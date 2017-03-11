@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Dr=System.Drawing ;
+using Dr = System.Drawing;
 
 namespace WKR2
 {
@@ -27,7 +29,7 @@ namespace WKR2
         public MainWindow()
         {
             InitializeComponent();
-            image.Source = new BitmapImage(new Uri(@"c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\ggh.jpg"));
+            image.Source = new BitmapImage(new Uri(@"C:\BKR\WKR2\ggh.jpg"));
             for (int i = 1; i < 3; i++)
             {
                 var but = new Button() { Name = "T_" + i, Content = "**"+i+"**", Margin = new Thickness(0, 0, 0, 0) };
@@ -58,7 +60,7 @@ namespace WKR2
             ////bmp = b;
 
 
-            Dr.Bitmap bmp = new Dr.Bitmap(@"c: \users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\ggh.jpg");
+            Dr.Bitmap bmp = new Dr.Bitmap(@"C:\BKR\WKR2\ggh.jpg");
             Dr.Bitmap b = new Dr.Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
 
             using (Dr.Graphics g = Dr.Graphics.FromImage(b))
@@ -88,8 +90,41 @@ namespace WKR2
                    
                 }
             }
-            b.Save(@"c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\gomer1.jpg", System.Drawing.Imaging.ImageFormat.Png);
-            bmp.Dispose();
+            Dr.Image vie;
+            
+            using (MemoryStream tmpStrm = new MemoryStream())
+            {
+                b.Save(tmpStrm, System.Drawing.Imaging.ImageFormat.Png);
+                vie = Dr.Image.FromStream(tmpStrm);
+            }
+
+
+            var df1=Convert(vie);
+
+
+
+            Perview dd = new Perview(vie);
+            dd.ShowDialog();
+
+            b.Save(@"C:\BKR\WKR2\gomer1.jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            
+        }
+
+        public BitmapImage Convert(Dr.Image img)
+        {
+            using (var memory = new MemoryStream())
+            {
+                img.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
+
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+
+                return bitmapImage;
+            }
         }
 
         private void imag_click(object sender, MouseButtonEventArgs e)
@@ -108,27 +143,26 @@ namespace WKR2
         {
             //Example df = new Example();
             //df.Show();
-            Window dd = new Window();
-            var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
-            stackPanel.Children.Add(new Image
-            {
-                Source = new BitmapImage(
-            new Uri(@"c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\gomer1.jpg"))
-            });
+            //Window dd = new Window();
+            //var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
+            //stackPanel.Children.Add(new Image
+            //{
+            //    Source = new BitmapImage(
+            //new Uri(@"c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\gomer1.jpg"))
+            //});
 
-            
-            
+            //dd.ShowDialog();
 
+            //foreach (var item in stackPanel.Children)
+            //{
+            //    if (item is Image)
+            //    {
+            //        var gg = item as Image;
+            //        gg.Source = null;
+            //    }
+            //}
+            Perview dd = new Perview();
             dd.ShowDialog();
-
-            foreach (var item in stackPanel.Children)
-            {
-                if (item is Image)
-                {
-                    var gg = item as Image;
-                    gg.Source = null;
-                }
-            }
 
 
         }
