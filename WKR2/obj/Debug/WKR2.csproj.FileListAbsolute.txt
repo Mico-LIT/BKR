@@ -14,3 +14,6 @@ c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.ex
 c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.pdb
 C:\Users\redga\Documents\Visual Studio 2015\Projects\WKR2\WKR2\obj\Debug\Example.g.cs
 C:\Users\redga\Documents\Visual Studio 2015\Projects\WKR2\WKR2\obj\Debug\Example.baml
+C:\BKR\WKR2\bin\Debug\WKR2.exe.config
+C:\BKR\WKR2\obj\Debug\WKR2.exe
+C:\BKR\WKR2\obj\Debug\WKR2.pdb
