@@ -32,3 +32,8 @@ C:\BKR\WKR2\obj\Debug\WKR2.Properties.Resources.resources
 C:\BKR\WKR2\obj\Debug\WKR2.csproj.GenerateResource.Cache
 C:\BKR\WKR2\bin\Debug\Tool.dll
 C:\BKR\WKR2\bin\Debug\Tool.pdb
+C:\BKR\WKR2\bin\Debug\Excel.dll
+C:\BKR\WKR2\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\BKR\WKR2\bin\Debug\Excel.pdb
+C:\BKR\WKR2\bin\Debug\Newtonsoft.Json.dll
+C:\BKR\WKR2\bin\Debug\Newtonsoft.Json.xml

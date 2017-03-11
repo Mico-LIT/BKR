@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using Dr = System.Drawing;
 using Tool;
 using System.IO;
+using Microsoft.Win32;
+using System.Data;
 
 namespace WKR2
 {
@@ -26,9 +28,17 @@ namespace WKR2
         public Point PointImag;     // координаты кнопки 
         public Image imageORig;     //оригинал загружен
         public Dr.Bitmap bitmapORig;//оригинал загружен
+        public  class Date
+        {
+             public string jsdkf { get; set; }
+             public string NAme { get; set; }
+             public string NAme1 { get; set; }
+        }
         public MainWindow()
         {
-            InitializeComponent(); 
+            InitializeComponent();
+            List<Date> fd = new List<Date>() { new Date() { jsdkf = "423", NAme = "dsf4", NAme1 = "fs43" } };
+
             image.Source = ImageWork.Load();
             imageORig = image;
             bitmapORig = new Dr.Bitmap(ImageWork.Load().UriSource.LocalPath);
@@ -42,7 +52,7 @@ namespace WKR2
                 but.MouseMove += new MouseEventHandler(MouseMove);
                 grid_imag.Children.Add(but);
             }
-
+            d12.ItemsSource = fd;
             
         }
 
@@ -94,8 +104,9 @@ namespace WKR2
                    
                 }
             }
-            b.Save(@"C:\BKR\WKR2\gomer1.jpg", System.Drawing.Imaging.ImageFormat.Png);
+            b.Save(@"C:\BKR\WKR2\gomer1.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
             bmp.Dispose();
+            b.Dispose();
         }
 
         private void imag_click(object sender, MouseButtonEventArgs e)
@@ -109,11 +120,19 @@ namespace WKR2
             point.Content = String.Format("x={0}  Y={1}", PointImag.X, PointImag.Y);
         }
 
+        
+        //новое окно 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Previwe();
+        }
+
         public void Previwe()
         {
 
             //Dr.Bitmap bitmapORig = this.bitmapORig;
             Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width, bitmapORig.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            Dr.Image vie;
 
             using (Dr.Graphics g = Dr.Graphics.FromImage(b))
             {
@@ -142,46 +161,15 @@ namespace WKR2
 
                 }
             }
-
-            Dr.Image vie;
-
             using (MemoryStream tmpStrm = new MemoryStream())
             {
                 b.Save(tmpStrm, System.Drawing.Imaging.ImageFormat.Png);
                 vie = Dr.Image.FromStream(tmpStrm);
             }
-
-
-            //b.Save(@"C:\BKR\WKR2\gomer1.jpg", System.Drawing.Imaging.ImageFormat.Png);
             b.Dispose();
 
             PreView pre = new PreView(vie);
             pre.ShowDialog();
-            //using (MemoryStream tmpStrm = new MemoryStream())
-            //{
-            //    b.Save(tmpStrm, System.Drawing.Imaging.ImageFormat.Png);
-            //    vie = Dr.Image.FromStream(tmpStrm);
-            //}
-
-
-            //return
-        }
-        //новое окно 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-            Previwe();
-            //Example df = new Example();
-            //df.Show();
-            //Window dd = new Window();
-            //var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
-            //stackPanel.Children.Add(new Image
-            //{
-            //    Source = new BitmapImage(
-            //new Uri(@"C:\BKR\WKR2\gomer1.jpg"))
-            //});
-
-
         }
 
         #region Движение мыши
@@ -214,9 +202,8 @@ namespace WKR2
                 rect.Margin = new Thickness(currentPoint.X - 10, currentPoint.Y - 10, 0, 0);
             }
         }
+
         #endregion
-
-
 
         #region xren
         //bool m_IsPressed;
@@ -242,5 +229,17 @@ namespace WKR2
 
         //}
         #endregion
+
+        private void open(object sender, RoutedEventArgs e)
+        {
+            DataView dd = Tool.ExcelWork.LoadrExcel();
+            if (dd != null) d12.ItemsSource = dd;
+            //Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
+        }
+
+        private void JJson(object sender, RoutedEventArgs e)
+        {
+            Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
+        }
     }
 }

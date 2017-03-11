@@ -14,7 +14,7 @@ namespace Tool
 
         public static BitmapImage Load() { return new BitmapImage(new Uri(@"C:\BKR\WKR2\ggh.jpg")); }
 
-        public static void Save() {
-        }
+        public static void Save() {}
+          
     }
 }
