@@ -12,7 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Dr=System.Drawing ;
+using Dr = System.Drawing;
+using Tool;
+using System.IO;
 
 namespace WKR2
 {
@@ -21,13 +23,17 @@ namespace WKR2
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Point PointImag;
-        public Image imageORig;
-
+        public Point PointImag;     // координаты кнопки 
+        public Image imageORig;     //оригинал загружен
+        public Dr.Bitmap bitmapORig;//оригинал загружен
         public MainWindow()
         {
-            InitializeComponent();
-            image.Source = new BitmapImage(new Uri(@"c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\ggh.jpg"));
+            InitializeComponent(); 
+            image.Source = ImageWork.Load();
+            imageORig = image;
+            bitmapORig = new Dr.Bitmap(ImageWork.Load().UriSource.LocalPath);
+
+            // сколько кнопок надо на разментку 
             for (int i = 1; i < 3; i++)
             {
                 var but = new Button() { Name = "T_" + i, Content = "**"+i+"**", Margin = new Thickness(0, 0, 0, 0) };
@@ -37,7 +43,7 @@ namespace WKR2
                 grid_imag.Children.Add(but);
             }
 
-            imageORig = image;
+            
         }
 
         private void Save_img(object sender, RoutedEventArgs e)
@@ -58,7 +64,7 @@ namespace WKR2
             ////bmp = b;
 
 
-            Dr.Bitmap bmp = new Dr.Bitmap(@"c: \users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\ggh.jpg");
+            Dr.Bitmap bmp = new Dr.Bitmap(@"C:\BKR\WKR2\ggh.jpg");
             Dr.Bitmap b = new Dr.Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
 
             using (Dr.Graphics g = Dr.Graphics.FromImage(b))
@@ -81,14 +87,14 @@ namespace WKR2
                             PointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
                             PointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
 
-                            g.DrawString("Привет я сделал вкр!!", font, Dr.Brushes.Black,
+                            g.DrawString("Информационная конференция IT Corparation", font, Dr.Brushes.Black,
                        (float)PointImag.X, (float)PointImag.Y);
                         }
                     }
                    
                 }
             }
-            b.Save(@"c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\gomer1.jpg", System.Drawing.Imaging.ImageFormat.Png);
+            b.Save(@"C:\BKR\WKR2\gomer1.jpg", System.Drawing.Imaging.ImageFormat.Png);
             bmp.Dispose();
         }
 
@@ -103,36 +109,81 @@ namespace WKR2
             point.Content = String.Format("x={0}  Y={1}", PointImag.X, PointImag.Y);
         }
 
-        //новое окно 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public void Previwe()
         {
-            //Example df = new Example();
-            //df.Show();
-            Window dd = new Window();
-            var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
-            stackPanel.Children.Add(new Image
+
+            //Dr.Bitmap bitmapORig = this.bitmapORig;
+            Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width, bitmapORig.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+
+            using (Dr.Graphics g = Dr.Graphics.FromImage(b))
             {
-                Source = new BitmapImage(
-            new Uri(@"c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\gomer1.jpg"))
-            });
+                g.DrawImage(bitmapORig, 0, 0);
+            }
 
-            
-            
-
-            dd.ShowDialog();
-
-            foreach (var item in stackPanel.Children)
+            using (Dr.Graphics g = Dr.Graphics.FromImage(b))
             {
-                if (item is Image)
+                using (var font = new Dr.Font("Arial", 10))
                 {
-                    var gg = item as Image;
-                    gg.Source = null;
+                    foreach (var item in grid_imag.Children)
+                    {
+                        if (item is Button)
+                        {
+                            Button f = item as Button;
+
+                            double pixelWidth = image.Source.Width;
+                            double pixelHeight = image.Source.Height;
+                            PointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
+                            PointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
+
+                            g.DrawString("Информационная конференция IT Corparation", font, Dr.Brushes.Black,
+                       (float)PointImag.X, (float)PointImag.Y);
+                        }
+                    }
+
                 }
             }
 
+            Dr.Image vie;
+
+            using (MemoryStream tmpStrm = new MemoryStream())
+            {
+                b.Save(tmpStrm, System.Drawing.Imaging.ImageFormat.Png);
+                vie = Dr.Image.FromStream(tmpStrm);
+            }
+
+
+            //b.Save(@"C:\BKR\WKR2\gomer1.jpg", System.Drawing.Imaging.ImageFormat.Png);
+            b.Dispose();
+
+            PreView pre = new PreView(vie);
+            pre.ShowDialog();
+            //using (MemoryStream tmpStrm = new MemoryStream())
+            //{
+            //    b.Save(tmpStrm, System.Drawing.Imaging.ImageFormat.Png);
+            //    vie = Dr.Image.FromStream(tmpStrm);
+            //}
+
+
+            //return
+        }
+        //новое окно 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            Previwe();
+            //Example df = new Example();
+            //df.Show();
+            //Window dd = new Window();
+            //var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
+            //stackPanel.Children.Add(new Image
+            //{
+            //    Source = new BitmapImage(
+            //new Uri(@"C:\BKR\WKR2\gomer1.jpg"))
+            //});
+
 
         }
-       
+
         #region Движение мыши
 
         bool isMoved = false;

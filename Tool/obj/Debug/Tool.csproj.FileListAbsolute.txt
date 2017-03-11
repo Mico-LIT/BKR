@@ -1,0 +1,5 @@
+C:\BKR\Tool\bin\Debug\Tool.dll
+C:\BKR\Tool\bin\Debug\Tool.pdb
+C:\BKR\Tool\obj\Debug\Tool.csprojResolveAssemblyReference.cache
+C:\BKR\Tool\obj\Debug\Tool.dll
+C:\BKR\Tool\obj\Debug\Tool.pdb

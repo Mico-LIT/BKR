@@ -1,0 +1,5 @@
+C:\BKR\ImageWork\bin\Debug\ImageWork.dll
+C:\BKR\ImageWork\bin\Debug\ImageWork.pdb
+C:\BKR\ImageWork\obj\Debug\ImageWork.csprojResolveAssemblyReference.cache
+C:\BKR\ImageWork\obj\Debug\ImageWork.dll
+C:\BKR\ImageWork\obj\Debug\ImageWork.pdb
