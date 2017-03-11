@@ -21,12 +21,10 @@ C:\BKR\WKR2\bin\Debug\WKR2.exe
 C:\BKR\WKR2\bin\Debug\WKR2.pdb
 C:\BKR\WKR2\obj\Debug\WKR2.csprojResolveAssemblyReference.cache
 C:\BKR\WKR2\obj\Debug\MainWindow.g.cs
-C:\BKR\WKR2\obj\Debug\PreView.g.cs
 C:\BKR\WKR2\obj\Debug\App.g.cs
 C:\BKR\WKR2\obj\Debug\WKR2_MarkupCompile.cache
 C:\BKR\WKR2\obj\Debug\WKR2_MarkupCompile.lref
 C:\BKR\WKR2\obj\Debug\MainWindow.baml
-C:\BKR\WKR2\obj\Debug\PreView.baml
 C:\BKR\WKR2\obj\Debug\WKR2.g.resources
 C:\BKR\WKR2\obj\Debug\WKR2.Properties.Resources.resources
 C:\BKR\WKR2\obj\Debug\WKR2.csproj.GenerateResource.Cache
@@ -37,3 +35,7 @@ C:\BKR\WKR2\bin\Debug\ICSharpCode.SharpZipLib.dll
 C:\BKR\WKR2\bin\Debug\Excel.pdb
 C:\BKR\WKR2\bin\Debug\Newtonsoft.Json.dll
 C:\BKR\WKR2\bin\Debug\Newtonsoft.Json.xml
+C:\BKR\WKR2\obj\Debug\View\PreView.g.cs
+C:\BKR\WKR2\obj\Debug\View\PreView.baml
+C:\BKR\WKR2\obj\Debug\View\SettingView.g.cs
+C:\BKR\WKR2\obj\Debug\View\SettingView.baml

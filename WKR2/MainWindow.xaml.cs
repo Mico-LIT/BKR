@@ -168,7 +168,7 @@ namespace WKR2
             }
             b.Dispose();
 
-            PreView pre = new PreView(vie);
+            View.PreView pre = new View.PreView(vie);
             pre.ShowDialog();
         }
 
@@ -234,6 +234,9 @@ namespace WKR2
         {
             DataView dd = Tool.ExcelWork.LoadrExcel();
             if (dd != null) d12.ItemsSource = dd;
+
+            View.SettingView vv = new View.SettingView(dd);
+            vv.ShowDialog();
             //Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
         }
 
