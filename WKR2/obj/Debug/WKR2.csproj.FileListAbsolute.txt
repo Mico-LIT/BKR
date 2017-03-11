@@ -1,0 +1,16 @@
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\bin\Debug\WKR2.exe.config
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\bin\Debug\WKR2.exe
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\bin\Debug\WKR2.pdb
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.csprojResolveAssemblyReference.cache
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\MainWindow.g.cs
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\App.g.cs
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2_MarkupCompile.cache
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2_MarkupCompile.lref
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\MainWindow.baml
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.g.resources
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.Properties.Resources.resources
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.csproj.GenerateResource.Cache
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.exe
+c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.pdb
+C:\Users\redga\Documents\Visual Studio 2015\Projects\WKR2\WKR2\obj\Debug\Example.g.cs
+C:\Users\redga\Documents\Visual Studio 2015\Projects\WKR2\WKR2\obj\Debug\Example.baml

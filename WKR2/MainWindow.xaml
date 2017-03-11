@@ -1,0 +1,67 @@
+﻿<Window x:Class="WKR2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WKR2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid Name="GLABN_GRID">
+
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+        <Menu>
+            <MenuItem Header="Файл">
+                <MenuItem Header="Открть"></MenuItem>
+                <MenuItem Header="Выход"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Предпросмотр" Click="Button_Click"></MenuItem>
+            <MenuItem Header="Печать"></MenuItem>
+            <MenuItem Header="Save" Click="Save_img"></MenuItem>
+        </Menu>
+
+        <Image Grid.Row="1" Name="image" MouseDown="imag_click"></Image>
+
+        <Canvas Grid.Row="1" Name="grid_imag" Height="{Binding ElementName=image,Path=ActualHeight }" 
+              Width="{Binding ElementName=image,Path=ActualWidth }">
+        </Canvas>
+        
+        <Label Grid.Row="1" Grid.Column="1" Width="200" Name="point"></Label>
+
+        <DataGrid Grid.Row="2" Name="d12">
+        </DataGrid>
+        <!--Старое
+        <Grid.RowDefinitions>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition Height="32"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Image Name="image" MouseDown="imag_click"></Image>
+
+
+        --><!--<Grid Name="grid_imag" MouseDown="imag_click" Height="{Binding ElementName=image,Path=ActualHeight }" 
+              Width="{Binding ElementName=image,Path=ActualWidth }"></Grid>--><!--
+
+        <Canvas Name="grid_imag" Grid.Row="0" Height="{Binding ElementName=image,Path=ActualHeight }" 
+              Width="{Binding ElementName=image,Path=ActualWidth }">
+             </Canvas>
+
+
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+
+            <Button  Width="80" Content="save" Click="Save_img"></Button>
+            <Label Width="200" Name="point"></Label>
+            <Button Click="Button_Click"   Content="open"   />
+        </StackPanel>-->
+
+    </Grid>
+</Window>
