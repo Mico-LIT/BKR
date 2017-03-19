@@ -9,20 +9,37 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
+            <RowDefinition Height="auto"/>
+
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ListView Margin="42,34,444.6,89.2" Name="listV" >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock  Text="Строки"/>
+            <TextBlock Grid.Column="1"  Text="Колонки"/>
+            <ListView Margin="0,20,0,0" Name="listRow" BorderBrush="Red">
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Delete" Click="MenuItem_Click_Delete"></MenuItem>
+                    <MenuItem Header="Delete" Click="MenuItem_Click_Delete_Row"></MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
-        <Button Content="NEw" Click="Button_Click_new" Margin="232,109,137.6,59.2"/>
-        <DataGrid Grid.Row="1" Name="DataG">
+            <ListView Margin="0,20,0,0" Grid.Column="1" Name="listColumn" BorderBrush="Red">
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Delete" Click="MenuItem_Click_Delete"></MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+            </ListView>
+        </Grid>
+        <Button Grid.Row="1" Content="Сохранить изменения" Click="Button_Click_new" Height="20"/>
+        <DataGrid  Grid.Row="2" Name="DataG" PreviewKeyDown="delete" SelectionUnit="CellOrRowHeader">
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Удалить"></MenuItem>
+                    <MenuItem Header="Удалить строку" Click="Delete_Row"></MenuItem>
                     <MenuItem Header="Удалить столбец" Click="Delete_Collumn"></MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>

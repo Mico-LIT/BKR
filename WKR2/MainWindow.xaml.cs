@@ -37,22 +37,22 @@ namespace WKR2
         public MainWindow()
         {
             InitializeComponent();
-            List<Date> fd = new List<Date>() { new Date() { jsdkf = "423", NAme = "dsf4", NAme1 = "fs43" } };
+            //List<Date> fd = new List<Date>() { new Date() { jsdkf = "423", NAme = "dsf4", NAme1 = "fs43" } };
 
             image.Source = ImageWork.Load();
             imageORig = image;
             bitmapORig = new Dr.Bitmap(ImageWork.Load().UriSource.LocalPath);
 
             // сколько кнопок надо на разментку 
-            for (int i = 1; i < 3; i++)
-            {
-                var but = new Button() { Name = "T_" + i, Content = "**"+i+"**", Margin = new Thickness(0, 0, 0, 0) };
-                but.MouseDown += new MouseButtonEventHandler(MouseDown);
-                but.MouseUp += new MouseButtonEventHandler(MouseUp);
-                but.MouseMove += new MouseEventHandler(MouseMove);
-                grid_imag.Children.Add(but);
-            }
-            d12.ItemsSource = fd;
+            //for (int i = 1; i < 3; i++)
+            //{
+            //    var but = new Button() { Name = "T_" + i, Content = "**"+i+"**", Margin = new Thickness(0, 0, 0, 0) };
+            //    but.MouseDown += new MouseButtonEventHandler(MouseDown);
+            //    but.MouseUp += new MouseButtonEventHandler(MouseUp);
+            //    but.MouseMove += new MouseEventHandler(MouseMove);
+            //    grid_imag.Children.Add(but);
+            //}
+            //d12.ItemsSource = fd;
             
         }
 
@@ -84,7 +84,7 @@ namespace WKR2
 
                 using (Dr.Graphics g = Dr.Graphics.FromImage(b))
             {
-                using (var font = new Dr.Font("Arial", 10))
+                using (var font = new Dr.Font("Arial", 10))  // настроить шрифт
                 {
                     foreach (var item in grid_imag.Children)
                     {
@@ -141,8 +141,9 @@ namespace WKR2
 
             using (Dr.Graphics g = Dr.Graphics.FromImage(b))
             {
-                using (var font = new Dr.Font("Arial", 10))
+                using (var font = new Dr.Font("Arial", 15))
                 {
+                    int i = 0;
                     foreach (var item in grid_imag.Children)
                     {
                         if (item is Button)
@@ -153,9 +154,14 @@ namespace WKR2
                             double pixelHeight = image.Source.Height;
                             PointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
                             PointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
+                            var yy = (DataView)d12.ItemsSource;
+                            string TEXT=(yy.Table.Rows[0].ItemArray[i++]).ToString();
 
-                            g.DrawString("Информационная конференция IT Corparation", font, Dr.Brushes.Black,
-                       (float)PointImag.X, (float)PointImag.Y);
+                            g.DrawString(TEXT/*+"123456786543213453421224234234"*/, font, Dr.Brushes.Black,
+                                new Dr.RectangleF((float)PointImag.X, (float)PointImag.Y,200,500));
+
+                       //     g.DrawString(TEXT+"</br> 3efdvgt4", font, Dr.Brushes.Black,
+                       //(float)PointImag.X, (float)PointImag.Y);
                         }
                     }
 
@@ -233,16 +239,52 @@ namespace WKR2
         private void open(object sender, RoutedEventArgs e)
         {
             DataView dd = Tool.ExcelWork.LoadrExcel();
-            if (dd != null) d12.ItemsSource = dd;
+            //if (dd != null) d12.ItemsSource = dd;
 
             View.SettingView vv = new View.SettingView(dd);
             vv.ShowDialog();
+            d12.ItemsSource = null;
+            d12.ItemsSource = dd;
+
+            DataView colbot = dd;
+            
+         
+            // сколько кнопок надо на разментку 
+            foreach (DataColumn item in colbot.Table.Columns)
+           {
+                var but = new Button() { Name = item.ColumnName, Content = "**" + item.ColumnName + "**", Margin = new Thickness(0, 0, 0, 0) };
+                but.MouseDown += new MouseButtonEventHandler(MouseDown);
+                but.MouseUp += new MouseButtonEventHandler(MouseUp);
+                but.MouseMove += new MouseEventHandler(MouseMove);
+                grid_imag.Children.Add(but);
+            }
+
+            //Сохранить в Json Парметр Excel измененого
             //Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
         }
 
         private void JJson(object sender, RoutedEventArgs e)
         {
             Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
+        }
+
+        private void delete_row(object sender, KeyEventArgs e)
+        {
+            if (e.Key==Key.Delete)
+            {
+                DataView gg =(DataView)d12.ItemsSource;
+                gg.Table.Rows.RemoveAt(d12.SelectedIndex);
+                d12.ItemsSource = null;
+                d12.ItemsSource = gg;
+                //d12.Items.Remove(d12.SelectedItem);// напрямую с ним работать нельзя надо посредника DataTable
+            }
+        }
+
+        private void Pehat(object sender, RoutedEventArgs e)
+        {
+           
+            Tool.Print.dd();
+
         }
     }
 }

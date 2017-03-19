@@ -22,6 +22,7 @@ namespace WKR2.View
     {
         private DataView dd;
         private List<string>  DelCol =new List<string> ();
+        private List<int> DelRow = new List<int>();
         public SettingView(DataView dd)
         {
             InitializeComponent();
@@ -38,30 +39,65 @@ namespace WKR2.View
 
         private void MenuItem_Click_Delete(object sender, RoutedEventArgs e)
         {
-            List<string> default1 = (List<string>)listV.ItemsSource;
-            foreach (string eachItem in listV.SelectedItems)
-            {
-                default1.Remove(eachItem);
-            }
-            listV.ItemsSource = null;
-            listV.ItemsSource = default1;
+            DelCol.Remove(listColumn.SelectedItem.ToString());
+            listColumn.Items.Remove(listColumn.SelectedItem);
+        }
+        private void MenuItem_Click_Delete_Row(object sender, RoutedEventArgs e)
+        {
+            DelRow.Remove(int.Parse(listRow.SelectedItem.ToString()));
+            listRow.Items.Remove(listRow.SelectedItem);
         }
 
         private void Button_Click_new(object sender, RoutedEventArgs e)
         {
             DataView ff = (DataView)DataG.ItemsSource;
-            foreach (string item in listV.Items)ff.Table.Columns.Remove(item);
-
+            foreach (string item in DelCol)ff.Table.Columns.Remove(item);
+            foreach (int item in DelRow) ff.Table.Rows.RemoveAt(item);
             DataG.ItemsSource = null;
             DataG.ItemsSource = ff;
-            listV.Items.Clear();
+            listColumn.Items.Clear();
+            listRow.Items.Clear();
+            this.Close();
         }
 
         private void Delete_Collumn(object sender, RoutedEventArgs e)
         {
-            string df1 = (string)DataG.CurrentColumn.Header;
+            foreach (DataGridCellInfo item in DataG.SelectedCells)
+            {
+            string df1 = item.Column.Header.ToString();
             var hh = DelCol.Find(x => x == df1);
-            if (hh == null) { DelCol.Add(df1); listV.Items.Add(df1); }
+            if (hh == null) { DelCol.Add(df1); listColumn.Items.Add(df1); }
+            }
+        }
+
+        private void delete(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete) del_row();
+        }
+
+        public void del_row()
+        {
+            DataView gg = (DataView)DataG.ItemsSource;
+            foreach (DataGridCellInfo item in DataG.SelectedCells)
+            {
+                int gggh = item.Column.DisplayIndex;
+                string gggh1 = item.Column.Header.ToString();
+            }
+            //gg.Table.Rows.RemoveAt(DataG.SelectedIndex);
+            DataG.ItemsSource = null;
+            DataG.ItemsSource = gg;
+        }
+
+        private void Delete_Row(object sender, RoutedEventArgs e)
+        {
+            foreach (DataGridCellInfo item in DataG.SelectedCells)
+            {
+                DataRowView pp = (DataRowView)item.Item;
+                int INT_ROW=DataG.Items.IndexOf(pp);
+                var hh = DelRow.FindIndex(x => x == INT_ROW);
+                if (hh == -1) { DelRow.Add(INT_ROW); listRow.Items.Add(INT_ROW); }
+            }
         }
     }
+
 }

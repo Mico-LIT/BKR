@@ -25,7 +25,7 @@
                 <MenuItem Header="Выход"></MenuItem>
             </MenuItem>
             <MenuItem Header="Предпросмотр" Click="Button_Click"></MenuItem>
-            <MenuItem Header="Печать"></MenuItem>
+            <MenuItem Header="Печать" Click="Pehat"></MenuItem>
             <MenuItem Header="Save" Click="Save_img"></MenuItem>
             <MenuItem Header="Json" Click="JJson"></MenuItem>
         </Menu>
@@ -38,8 +38,26 @@
         
         <Label Grid.Row="1" Grid.Column="1" Width="200" Name="point"></Label>
 
-        <DataGrid Grid.Row="2" Name="d12">
-            
+        <DataGrid Grid.Row="2" Name="d12" PreviewKeyDown="delete_row">
+             
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Печать">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Button Content="Печать" Click="Button_Click"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Печать">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox Margin="15,2,0,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
         </DataGrid>
         <!--Старое
         <Grid.RowDefinitions>
