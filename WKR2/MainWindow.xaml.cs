@@ -174,6 +174,7 @@ namespace WKR2
             }
             b.Dispose();
 
+            Tool.Print.iii = vie;
             View.PreView pre = new View.PreView(vie);
             pre.ShowDialog();
         }
