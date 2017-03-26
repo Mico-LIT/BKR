@@ -17,6 +17,7 @@ using Tool;
 using System.IO;
 using Microsoft.Win32;
 using System.Data;
+using System.ComponentModel;
 
 namespace WKR2
 {
@@ -28,12 +29,7 @@ namespace WKR2
         public Point PointImag;     // координаты кнопки 
         public Image imageORig;     //оригинал загружен
         public Dr.Bitmap bitmapORig;//оригинал загружен
-        public  class Date
-        {
-             public string jsdkf { get; set; }
-             public string NAme { get; set; }
-             public string NAme1 { get; set; }
-        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -129,20 +125,20 @@ namespace WKR2
 
         public void Previwe()
         {
-
+            int tt = 0;
             //Dr.Bitmap bitmapORig = this.bitmapORig;
-            Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width, bitmapORig.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width+tt, bitmapORig.Height+tt, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             Dr.Image vie;
+            
+             using (Dr.Graphics g = Dr.Graphics.FromImage(b)) { g.DrawImage(bitmapORig, 0, 0);}
 
             using (Dr.Graphics g = Dr.Graphics.FromImage(b))
             {
-                g.DrawImage(bitmapORig, 0, 0);
-            }
+                //g.Clear(System.Drawing.Color.White); 
+                //g.FillRectangle(Dr.Brushes.White, -50, -50, b.Width, b.Height); //белый листок
 
-            using (Dr.Graphics g = Dr.Graphics.FromImage(b))
-            {
-                using (var font = new Dr.Font("Arial", 15))
-                {
+                //using (var font = new Dr.Font("Arial", 15))
+                //{
                     int i = 0;
                     foreach (var item in grid_imag.Children)
                     {
@@ -157,7 +153,7 @@ namespace WKR2
                             var yy = (DataView)d12.ItemsSource;
                             string TEXT=(yy.Table.Rows[0].ItemArray[i++]).ToString();
 
-                            g.DrawString(TEXT/*+"123456786543213453421224234234"*/, font, Dr.Brushes.Black,
+                            g.DrawString(TEXT/*+"123456786543213453421224234234"*/, Tool.Print.font, Dr.Brushes.Black,
                                 new Dr.RectangleF((float)PointImag.X, (float)PointImag.Y,200,500));
 
                        //     g.DrawString(TEXT+"</br> 3efdvgt4", font, Dr.Brushes.Black,
@@ -165,12 +161,14 @@ namespace WKR2
                         }
                     }
 
-                }
+                //}
             }
+            b.Save(@"C:\BKR\WKR2\new12.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
             using (MemoryStream tmpStrm = new MemoryStream())
             {
                 b.Save(tmpStrm, System.Drawing.Imaging.ImageFormat.Png);
                 vie = Dr.Image.FromStream(tmpStrm);
+                
             }
             b.Dispose();
 
@@ -286,6 +284,17 @@ namespace WKR2
            
             Tool.Print.dd();
 
+        }
+
+        private void Calibration_Click(object sender, RoutedEventArgs e)
+        {
+            WKR2.View.Calibration gf = new View.Calibration( Tool.Print.calibration_data);
+            gf.ShowDialog();
+        }
+
+        private void Font_click(object sender, RoutedEventArgs e)
+        {
+            Tool.Print.Font();
         }
     }
 }

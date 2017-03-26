@@ -28,6 +28,8 @@
             <MenuItem Header="Печать" Click="Pehat"></MenuItem>
             <MenuItem Header="Save" Click="Save_img"></MenuItem>
             <MenuItem Header="Json" Click="JJson"></MenuItem>
+            <MenuItem Header="Калибровка" Click="Calibration_Click"></MenuItem>
+            <MenuItem Header="Шрифт" Click="Font_click"></MenuItem>
         </Menu>
 
         <Image Grid.Row="1" Name="image" MouseDown="imag_click"></Image>

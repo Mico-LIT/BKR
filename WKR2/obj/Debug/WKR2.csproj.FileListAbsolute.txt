@@ -39,3 +39,7 @@ C:\BKR\WKR2\obj\Debug\View\PreView.g.cs
 C:\BKR\WKR2\obj\Debug\View\PreView.baml
 C:\BKR\WKR2\obj\Debug\View\SettingView.g.cs
 C:\BKR\WKR2\obj\Debug\View\SettingView.baml
+C:\BKR\WKR2\bin\Debug\Microsoft.QualityTools.Testing.Fakes.dll
+C:\BKR\WKR2\bin\Debug\ru\Microsoft.QualityTools.Testing.Fakes.resources.dll
+C:\BKR\WKR2\obj\Debug\View\Calibration.g.cs
+C:\BKR\WKR2\obj\Debug\View\Calibration.baml

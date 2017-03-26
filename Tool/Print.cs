@@ -13,9 +13,27 @@ namespace Tool
 {
     static public class Print
     {
+        //Калибровка
+        public class Calibration_Data
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+        }
+        static public Calibration_Data calibration_data=new Calibration_Data() { X=0,Y=0};
+        //Картинка на печать
         static public Image iii;
-        static private int width;
-        static private int height;
+        //Шрифт
+        static public Font font=new Font("Arial", 15);
+
+
+        static public void Font()
+        {
+            using (FontDialog Fontdialog = new FontDialog())
+            {
+            Fontdialog.Font = font;
+            if (Fontdialog.ShowDialog() == DialogResult.OK) font = Fontdialog.Font;
+            }
+        }
         static public void dd()
         {
 
@@ -23,27 +41,25 @@ namespace Tool
             var printDlg = new PrintDialog();
             var printDoc = new PrintDocument();
             printDoc.DocumentName = "Print Document";
-           
-            //PageSetupDialog settings
-            setupDlg.Document = printDoc;
+            ////PageSetupDialog settings
+            //setupDlg.Document = printDoc;
 
-            setupDlg.AllowMargins = false;
-            setupDlg.AllowOrientation = false;
-            setupDlg.AllowPaper = false;
-            setupDlg.AllowPrinter = false;
-            setupDlg.Reset();
+            //setupDlg.AllowMargins = false;
+            //setupDlg.AllowOrientation = false;
+            //setupDlg.AllowPaper = false;
+            //setupDlg.AllowPrinter = false;
+            //setupDlg.Reset();
 
             setupDlg.PageSettings = new System.Drawing.Printing.PageSettings();
-
             setupDlg.PrinterSettings =  new System.Drawing.Printing.PrinterSettings();
 
-            if (setupDlg.ShowDialog() == DialogResult.OK)
-            {
-                printDoc.DefaultPageSettings = setupDlg.PageSettings;
-                printDoc.PrinterSettings = setupDlg.PrinterSettings;
-            }
+            //if (setupDlg.ShowDialog() == DialogResult.OK)
+            //{
+            //    printDoc.DefaultPageSettings = setupDlg.PageSettings;
+            //    printDoc.PrinterSettings = setupDlg.PrinterSettings;
+            //}
 
-            var fggg=printDoc.PrinterSettings.LandscapeAngle;
+            //var fggg=printDoc.PrinterSettings.LandscapeAngle;
             if (printDlg.ShowDialog() == DialogResult.OK){
                 printDoc.PrinterSettings = printDlg.PrinterSettings; 
 
@@ -58,7 +74,8 @@ namespace Tool
             //    ff.DrawImage(iii, 0, 0);
             //    ff.Dispose();
             //}
-
+            printDoc.DefaultPageSettings.Landscape = true; //Горизонт
+            printDoc.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);// отступы
             printDoc.PrintPage += PrintDoc_PrintPage;
             printDoc.Print();
 
@@ -66,11 +83,18 @@ namespace Tool
 
         private static void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
         {
-            e.PageSettings.Margins = new Margins(0,0,0,0);
-            var df=e.PageBounds;
+            //e.PageSettings.Margins = new Margins(0,0,0,0);
+            //var df=e.PageBounds;
             //e.Graphics.DrawString("Приведд уродец", new System.Drawing.Font("Arial", 12),System.Drawing.Brushes.Black,1800,100);
             //e.Graphics.DrawImage(ResizeOrigImg(iii,(int)(df.Width*1.5),(int)(df.Height*1.5) ), 0,0);
-            e.Graphics.DrawImage(iii, e.MarginBounds);
+            //e.Graphics.DrawImage(iii, e.MarginBounds);
+            e.Graphics.DrawImage(iii, new Rectangle()
+            {
+                Height = e.PageSettings.PaperSize.Width,
+                Width = e.PageSettings.PaperSize.Height,
+                X = calibration_data.X,
+                Y = calibration_data.Y,
+            });
             //Rectangle m = e.MarginBounds;
 
             //if ((double)iii.Width / (double)iii.Height > (double)m.Width / (double)m.Height) // image is wider
