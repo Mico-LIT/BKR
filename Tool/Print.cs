@@ -53,17 +53,23 @@ namespace Tool
             setupDlg.PageSettings = new System.Drawing.Printing.PageSettings();
             setupDlg.PrinterSettings =  new System.Drawing.Printing.PrinterSettings();
 
-            //if (setupDlg.ShowDialog() == DialogResult.OK)
-            //{
-            //    printDoc.DefaultPageSettings = setupDlg.PageSettings;
-            //    printDoc.PrinterSettings = setupDlg.PrinterSettings;
-            //}
+            setupDlg.PageSettings.Landscape = true;
+            setupDlg.PageSettings.Margins= new Margins(0, 0, 0, 0);
+
+            if (setupDlg.ShowDialog() == DialogResult.OK)
+            {
+                printDoc.DefaultPageSettings = setupDlg.PageSettings;
+                printDoc.PrinterSettings = setupDlg.PrinterSettings;
+            }
+            else return;
 
             //var fggg=printDoc.PrinterSettings.LandscapeAngle;
-            if (printDlg.ShowDialog() == DialogResult.OK){
-                printDoc.PrinterSettings = printDlg.PrinterSettings; 
+            if (printDlg.ShowDialog() == DialogResult.OK)
+            {
+                printDoc.PrinterSettings = printDlg.PrinterSettings;
 
             }
+            else return;
             //width = printDoc.DefaultPageSettings.PaperSize.Width;
             //height = printDoc.DefaultPageSettings.PaperSize.Height;
 
@@ -74,8 +80,8 @@ namespace Tool
             //    ff.DrawImage(iii, 0, 0);
             //    ff.Dispose();
             //}
-            printDoc.DefaultPageSettings.Landscape = true; //Горизонт
-            printDoc.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);// отступы
+            //printDoc.DefaultPageSettings.Landscape = true; //Горизонт
+            //printDoc.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);// отступы
             printDoc.PrintPage += PrintDoc_PrintPage;
             printDoc.Print();
 
@@ -161,5 +167,6 @@ namespace Tool
             }
             return result;
         }
+
     }
 }

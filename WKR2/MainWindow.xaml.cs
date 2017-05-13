@@ -35,9 +35,9 @@ namespace WKR2
             InitializeComponent();
             //List<Date> fd = new List<Date>() { new Date() { jsdkf = "423", NAme = "dsf4", NAme1 = "fs43" } };
 
-            image.Source = ImageWork.Load();
-            imageORig = image;
-            bitmapORig = new Dr.Bitmap(ImageWork.Load().UriSource.LocalPath);
+            //image.Source = ImageWork.Load();                                   //генирится ошибка вот тут 
+            //imageORig = image;
+            //bitmapORig = new Dr.Bitmap(ImageWork.Load().UriSource.LocalPath); //генирится ошибка вот тут 
 
             // сколько кнопок надо на разментку 
             //for (int i = 1; i < 3; i++)
@@ -49,7 +49,7 @@ namespace WKR2
             //    grid_imag.Children.Add(but);
             //}
             //d12.ItemsSource = fd;
-            
+
         }
 
         private void Save_img(object sender, RoutedEventArgs e)
@@ -105,24 +105,69 @@ namespace WKR2
             b.Dispose();
         }
 
+        //Вывод кардинат где нажал 
         private void imag_click(object sender, MouseButtonEventArgs e)
         {
-            PointImag = e.GetPosition(image);
-            double pixelWidth = image.Source.Width;
-            double pixelHeight = image.Source.Height;
-            PointImag.X = (pixelWidth * PointImag.X ) / image.ActualWidth;
-            PointImag.Y = (pixelHeight * PointImag.Y )/ image.ActualHeight;
+            //PointImag = e.GetPosition(image);
+            //double pixelWidth = image.Source.Width;
+            //double pixelHeight = image.Source.Height;
+            //PointImag.X = (pixelWidth * PointImag.X ) / image.ActualWidth;
+            //PointImag.Y = (pixelHeight * PointImag.Y )/ image.ActualHeight;
 
-            point.Content = String.Format("x={0}  Y={1}", PointImag.X, PointImag.Y);
+           
+            //point.Content = String.Format("x={0}  Y={1}", PointImag.X, PointImag.Y); 
         }
 
         
         //новое окно 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Previwe();
+            var ddd = d12.SelectedIndex;
+            Print_Item(ddd);
         }
+        public void Print_Item(int Item_Row)
+        {
+            Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width, bitmapORig.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            Dr.Image vie;
 
+            using (Dr.Graphics g = Dr.Graphics.FromImage(b))
+            {
+                g.Clear(System.Drawing.Color.White); 
+
+                int i = 0;
+                foreach (var item in grid_imag.Children)
+                {
+                    if (item is Button)
+                    {
+                        Button f = item as Button;
+
+                        double pixelWidth = image.Source.Width;
+                        double pixelHeight = image.Source.Height;
+                        PointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
+                        PointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
+                        var yy = (DataView)d12.ItemsSource;
+                        string TEXT = (yy.Table.Rows[Item_Row].ItemArray[i++]).ToString();
+
+                        g.DrawString(TEXT, Tool.Print.font, Dr.Brushes.Black,
+                            new Dr.RectangleF(
+                                (float)PointImag.X, 
+                                (float)PointImag.Y, 
+                                (float)(f.Width * 3.3), 
+                                (float)(f.Height * 3.3)));
+                    }
+                }
+
+            }
+
+            using (MemoryStream tmpStrm = new MemoryStream())
+            {
+                b.Save(tmpStrm, System.Drawing.Imaging.ImageFormat.Png);
+                vie = Dr.Image.FromStream(tmpStrm);
+            }
+            b.Dispose();
+            Tool.Print.iii = vie;
+            Tool.Print.dd();
+        }
         public void Previwe()
         {
             int tt = 0;
@@ -154,7 +199,7 @@ namespace WKR2
                             string TEXT=(yy.Table.Rows[0].ItemArray[i++]).ToString();
 
                             g.DrawString(TEXT/*+"123456786543213453421224234234"*/, Tool.Print.font, Dr.Brushes.Black,
-                                new Dr.RectangleF((float)PointImag.X, (float)PointImag.Y,200,500));
+                                new Dr.RectangleF((float)PointImag.X, (float)PointImag.Y,(float)(f.Width*3.3), (float)(f.Height*3.3)));
 
                        //     g.DrawString(TEXT+"</br> 3efdvgt4", font, Dr.Brushes.Black,
                        //(float)PointImag.X, (float)PointImag.Y);
@@ -174,6 +219,7 @@ namespace WKR2
 
             Tool.Print.iii = vie;
             View.PreView pre = new View.PreView(vie);
+            pre.WindowState = WindowState.Maximized;
             pre.ShowDialog();
         }
 
@@ -237,26 +283,36 @@ namespace WKR2
 
         private void open(object sender, RoutedEventArgs e)
         {
+            Clear_button();
             DataView dd = Tool.ExcelWork.LoadrExcel();
             //if (dd != null) d12.ItemsSource = dd;
 
             View.SettingView vv = new View.SettingView(dd);
-            vv.ShowDialog();
-            d12.ItemsSource = null;
-            d12.ItemsSource = dd;
+            if(dd!=null)
+            if (vv.ShowDialog()== true)
+            {
+                d12.ItemsSource = null;
+                d12.ItemsSource = dd;
 
-            DataView colbot = dd;
-            
-         
-            // сколько кнопок надо на разментку 
-            foreach (DataColumn item in colbot.Table.Columns)
-           {
-                var but = new Button() { Name = item.ColumnName, Content = "**" + item.ColumnName + "**", Margin = new Thickness(0, 0, 0, 0) };
-                but.MouseDown += new MouseButtonEventHandler(MouseDown);
-                but.MouseUp += new MouseButtonEventHandler(MouseUp);
-                but.MouseMove += new MouseEventHandler(MouseMove);
-                grid_imag.Children.Add(but);
+                DataView colbot = dd;
+
+
+                // сколько кнопок надо на разментку 
+                foreach (DataColumn item in colbot.Table.Columns)
+                {
+                    var but = new Button() { Name = item.ColumnName, Height = 20, Width = 100, Content = "**" + item.ColumnName + "**", Margin = new Thickness(0, 0, 0, 0) };
+                    but.MouseDown += new MouseButtonEventHandler(MouseDown);
+                    but.MouseUp += new MouseButtonEventHandler(MouseUp);
+                    but.MouseMove += new MouseEventHandler(MouseMove);
+                    but.Click += (r, t) => {
+                        Button bu = r as Button;
+                        View.Button_Calibration ff = new View.Button_Calibration(ref bu);
+                        ff.ShowDialog();
+                    };
+                    grid_imag.Children.Add(but);
+                }
             }
+           
 
             //Сохранить в Json Парметр Excel измененого
             //Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
@@ -295,6 +351,38 @@ namespace WKR2
         private void Font_click(object sender, RoutedEventArgs e)
         {
             Tool.Print.Font();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Previwe();
+        }
+
+        private void Exit(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Image_Download(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog OFD = new OpenFileDialog();
+            OFD.Filter = "Jpeg files (*.jpeg)|*.jpeg;*.jpg| PNG files (*.PNG)|*.png|Все файлы (*.*)|*.*";
+            if (OFD.ShowDialog()==true)
+            {
+                Clear_button();
+                image.Source = new BitmapImage(new Uri(OFD.FileName));                                   //генирится ошибка вот тут 
+                imageORig = image;
+                bitmapORig = new Dr.Bitmap(new BitmapImage(new Uri(OFD.FileName)).UriSource.LocalPath); //генирится ошибка вот тут 
+            }
+        }
+        public void Clear_button()
+        {
+            for (int i = grid_imag.Children.Count-1; i >= 0 ; i--)
+            {
+                Button pp = grid_imag.Children[i] as Button;
+                if (pp != null) grid_imag.Children.Remove(pp);
+            }
+           
         }
     }
 }

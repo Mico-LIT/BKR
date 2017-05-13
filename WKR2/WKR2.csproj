@@ -59,6 +59,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="View\Button_Calibration.xaml.cs">
+      <DependentUpon>Button_Calibration.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Calibration.xaml.cs">
       <DependentUpon>Calibration.xaml</DependentUpon>
     </Compile>
@@ -77,6 +80,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Button_Calibration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Calibration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -132,6 +139,9 @@
       <Project>{13296843-052d-42da-acd9-1b6fbbbbc1e9}</Project>
       <Name>Tool</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\strelki.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

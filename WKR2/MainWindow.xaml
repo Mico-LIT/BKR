@@ -15,21 +15,22 @@
             <RowDefinition/>
             <RowDefinition Height="0.4*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
+        <!--<Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="100"/>
-        </Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>-->
         <Menu>
             <MenuItem Header="Файл">
-                <MenuItem Header="Открть" Click="open"></MenuItem>
-                <MenuItem Header="Выход"></MenuItem>
+                <MenuItem Header="Открыть картинку" Click="Image_Download"></MenuItem>
+                <MenuItem Header="Открть Excel" Click="open"></MenuItem>
+                <MenuItem Header="Выход" Click="Exit"></MenuItem>
             </MenuItem>
-            <MenuItem Header="Предпросмотр" Click="Button_Click"></MenuItem>
-            <MenuItem Header="Печать" Click="Pehat"></MenuItem>
-            <MenuItem Header="Save" Click="Save_img"></MenuItem>
-            <MenuItem Header="Json" Click="JJson"></MenuItem>
-            <MenuItem Header="Калибровка" Click="Calibration_Click"></MenuItem>
+            <MenuItem Header="Предпросмотр" Click="MenuItem_Click"></MenuItem>
+            <MenuItem Header="Печать" Click="Pehat" Visibility="Hidden"></MenuItem>
+            <MenuItem Header="Save" Click="Save_img" Visibility="Hidden"></MenuItem>
+            <MenuItem Header="Json" Click="JJson" Visibility="Hidden"></MenuItem>
             <MenuItem Header="Шрифт" Click="Font_click"></MenuItem>
+            <MenuItem Header="Калибровка" Click="Calibration_Click"></MenuItem>
         </Menu>
 
         <Image Grid.Row="1" Name="image" MouseDown="imag_click"></Image>
@@ -38,7 +39,7 @@
               Width="{Binding ElementName=image,Path=ActualWidth }">
         </Canvas>
         
-        <Label Grid.Row="1" Grid.Column="1" Width="200" Name="point"></Label>
+        <!--<Label Grid.Row="1" Grid.Column="1" Width="200" Name="point"></Label>-->
 
         <DataGrid Grid.Row="2" Name="d12" PreviewKeyDown="delete_row">
              
@@ -52,13 +53,13 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Печать">
+                <!--<DataGridTemplateColumn Header="Печать">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox Margin="15,2,0,0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
         <!--Старое

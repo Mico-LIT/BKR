@@ -35,7 +35,7 @@
                 </ListView.ContextMenu>
             </ListView>
         </Grid>
-        <Button Grid.Row="1" Content="Сохранить изменения" Click="Button_Click_new" Height="20"/>
+        <Button Grid.Row="1" Content="Готово" Click="Button_Click_new" Height="60" Background="#FFFFADAD"/>
         <DataGrid  Grid.Row="2" Name="DataG" PreviewKeyDown="delete" SelectionUnit="CellOrRowHeader">
             <DataGrid.ContextMenu>
                 <ContextMenu>
