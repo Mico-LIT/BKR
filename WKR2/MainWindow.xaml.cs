@@ -208,7 +208,9 @@ namespace WKR2
 
                 //}
             }
-            b.Save(@"C:\BKR\WKR2\new12.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            
+            string ff = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            b.Save(ff+"\\PreView.jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
             using (MemoryStream tmpStrm = new MemoryStream())
             {
                 b.Save(tmpStrm, System.Drawing.Imaging.ImageFormat.Png);

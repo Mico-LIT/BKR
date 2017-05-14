@@ -25,7 +25,6 @@ C:\BKR\WKR2\bin\Debug\ICSharpCode.SharpZipLib.dll
 C:\BKR\WKR2\bin\Debug\Tool.pdb
 C:\BKR\WKR2\bin\Debug\Excel.pdb
 C:\BKR\WKR2\bin\Debug\Newtonsoft.Json.xml
-C:\BKR\WKR2\bin\Debug\ru\Microsoft.QualityTools.Testing.Fakes.resources.dll
 C:\BKR\WKR2\obj\Debug\WKR2.csprojResolveAssemblyReference.cache
 C:\BKR\WKR2\obj\Debug\MainWindow.g.cs
 C:\BKR\WKR2\obj\Debug\View\Button_Calibration.g.cs
