@@ -8,11 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.Serialization;
 
 namespace Tool
 {
     static public class Print
     {
+        [Serializable]
         //Калибровка
         public class Calibration_Data
         {

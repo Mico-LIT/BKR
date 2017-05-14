@@ -7,3 +7,4 @@ C:\BKR\Tool\bin\x86\Debug\Excel.pdb
 C:\BKR\Tool\bin\x86\Debug\Newtonsoft.Json.xml
 C:\BKR\Tool\obj\x86\Debug\Tool.dll
 C:\BKR\Tool\obj\x86\Debug\Tool.pdb
+C:\BKR\Tool\obj\x86\Debug\Tool.csprojResolveAssemblyReference.cache

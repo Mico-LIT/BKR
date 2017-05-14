@@ -29,6 +29,7 @@ namespace WKR2
         public Point PointImag;     // координаты кнопки 
         public Image imageORig;     //оригинал загружен
         public Dr.Bitmap bitmapORig;//оригинал загружен
+        private List<UIElement> But_canvas = new List<UIElement>();
 
         public MainWindow()
         {
@@ -170,6 +171,10 @@ namespace WKR2
         }
         public void Previwe()
         {
+            try
+            {
+
+            
             int tt = 0;
             //Dr.Bitmap bitmapORig = this.bitmapORig;
             Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width+tt, bitmapORig.Height+tt, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
@@ -223,6 +228,12 @@ namespace WKR2
             View.PreView pre = new View.PreView(vie);
             pre.WindowState = WindowState.Maximized;
             pre.ShowDialog();
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error"); 
+            }
         }
 
         #region Движение мыши
@@ -245,7 +256,7 @@ namespace WKR2
 
             }
         }
-        private void MouseMove(object sender, MouseEventArgs e)
+        public void MouseMove(object sender, MouseEventArgs e)
         {
             if (isMoved)
             {
@@ -285,7 +296,7 @@ namespace WKR2
 
         private void open(object sender, RoutedEventArgs e)
         {
-            Clear_button();
+            //Clear_button();
             DataView dd = Tool.ExcelWork.LoadrExcel();
             //if (dd != null) d12.ItemsSource = dd;
 
@@ -293,31 +304,40 @@ namespace WKR2
             if(dd!=null)
             if (vv.ShowDialog()== true)
             {
+                grid_imag.Children.Clear();
                 d12.ItemsSource = null;
                 d12.ItemsSource = dd;
-
                 DataView colbot = dd;
-
-
-                // сколько кнопок надо на разментку 
-                foreach (DataColumn item in colbot.Table.Columns)
-                {
-                    var but = new Button() { Name = item.ColumnName, Height = 20, Width = 100, Content = "**" + item.ColumnName + "**", Margin = new Thickness(0, 0, 0, 0) };
-                    but.MouseDown += new MouseButtonEventHandler(MouseDown);
-                    but.MouseUp += new MouseButtonEventHandler(MouseUp);
-                    but.MouseMove += new MouseEventHandler(MouseMove);
-                    but.Click += (r, t) => {
-                        Button bu = r as Button;
-                        View.Button_Calibration ff = new View.Button_Calibration(ref bu);
-                        ff.ShowDialog();
-                    };
-                    grid_imag.Children.Add(but);
-                }
             }
            
-
             //Сохранить в Json Парметр Excel измененого
             //Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
+        }
+
+        // сколько кнопок надо на разментку 
+        private void Button_ADD_Canvas(string str)
+        {
+            DataView colbot = (DataView)d12.ItemsSource;
+
+            //foreach (DataColumn item in colbot.Table.Columns)
+            //{
+            //var but = new Button() { Name = item.ColumnName, Height = 20, Width = 100, Content = "**" + item.ColumnName + "**", Margin = new Thickness(0, 0, 0, 0) };
+
+            Button but = new Button() { Name = str, Height = 20, Width = 100, Content = "**" + str + "**", Margin = new Thickness(0, 0, 0, 0) };
+            but.MouseDown += new MouseButtonEventHandler(MouseDown);
+                but.MouseUp += new MouseButtonEventHandler(MouseUp);
+                but.MouseMove += new MouseEventHandler(MouseMove);
+                but.Click += (r, t) => {
+                    Button bu = r as Button;
+                    View.Button_Calibration ff = new View.Button_Calibration(ref bu);
+                    ff.ShowDialog();
+                };
+            var df=But_canvas.Find(x => ((Button)x).Name == str);
+            if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
+            
+                grid_imag.Children.Add(but);
+            But_canvas.Add(but);
+            //}
         }
 
         private void JJson(object sender, RoutedEventArgs e)
@@ -371,20 +391,176 @@ namespace WKR2
             OFD.Filter = "Jpeg files (*.jpeg)|*.jpeg;*.jpg| PNG files (*.PNG)|*.png|Все файлы (*.*)|*.*";
             if (OFD.ShowDialog()==true)
             {
-                Clear_button();
+                //Clear_button();
                 image.Source = new BitmapImage(new Uri(OFD.FileName));                                   //генирится ошибка вот тут 
                 imageORig = image;
                 bitmapORig = new Dr.Bitmap(new BitmapImage(new Uri(OFD.FileName)).UriSource.LocalPath); //генирится ошибка вот тут 
+                But_canvas.Clear();
+                grid_imag.Children.Clear();
             }
         }
-        public void Clear_button()
-        {
-            for (int i = grid_imag.Children.Count-1; i >= 0 ; i--)
-            {
-                Button pp = grid_imag.Children[i] as Button;
-                if (pp != null) grid_imag.Children.Remove(pp);
-            }
+        //Зачем сука???
+        //public void Clear_button()
+        //{
+        //    for (int i = grid_imag.Children.Count-1; i >= 0 ; i--)
+        //    {
+        //        Button pp = grid_imag.Children[i] as Button;
+        //        if (pp != null) grid_imag.Children.Remove(pp);
+        //    }
            
+        //}
+
+        private void Add_Convas(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string fg = (string)d12.CurrentCell.Column.Header;
+                d12.SelectedIndex = -1;
+                Button_ADD_Canvas(fg);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Source,"Ошибка!",MessageBoxButton.OK,MessageBoxImage.Error);
+                d12.SelectedIndex = -1;
+            }
+            
+        }
+
+        private void Del_Button_Convas(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                string fg = (string)d12.CurrentCell.Column.Header;
+                var h=But_canvas.Find(x => ((Button)x).Name == fg);
+                d12.SelectedIndex = -1;
+                if (h == null) return;
+                grid_imag.Children.Remove(h);
+                But_canvas.Remove(h);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Source);
+                d12.SelectedIndex = -1;
+            }
+        }
+
+        private void Save_Serial(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SaveFileDialog SFD = new SaveFileDialog();
+                SFD.Filter = "Dat files (*.dat)|*.dat";
+                if (SFD.ShowDialog() == true)
+                {
+                    List<Setting_Button> but = new List<Setting_Button>();
+                    foreach (UIElement item in grid_imag.Children)
+                    {
+                        but.Add(new Setting_Button()
+                        {
+                            Name = ((Button)item).Name,
+                            Height = ((Button)item).Height,
+                            Width = ((Button)item).Width,
+                            MarginB = ((Button)item).Margin.Bottom,
+                            MarginL = ((Button)item).Margin.Left,
+                            MarginR = ((Button)item).Margin.Right,
+                            MarginT = ((Button)item).Margin.Top,
+                        });
+                    }
+
+
+                    Serialization_Data Se = new Serialization_Data(
+                        bitmapORig, Print.font,
+                        Print.calibration_data, but
+                        );
+                    Se.Serialization(SFD.FileName);
+                    MessageBox.Show("Сохранение прошло успешно");
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Ошибка при сохранении", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void Download_Serial(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog OFD = new OpenFileDialog();
+                OFD.Filter = "Dat files (*.dat)|*.dat";
+                if (OFD.ShowDialog() == true)
+                {
+                    But_canvas.Clear();
+                    grid_imag.Children.Clear();
+                    Tool.Serialization_Data De = new Serialization_Data();
+                    Data_Patern ds = De.DeSerialization(OFD.FileName);
+                    Print.font = ds.font;
+                    Print.calibration_data = ds.calibration_data;
+                    image.Source = ConvertToBitmapSource(ds.Image);
+                    Button_SERi_Canvas(ds.But_canvas);
+                    bitmapORig = ds.Image;
+                    MessageBox.Show("Загрузка прошла успешно");
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Ошибка при загрузки", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+        }
+        public BitmapSource ConvertToBitmapSource(Dr.Bitmap bitmap)
+        {
+            BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap
+            (
+            bitmap.GetHbitmap(),
+            IntPtr.Zero,
+            Int32Rect.Empty,
+            BitmapSizeOptions.FromEmptyOptions()
+            );
+            return bitmapSource;
+        }
+
+        private void Button_SERi_Canvas(List<Setting_Button> lis)
+        {
+            foreach (Setting_Button item in lis)
+            {
+
+
+            Button but = new Button() { Name = item.Name,
+                Height = item.Height,
+                Width = item.Width,
+                Content = "**" + item.Name + "**",
+                Margin = new Thickness(item.MarginL, item.MarginT, item.MarginR, item.MarginB) };
+            but.MouseDown += new MouseButtonEventHandler(MouseDown);
+            but.MouseUp += new MouseButtonEventHandler(MouseUp);
+            but.MouseMove += new MouseEventHandler(MouseMove);
+            but.Click += (r, t) => {
+                Button bu = r as Button;
+                View.Button_Calibration ff = new View.Button_Calibration(ref bu);
+                ff.ShowDialog();
+            };
+            //var df = But_canvas.Find(x => ((Button)x).Name == str);
+            //if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
+
+            grid_imag.Children.Add(but);
+            But_canvas.Add(but);
+
+            }
+        }
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            IssEnabled();
+        }
+        private void IssEnabled() {
+            if (d12.Columns.Count>1) 
+            {
+                D0.IsEnabled = D1.IsEnabled = D2.IsEnabled = true;
+                if (image.Source==null) D2.IsEnabled = false;
+                else D2.IsEnabled = true;
+            }
+            else{ D0.IsEnabled = D1.IsEnabled = D2.IsEnabled = false; }
+
         }
     }
 }
