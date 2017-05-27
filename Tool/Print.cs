@@ -27,13 +27,27 @@ namespace Tool
         //Шрифт
         static public Font font=new Font("Arial", 15);
 
+        static public Dictionary<System.Windows.Controls.Button, Font> But_font = new Dictionary<System.Windows.Controls.Button, Font>();
 
-        static public void Font()
+
+        static public Font Font()
         {
+            
             using (FontDialog Fontdialog = new FontDialog())
             {
             Fontdialog.Font = font;
-            if (Fontdialog.ShowDialog() == DialogResult.OK) font = Fontdialog.Font;
+            if (Fontdialog.ShowDialog() == DialogResult.OK) return Fontdialog.Font;
+                return null;
+            }
+        }
+        static public Font Font(Font s)
+        {
+
+            using (FontDialog Fontdialog = new FontDialog())
+            {
+                Fontdialog.Font = s;
+                if (Fontdialog.ShowDialog() == DialogResult.OK) return Fontdialog.Font;
+                return null;
             }
         }
         static public void dd()

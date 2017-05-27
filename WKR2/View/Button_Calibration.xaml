@@ -8,14 +8,16 @@
         Title="Button_Calibration" Height="269.333" Width="230">
     <Grid Name="d12">
         <Grid.RowDefinitions>
+
             <RowDefinition />
             <RowDefinition />
             <RowDefinition Height="20" />
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
             <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
 
         <Button Name="down"  Click="down_Click" >
@@ -30,7 +32,7 @@
                         </TransformGroup>
                     </ImageBrush.RelativeTransform>
                 </ImageBrush>
-            </Button.Background> 
+            </Button.Background>
         </Button>
         <Button Name="up"  Click="up_Click" Grid.Column="1"  >
             <Button.Background>
@@ -44,7 +46,7 @@
                         </TransformGroup>
                     </ImageBrush.RelativeTransform>
                 </ImageBrush>
-            </Button.Background> 
+            </Button.Background>
         </Button>
         <Button Name="rigth"  Click="rigth_Click"  Grid.Row="1" >
             <Button.Background>
@@ -58,7 +60,7 @@
                         </TransformGroup>
                     </ImageBrush.RelativeTransform>
                 </ImageBrush>
-            </Button.Background> 
+            </Button.Background>
         </Button>
         <Button Name="left"  Click="left_Click" Grid.Column="1" Grid.Row="1">
             <Button.Background>
@@ -79,5 +81,15 @@
         <TextBlock Grid.Row="2" Grid.Column="1">Длина</TextBlock>
         <TextBox Grid.Row="3" Text="{Binding Path=Height ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=Width,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <Button  Content="Шрифт" Grid.Row="1" Grid.Column="2" Name="But_font" Click="But_font_Click" FontFamily="Arial" >
+            <Button.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.LayoutTransform>
+        </Button>
     </Grid>
 </Window>

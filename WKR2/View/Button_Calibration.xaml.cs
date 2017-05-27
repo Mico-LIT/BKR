@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,6 +48,27 @@ namespace WKR2.View
         private void left_Click(object sender, RoutedEventArgs e)
         {
             bu.Margin = new Thickness(bu.Margin.Left-1, bu.Margin.Top , 0, 0);
+        }
+
+        private void But_font_Click(object sender, RoutedEventArgs e)
+        {
+
+            var tt= Tool.Print.But_font.FirstOrDefault(x => bu == x.Key);
+            if (tt.Key != null)
+            {
+                Font f = Tool.Print.Font(Tool.Print.But_font[bu]);
+                if (f!=null)Tool.Print.But_font[bu] = f;
+
+            }
+            else {
+                Font f = Tool.Print.Font();
+                if (f != null) Tool.Print.But_font.Add(bu, f);
+            }
+            
+        
+
+
+
         }
     }
 }

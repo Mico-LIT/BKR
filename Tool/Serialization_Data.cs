@@ -17,7 +17,8 @@ namespace Tool
         private Print.Calibration_Data calibration_data;
         private List<Setting_Button> but;
 
-        public Serialization_Data(Bitmap image, Font font, Print.Calibration_Data calibration_data, List<Setting_Button> but)
+        public Serialization_Data(Bitmap image, Font font, 
+            Print.Calibration_Data calibration_data, List<Setting_Button> but)
         {
             this.image = image;
             this.font = font;

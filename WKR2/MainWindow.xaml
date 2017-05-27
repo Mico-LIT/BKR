@@ -13,7 +13,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition/>
-            <RowDefinition Height="0.4*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
         <!--<Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -44,8 +45,13 @@
         </Canvas>
         
         <!--<Label Grid.Row="1" Grid.Column="1" Width="200" Name="point"></Label>-->
-
-        <DataGrid Grid.Row="2" Name="d12" PreviewKeyDown="delete_row">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Name="poisk">
+            <ComboBox Width="200" Name="Com"></ComboBox>
+            <TextBox Width="150"></TextBox>
+            <Button Width="50" Click="Poisk"> поиск</Button>
+        </StackPanel>
+        <DataGrid Grid.Row="3" Name="d12" PreviewKeyDown="delete_row" RowHeight="19" ColumnWidth="80" LoadingRow="d12_LoadingRow" AutoGeneratingColumn="d12_AutoGeneratingColumn" >
+            
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="ADD" Click="Add_Convas"></MenuItem>
@@ -53,7 +59,7 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Печать">
+                <DataGridTemplateColumn Header="Печать" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
@@ -62,6 +68,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                
                 <!--<DataGridTemplateColumn Header="Печать">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

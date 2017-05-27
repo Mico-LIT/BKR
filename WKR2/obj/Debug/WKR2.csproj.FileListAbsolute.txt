@@ -44,3 +44,5 @@ C:\BKR\WKR2\obj\Debug\WKR2.Properties.Resources.resources
 C:\BKR\WKR2\obj\Debug\WKR2.csproj.GenerateResource.Cache
 C:\BKR\WKR2\obj\Debug\WKR2.exe
 C:\BKR\WKR2\obj\Debug\WKR2.pdb
+C:\BKR\WKR2\obj\Debug\View\Poisk.g.cs
+C:\BKR\WKR2\obj\Debug\View\Poisk.baml

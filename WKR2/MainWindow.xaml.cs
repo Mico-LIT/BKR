@@ -33,7 +33,7 @@ namespace WKR2
 
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent(); IssEnabled();
             //List<Date> fd = new List<Date>() { new Date() { jsdkf = "423", NAme = "dsf4", NAme1 = "fs43" } };
 
             //image.Source = ImageWork.Load();                                   //генирится ошибка вот тут 
@@ -135,21 +135,29 @@ namespace WKR2
             {
                 g.Clear(System.Drawing.Color.White); 
 
-                int i = 0;
+                
                 foreach (var item in grid_imag.Children)
                 {
                     if (item is Button)
                     {
                         Button f = item as Button;
-
+                        int i = 0;
                         double pixelWidth = image.Source.Width;
                         double pixelHeight = image.Source.Height;
                         PointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
                         PointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
                         var yy = (DataView)d12.ItemsSource;
-                        string TEXT = (yy.Table.Rows[Item_Row].ItemArray[i++]).ToString();
+                        foreach (DataColumn ii in yy.Table.Columns)
+                        {
+                            if (ii.ColumnName == f.Name) break;
+                            i++;
+                        }
+                        string TEXT = (yy.Table.Rows[Item_Row].ItemArray[i]).ToString();
 
-                        g.DrawString(TEXT, Tool.Print.font, Dr.Brushes.Black,
+                        var trt = Tool.Print.But_font.FirstOrDefault(x => f == x.Key).Value;
+                        if (trt == null) { trt = Tool.Print.font; }
+
+                        g.DrawString(TEXT, trt, Dr.Brushes.Black,
                             new Dr.RectangleF(
                                 (float)PointImag.X, 
                                 (float)PointImag.Y, 
@@ -189,21 +197,29 @@ namespace WKR2
 
                 //using (var font = new Dr.Font("Arial", 15))
                 //{
-                    int i = 0;
+                    
                     foreach (var item in grid_imag.Children)
                     {
                         if (item is Button)
                         {
                             Button f = item as Button;
-
+                            int i = 0;
                             double pixelWidth = image.Source.Width;
                             double pixelHeight = image.Source.Height;
                             PointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
                             PointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
                             var yy = (DataView)d12.ItemsSource;
-                            string TEXT=(yy.Table.Rows[0].ItemArray[i++]).ToString();
+                            foreach (DataColumn ii in yy.Table.Columns)
+                            {
+                                if (ii.ColumnName==f.Name)break;
+                                i++;
+                            }
+                            string TEXT=(yy.Table.Rows[0].ItemArray[i]).ToString();
 
-                            g.DrawString(TEXT/*+"123456786543213453421224234234"*/, Tool.Print.font, Dr.Brushes.Black,
+                            var trt = Tool.Print.But_font.FirstOrDefault(x => f == x.Key).Value;
+                            if (trt == null) { trt = Tool.Print.font; }
+
+                            g.DrawString(TEXT/*+"123456786543213453421224234234"*/, trt, Dr.Brushes.Black,
                                 new Dr.RectangleF((float)PointImag.X, (float)PointImag.Y,(float)(f.Width*3.3), (float)(f.Height*3.3)));
 
                        //     g.DrawString(TEXT+"</br> 3efdvgt4", font, Dr.Brushes.Black,
@@ -308,12 +324,20 @@ namespace WKR2
                 d12.ItemsSource = null;
                 d12.ItemsSource = dd;
                 DataView colbot = dd;
+                    var ff=d12.Columns;
+                    foreach (var item in ff)
+                    {
+                        if (item is DataGridTextColumn) Com.Items.Add( item.Header);
+                    }
             }
-           
+            IssEnabled();
             //Сохранить в Json Парметр Excel измененого
             //Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
         }
-
+        private void d12_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            var fg=e.Row.Header = (e.Row.GetIndex()).ToString();
+        }
         // сколько кнопок надо на разментку 
         private void Button_ADD_Canvas(string str)
         {
@@ -332,9 +356,10 @@ namespace WKR2
                     View.Button_Calibration ff = new View.Button_Calibration(ref bu);
                     ff.ShowDialog();
                 };
-            var df=But_canvas.Find(x => ((Button)x).Name == str);
-            if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
-            
+            //var df=But_canvas.Find(x => ((Button)x).Name == str);
+            //if (df != null) but.Content = "Копия " + but.Name;//throw new Exception() { Source = " Елемент такой уже добавлен!" };
+
+
                 grid_imag.Children.Add(but);
             But_canvas.Add(but);
             //}
@@ -372,7 +397,7 @@ namespace WKR2
 
         private void Font_click(object sender, RoutedEventArgs e)
         {
-            Tool.Print.Font();
+            Tool.Print.font=Tool.Print.Font();
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -432,9 +457,11 @@ namespace WKR2
             {
 
                 string fg = (string)d12.CurrentCell.Column.Header;
-                var h=But_canvas.Find(x => ((Button)x).Name == fg);
+                var h=But_canvas.FindLast(x => ((Button)x).Name == fg);
                 d12.SelectedIndex = -1;
                 if (h == null) return;
+
+                Tool.Print.But_font.Remove((Button)h);
                 grid_imag.Children.Remove(h);
                 But_canvas.Remove(h);
             }
@@ -465,6 +492,7 @@ namespace WKR2
                             MarginL = ((Button)item).Margin.Left,
                             MarginR = ((Button)item).Margin.Right,
                             MarginT = ((Button)item).Margin.Top,
+                            Font=Tool.Print.But_font.FirstOrDefault(x=>x.Key== (Button)item).Value
                         });
                     }
 
@@ -477,7 +505,7 @@ namespace WKR2
                     MessageBox.Show("Сохранение прошло успешно");
                 }
             }
-            catch (Exception)
+            catch (Exception ee)
             {
                 MessageBox.Show("Ошибка при сохранении", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -495,6 +523,7 @@ namespace WKR2
                     grid_imag.Children.Clear();
                     Tool.Serialization_Data De = new Serialization_Data();
                     Data_Patern ds = De.DeSerialization(OFD.FileName);
+                    //Tool.Print.But_font = ds.BF;
                     Print.font = ds.font;
                     Print.calibration_data = ds.calibration_data;
                     image.Source = ConvertToBitmapSource(ds.Image);
@@ -540,9 +569,9 @@ namespace WKR2
                 View.Button_Calibration ff = new View.Button_Calibration(ref bu);
                 ff.ShowDialog();
             };
-            //var df = But_canvas.Find(x => ((Button)x).Name == str);
-            //if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
-
+                //var df = But_canvas.Find(x => ((Button)x).Name == str);
+                //if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
+                if (item.Font!=null) Tool.Print.But_font.Add(but, item.Font);
             grid_imag.Children.Add(but);
             But_canvas.Add(but);
 
@@ -555,12 +584,25 @@ namespace WKR2
         private void IssEnabled() {
             if (d12.Columns.Count>1) 
             {
-                D0.IsEnabled = D1.IsEnabled = D2.IsEnabled = true;
+                D0.IsEnabled = D1.IsEnabled = D2.IsEnabled=poisk.IsEnabled = true;
                 if (image.Source==null) D2.IsEnabled = false;
                 else D2.IsEnabled = true;
             }
-            else{ D0.IsEnabled = D1.IsEnabled = D2.IsEnabled = false; }
+            else{ D0.IsEnabled = D1.IsEnabled = D2.IsEnabled = poisk.IsEnabled = false; }
 
+        }
+
+        private void Poisk(object sender, RoutedEventArgs e)
+        {
+            var fg = new View.Poisk(this);
+            fg.Show();
+        }
+
+        private void d12_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            
+                //e.Column.Header =;
+            
         }
     }
 }

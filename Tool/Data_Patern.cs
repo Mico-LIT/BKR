@@ -20,7 +20,7 @@ namespace Tool
         public Font font { get; set; }
         public Calibration_Data calibration_data { get; set; }
         public List<Setting_Button> But_canvas { get; set; }
-        
+
     }
     [Serializable]
     public class Setting_Button
@@ -32,5 +32,6 @@ namespace Tool
         public double MarginL { get; set; }
         public double MarginT { get; set; }
         public double MarginR { get; set; }
+        public Font Font { get; set; }
     }
 }
