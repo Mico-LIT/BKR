@@ -29,7 +29,7 @@
                 <MenuItem Header="Выход" Click="Exit"></MenuItem>
             </MenuItem>
             <MenuItem Header="Предпросмотр" Click="MenuItem_Click"></MenuItem>
-            <MenuItem Header="Печать" Click="Pehat" Visibility="Hidden"></MenuItem>
+            <MenuItem Header="Печать" Click="Pehat" Visibility="Visible"></MenuItem>
             <MenuItem Header="Save" Click="Save_img" Visibility="Hidden"></MenuItem>
             <MenuItem Header="Json" Click="JJson" Visibility="Hidden"></MenuItem>
             <MenuItem Header="Шрифт" Click="Font_click"></MenuItem>

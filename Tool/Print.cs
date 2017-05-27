@@ -12,7 +12,7 @@ using System.Runtime.Serialization;
 
 namespace Tool
 {
-    static public class Print
+    public class Print
     {
         [Serializable]
         //Калибровка
@@ -78,7 +78,8 @@ namespace Tool
                 printDoc.PrinterSettings = setupDlg.PrinterSettings;
             }
             else return;
-
+            printDlg.AllowSomePages = true;
+            printDlg.UseEXDialog = true;
             //var fggg=printDoc.PrinterSettings.LandscapeAngle;
             if (printDlg.ShowDialog() == DialogResult.OK)
             {
@@ -102,7 +103,7 @@ namespace Tool
             printDoc.Print();
 
         }
-
+        
         private static void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
         {
             //e.PageSettings.Margins = new Margins(0,0,0,0);
@@ -184,5 +185,62 @@ namespace Tool
             return result;
         }
 
+        private static Func<int, Image> print_Item2_;
+        public static void dd(Func<int, Image> print_Item2)
+        {
+            print_Item2_ = print_Item2;
+             var setupDlg = new PageSetupDialog();
+            var printDlg = new PrintDialog();
+            var printDoc = new PrintDocument();
+            printDoc.DocumentName = "Print Document";
+
+            setupDlg.PageSettings = new System.Drawing.Printing.PageSettings();
+            setupDlg.PrinterSettings = new System.Drawing.Printing.PrinterSettings();
+
+            setupDlg.PageSettings.Landscape = true;
+            setupDlg.PageSettings.Margins = new Margins(0, 0, 0, 0);
+
+            if (setupDlg.ShowDialog() == DialogResult.OK)
+            {
+                printDoc.DefaultPageSettings = setupDlg.PageSettings;
+                printDoc.PrinterSettings = setupDlg.PrinterSettings;
+            }
+            else return;
+            printDlg.AllowSomePages = true;
+            printDlg.UseEXDialog = true;
+
+            if (printDlg.ShowDialog() == DialogResult.OK)
+            {
+                printDoc.PrinterSettings = printDlg.PrinterSettings;
+
+            }
+            else return;
+            Start=printDlg.PrinterSettings.FromPage;
+            Stop=printDlg.PrinterSettings.ToPage;
+            printDoc.PrintPage += PrintDoc_PrintPage1; ;
+            printDoc.Print();
+        }
+
+        static int Start = 0;
+        static int Stop = 0;
+        private static void PrintDoc_PrintPage1(object sender, PrintPageEventArgs e)
+        {
+          
+            e.Graphics.DrawImage(print_Item2_(Start), new Rectangle()
+                 {
+                     Height = e.PageSettings.PaperSize.Width,
+                     Width = e.PageSettings.PaperSize.Height,
+                     X = calibration_data.X,
+                     Y = calibration_data.Y,
+                 });
+
+            if (Start == Stop)
+            {
+                e.HasMorePages = false;
+                Start = Stop = 0;
+            }
+            else e.HasMorePages = true;
+            Start++;
+        }
     }
 }

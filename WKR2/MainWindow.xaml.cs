@@ -19,6 +19,7 @@ using Microsoft.Win32;
 using System.Data;
 using System.ComponentModel;
 
+
 namespace WKR2
 {
     /// <summary>
@@ -123,8 +124,18 @@ namespace WKR2
         //новое окно 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
             var ddd = d12.SelectedIndex;
+            
             Print_Item(ddd);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         public void Print_Item(int Item_Row)
         {
@@ -384,10 +395,63 @@ namespace WKR2
 
         private void Pehat(object sender, RoutedEventArgs e)
         {
-           
-            Tool.Print.dd();
+
+            Tool.Print.dd(Print_Item2);
+        }
+
+
+        public Dr.Image Print_Item2(int Item_Row)
+        {
+            Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width, bitmapORig.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            Dr.Image vie;
+
+            using (Dr.Graphics g = Dr.Graphics.FromImage(b))
+            {
+                g.Clear(System.Drawing.Color.White);
+
+
+                foreach (var item in grid_imag.Children)
+                {
+                    if (item is Button)
+                    {
+                        Button f = item as Button;
+                        int i = 0;
+                        double pixelWidth = image.Source.Width;
+                        double pixelHeight = image.Source.Height;
+                        PointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
+                        PointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
+                        var yy = (DataView)d12.ItemsSource;
+                        foreach (DataColumn ii in yy.Table.Columns)
+                        {
+                            if (ii.ColumnName == f.Name) break;
+                            i++;
+                        }
+                        string TEXT = (yy.Table.Rows[Item_Row].ItemArray[i]).ToString();
+
+                        var trt = Tool.Print.But_font.FirstOrDefault(x => f == x.Key).Value;
+                        if (trt == null) { trt = Tool.Print.font; }
+
+                        g.DrawString(TEXT, trt, Dr.Brushes.Black,
+                            new Dr.RectangleF(
+                                (float)PointImag.X,
+                                (float)PointImag.Y,
+                                (float)(f.Width * 3.3),
+                                (float)(f.Height * 3.3)));
+                    }
+                }
+
+            }
+
+            using (MemoryStream tmpStrm = new MemoryStream())
+            {
+                b.Save(tmpStrm, System.Drawing.Imaging.ImageFormat.Png);
+                vie = Dr.Image.FromStream(tmpStrm);
+            }
+            b.Dispose();
+                return vie;
 
         }
+
 
         private void Calibration_Click(object sender, RoutedEventArgs e)
         {
