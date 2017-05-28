@@ -46,3 +46,5 @@ C:\BKR\WKR2\obj\Debug\WKR2.exe
 C:\BKR\WKR2\obj\Debug\WKR2.pdb
 C:\BKR\WKR2\obj\Debug\View\Poisk.g.cs
 C:\BKR\WKR2\obj\Debug\View\Poisk.baml
+C:\BKR\WKR2\obj\Debug\View\Anallitic_Setings.g.cs
+C:\BKR\WKR2\obj\Debug\View\Anallitic_Setings.baml

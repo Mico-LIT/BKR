@@ -16,14 +16,16 @@ namespace Tool
         private Font font;
         private Print.Calibration_Data calibration_data;
         private List<Setting_Button> but;
+        private Tool.Analitic.Params par;
 
         public Serialization_Data(Bitmap image, Font font, 
-            Print.Calibration_Data calibration_data, List<Setting_Button> but)
+            Print.Calibration_Data calibration_data, List<Setting_Button> but,Tool.Analitic.Params par)
         {
             this.image = image;
             this.font = font;
             this.calibration_data = calibration_data;
             this.but = but;
+            this.par = par;
         }
         public Serialization_Data()
         {
@@ -36,7 +38,8 @@ namespace Tool
                 Image = this.image ,
                 But_canvas= but,
                 font = this.font,
-                calibration_data = this.calibration_data
+                calibration_data = this.calibration_data,
+                par=this.par
             };
 
             BinaryFormatter formatter = new BinaryFormatter();

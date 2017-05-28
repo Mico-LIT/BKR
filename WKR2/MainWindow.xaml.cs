@@ -127,16 +127,17 @@ namespace WKR2
             try
             {
             var ddd = d12.SelectedIndex;
-            
-            Print_Item(ddd);
+                //Print_Item(ddd);
+                ShowMessAnalitic();
+                Tool.Print.dd(Print_Item2, GetParametrAnalitic,ddd+1);
 
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
+        //забросил метод
         public void Print_Item(int Item_Row)
         {
             Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width, bitmapORig.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
@@ -186,14 +187,12 @@ namespace WKR2
             }
             b.Dispose();
             Tool.Print.iii = vie;
-            Tool.Print.dd();
+            //Tool.Print.dd();
         }
-        public void Previwe()
+        public void Previwe(int row=0)
         {
             try
             {
-
-            
             int tt = 0;
             //Dr.Bitmap bitmapORig = this.bitmapORig;
             Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width+tt, bitmapORig.Height+tt, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
@@ -225,7 +224,7 @@ namespace WKR2
                                 if (ii.ColumnName==f.Name)break;
                                 i++;
                             }
-                            string TEXT=(yy.Table.Rows[0].ItemArray[i]).ToString();
+                            string TEXT=(yy.Table.Rows[row].ItemArray[i]).ToString();
 
                             var trt = Tool.Print.But_font.FirstOrDefault(x => f == x.Key).Value;
                             if (trt == null) { trt = Tool.Print.font; }
@@ -324,9 +323,13 @@ namespace WKR2
         private void open(object sender, RoutedEventArgs e)
         {
             //Clear_button();
-            DataView dd = Tool.ExcelWork.LoadrExcel();
-            //if (dd != null) d12.ItemsSource = dd;
+            try
+            {
 
+            
+            DataView dd = Tool.ExcelWork.LoadrExcel();
+                //if (dd != null) d12.ItemsSource = dd;
+           
             View.SettingView vv = new View.SettingView(dd);
             if(dd!=null)
             if (vv.ShowDialog()== true)
@@ -338,16 +341,23 @@ namespace WKR2
                     var ff=d12.Columns;
                     foreach (var item in ff)
                     {
-                        if (item is DataGridTextColumn) Com.Items.Add( item.Header);
+                        if (item is DataGridTextColumn) Com.Items.Add( (string)item.Header);
                     }
             }
             IssEnabled();
-            //Сохранить в Json Парметр Excel измененого
-            //Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
+
+                //Сохранить в Json Парметр Excel измененого
+                //Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Ошибка при загрузке!");
+            }
         }
         private void d12_LoadingRow(object sender, DataGridRowEventArgs e)
         {
-            var fg=e.Row.Header = (e.Row.GetIndex()).ToString();
+               var fg=e.Row.Header = (e.Row.GetIndex()+1).ToString()+"    ";
+
         }
         // сколько кнопок надо на разментку 
         private void Button_ADD_Canvas(string str)
@@ -392,22 +402,48 @@ namespace WKR2
                 //d12.Items.Remove(d12.SelectedItem);// напрямую с ним работать нельзя надо посредника DataTable
             }
         }
+        private void ShowMessAnalitic()
+       {
+            MessageBoxResult result = MessageBox.Show("Включить аналитик?!", "Внимание!", MessageBoxButton.YesNo,MessageBoxImage.Information);
+            switch (result)
+            {
+                case MessageBoxResult.No:
+                    Tool.Analitic.GetSettingOnAnalitic = false;
+                    break;
+                case MessageBoxResult.Yes:
+                    Tool.Analitic.GetSettingOnAnalitic = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private string GetParametrAnalitic(int Row)
+        {
+            string str=String.Format("{0}_{1}_{2}_", 
+                ((DataView)d12.ItemsSource).Table.Rows[Row].ItemArray[Tool.Analitic.PARAMS.Params_1].ToString(),
+                ((DataView)d12.ItemsSource).Table.Rows[Row].ItemArray[Tool.Analitic.PARAMS.Params_2].ToString(),
+                DateTime.Now.ToShortDateString()
+                );
+            return str;
+        }
 
         private void Pehat(object sender, RoutedEventArgs e)
         {
-
-            Tool.Print.dd(Print_Item2);
+            ShowMessAnalitic();
+            Tool.Print.dd(Print_Item2, GetParametrAnalitic);
         }
 
 
-        public Dr.Image Print_Item2(int Item_Row)
+        public Dr.Image Print_Item2(int Item_Row,int rez=0)
         {
             Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width, bitmapORig.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             Dr.Image vie;
+            if (rez!=0)using (Dr.Graphics g = Dr.Graphics.FromImage(b)) { g.DrawImage(bitmapORig, 0, 0); }
 
             using (Dr.Graphics g = Dr.Graphics.FromImage(b))
             {
-                g.Clear(System.Drawing.Color.White);
+                if (rez==0)g.Clear(System.Drawing.Color.White);
 
 
                 foreach (var item in grid_imag.Children)
@@ -471,11 +507,15 @@ namespace WKR2
 
         private void Exit(object sender, RoutedEventArgs e)
         {
+            
             this.Close();
         }
 
         private void Image_Download(object sender, RoutedEventArgs e)
         {
+
+            View.Anallitic_Setings AS = new View.Anallitic_Setings(Com.Items);
+            AS.ShowDialog();
             OpenFileDialog OFD = new OpenFileDialog();
             OFD.Filter = "Jpeg files (*.jpeg)|*.jpeg;*.jpg| PNG files (*.PNG)|*.png|Все файлы (*.*)|*.*";
             if (OFD.ShowDialog()==true)
@@ -540,8 +580,10 @@ namespace WKR2
         {
             try
             {
+                DirectoryInfo di = Directory.CreateDirectory(Print.PATH_LOCAL + @"\Patern");
                 SaveFileDialog SFD = new SaveFileDialog();
                 SFD.Filter = "Dat files (*.dat)|*.dat";
+                SFD.DefaultExt = di.FullName;
                 if (SFD.ShowDialog() == true)
                 {
                     List<Setting_Button> but = new List<Setting_Button>();
@@ -563,7 +605,8 @@ namespace WKR2
 
                     Serialization_Data Se = new Serialization_Data(
                         bitmapORig, Print.font,
-                        Print.calibration_data, but
+                        Print.calibration_data, but,
+                        Tool.Analitic.PARAMS
                         );
                     Se.Serialization(SFD.FileName);
                     MessageBox.Show("Сохранение прошло успешно");
@@ -581,6 +624,7 @@ namespace WKR2
             {
                 OpenFileDialog OFD = new OpenFileDialog();
                 OFD.Filter = "Dat files (*.dat)|*.dat";
+                OFD.InitialDirectory = Print.PATH_LOCAL;
                 if (OFD.ShowDialog() == true)
                 {
                     But_canvas.Clear();
@@ -590,6 +634,7 @@ namespace WKR2
                     //Tool.Print.But_font = ds.BF;
                     Print.font = ds.font;
                     Print.calibration_data = ds.calibration_data;
+                    Tool.Analitic.PARAMS = ds.par;
                     image.Source = ConvertToBitmapSource(ds.Image);
                     Button_SERi_Canvas(ds.But_canvas);
                     bitmapORig = ds.Image;
@@ -667,6 +712,24 @@ namespace WKR2
             
                 //e.Column.Header =;
             
+        }
+
+        private void Analitic(object sender, RoutedEventArgs e)
+        {
+            View.Anallitic_Setings an = new View.Anallitic_Setings(Com.Items);
+
+            an.ShowDialog();
+        }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            Previwe(d12.SelectedIndex);
+        }
+
+        private void IntoExcel(object sender, RoutedEventArgs e)
+        {
+            Tool.ExcelWork.ExportToExcel();
+            MessageBox.Show("Выгрузка прошла успешно!");
         }
     }
 }

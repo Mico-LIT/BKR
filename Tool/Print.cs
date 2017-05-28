@@ -21,6 +21,8 @@ namespace Tool
             public int X { get; set; }
             public int Y { get; set; }
         }
+        static public string PATH_LOCAL= System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
         static public Calibration_Data calibration_data=new Calibration_Data() { X=0,Y=0};
         //Картинка на печать
         static public Image iii;
@@ -37,7 +39,7 @@ namespace Tool
             {
             Fontdialog.Font = font;
             if (Fontdialog.ShowDialog() == DialogResult.OK) return Fontdialog.Font;
-                return null;
+                return font;
             }
         }
         static public Font Font(Font s)
@@ -50,9 +52,9 @@ namespace Tool
                 return null;
             }
         }
-        static public void dd()
+        static public void dd(int ii)
         {
-
+            Start = Stop = ii;
             var setupDlg = new PageSetupDialog();
             var printDlg = new PrintDialog();
             var printDoc = new PrintDocument();
@@ -78,8 +80,8 @@ namespace Tool
                 printDoc.PrinterSettings = setupDlg.PrinterSettings;
             }
             else return;
-            printDlg.AllowSomePages = true;
-            printDlg.UseEXDialog = true;
+            //printDlg.AllowSomePages = true;
+            //printDlg.UseEXDialog = true;
             //var fggg=printDoc.PrinterSettings.LandscapeAngle;
             if (printDlg.ShowDialog() == DialogResult.OK)
             {
@@ -99,7 +101,7 @@ namespace Tool
             //}
             //printDoc.DefaultPageSettings.Landscape = true; //Горизонт
             //printDoc.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);// отступы
-            printDoc.PrintPage += PrintDoc_PrintPage;
+            printDoc.PrintPage += PrintDoc_PrintPage1;
             printDoc.Print();
 
         }
@@ -185,10 +187,12 @@ namespace Tool
             return result;
         }
 
-        private static Func<int, Image> print_Item2_;
-        public static void dd(Func<int, Image> print_Item2)
+        private static Func<int, int, Image> print_Item2_;
+        private static Func<int, string> getParametrAnalitic_;
+        public static void dd(Func<int,int, Image> print_Item2, Func<int, string> getParametrAnalitic,int ii=1)
         {
             print_Item2_ = print_Item2;
+            getParametrAnalitic_ = getParametrAnalitic;
              var setupDlg = new PageSetupDialog();
             var printDlg = new PrintDialog();
             var printDoc = new PrintDocument();
@@ -208,15 +212,16 @@ namespace Tool
             else return;
             printDlg.AllowSomePages = true;
             printDlg.UseEXDialog = true;
-
+          
+           printDlg.PrinterSettings.FromPage=printDlg.PrinterSettings.ToPage = ii;
             if (printDlg.ShowDialog() == DialogResult.OK)
             {
                 printDoc.PrinterSettings = printDlg.PrinterSettings;
 
             }
             else return;
-            Start=printDlg.PrinterSettings.FromPage;
-            Stop=printDlg.PrinterSettings.ToPage;
+            Start=printDlg.PrinterSettings.FromPage-1;
+            Stop=printDlg.PrinterSettings.ToPage-1;
             printDoc.PrintPage += PrintDoc_PrintPage1; ;
             printDoc.Print();
         }
@@ -225,8 +230,9 @@ namespace Tool
         static int Stop = 0;
         private static void PrintDoc_PrintPage1(object sender, PrintPageEventArgs e)
         {
-          
-            e.Graphics.DrawImage(print_Item2_(Start), new Rectangle()
+           if(Analitic.GetSettingOnAnalitic) Analitic.Save_Persont(print_Item2_(Start, 1), getParametrAnalitic_(Start));
+
+            e.Graphics.DrawImage(print_Item2_(Start,0), new Rectangle()
                  {
                      Height = e.PageSettings.PaperSize.Width,
                      Width = e.PageSettings.PaperSize.Height,
@@ -242,5 +248,6 @@ namespace Tool
             else e.HasMorePages = true;
             Start++;
         }
+
     }
 }
