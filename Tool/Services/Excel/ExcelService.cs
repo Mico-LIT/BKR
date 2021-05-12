@@ -10,12 +10,13 @@ using System.IO;
 using Excel;
 using Newtonsoft.Json;
 using Microsoft.Office.Interop.Excel;
+using Tool.Services.Excel.Models;
 
-namespace Tool
+namespace Tool.Services.Excel
 {
-    static public class ExcelWork
+    public static class ExcelService
     {
-        static public DataView LoadrExcel()
+        public static DataView LoadrExcel()
         {
             DataSet dd;
             OpenFileDialog df = new OpenFileDialog() { ValidateNames = true };
@@ -42,31 +43,11 @@ namespace Tool
             return null;
         }
 
-        static public void Json(System.Data.DataTable dd)
-        {
-            DataSet dsSorted = new DataSet(); dsSorted.Tables.Add(dd);
-
-            string json = JsonConvert.SerializeObject(dsSorted, Formatting.Indented);
-            using (FileStream gg = new FileStream("DDD12.txt", FileMode.OpenOrCreate))
-            {
-                byte[] array = System.Text.Encoding.Default.GetBytes(json);
-                gg.Write(array, 0, array.Length);
-            }
-        }
-
-        class asd
-        {
-            public string FIO { get; set; }
-            public string Nomer { get; set; }
-            public string repeat { get; set; }
-            public string Date { get; set; }
-        }
-
         public static void ExportToExcel(string pathLocal)
         {
             System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(Path.Combine(pathLocal, @"\Analitic"));
 
-            List<asd> fff = new List<asd>();
+            List<Settings> fff = new List<Settings>();
             var files = info.GetFiles("*.jpeg").ToList();
             foreach (var item in files)
             {
@@ -74,7 +55,7 @@ namespace Tool
 
                 if (item.ToString().Split('_').Count() == 5)
                 {
-                    fff.Add(new asd()
+                    fff.Add(new Settings()
                     {
                         Nomer = (mas[1]),
                         FIO = (mas[2]),
@@ -85,7 +66,7 @@ namespace Tool
                 }
                 else
                 {
-                    fff.Add(new asd()
+                    fff.Add(new Settings()
                     {
                         Nomer = (mas[0]),
                         FIO = (mas[1]),
@@ -98,7 +79,7 @@ namespace Tool
             {
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("ФИО; НОМЕР;ПОВТОР;ДАТА");
-                foreach (asd items in fff)
+                foreach (Settings items in fff)
                 {
                     sb.AppendLine(String.Format("{0};{1};{2};{3}", items.FIO, items.Nomer, items.repeat, items.Date));
                 }
@@ -165,6 +146,5 @@ namespace Tool
             //}
             #endregion
         }
-
     }
 }

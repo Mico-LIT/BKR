@@ -19,6 +19,7 @@ using Microsoft.Win32;
 using System.Data;
 using System.ComponentModel;
 using Tool.Services.Analitic;
+using Tool.Services.Excel;
 
 namespace WKR2
 {
@@ -327,7 +328,7 @@ namespace WKR2
             {
 
             
-            DataView dd = Tool.ExcelWork.LoadrExcel();
+            DataView dd = ExcelService.LoadrExcel();
                 //if (dd != null) d12.ItemsSource = dd;
            
             View.SettingView vv = new View.SettingView(dd);
@@ -388,7 +389,7 @@ namespace WKR2
 
         private void JJson(object sender, RoutedEventArgs e)
         {
-            Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
+            Tool.Helper.Json(((DataView)d12.ItemsSource).ToTable());
         }
 
         private void delete_row(object sender, KeyEventArgs e)
@@ -728,7 +729,7 @@ namespace WKR2
 
         private void IntoExcel(object sender, RoutedEventArgs e)
         {
-            Tool.ExcelWork.ExportToExcel(Core.AppSettings.PathLocal);
+            ExcelService.ExportToExcel(Core.AppSettings.PathLocal);
             MessageBox.Show("Выгрузка прошла успешно!");
         }
     }
