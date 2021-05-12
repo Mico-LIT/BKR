@@ -30,7 +30,7 @@ namespace WKR2.View
         {
             d1.ItemsSource = items; //d1.SelectedIndex = 0;
             d2.ItemsSource = items; //d2.SelectedIndex = 0;
-            so.DataContext = Tool.Analitic.PARAMS;
+            so.DataContext = Tool.Services.Analitic.AnaliticService.PARAMS;
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.Serialization;
+using Tool.Services.Analitic;
 
 namespace Tool
 {
@@ -21,7 +22,8 @@ namespace Tool
             public int X { get; set; }
             public int Y { get; set; }
         }
-        static public string PATH_LOCAL= System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+        static string PathLocal{ get; set; }
 
         static public Calibration_Data calibration_data=new Calibration_Data() { X=0,Y=0};
         //Картинка на печать
@@ -189,8 +191,10 @@ namespace Tool
 
         private static Func<int, int, Image> print_Item2_;
         private static Func<int, string> getParametrAnalitic_;
-        public static void dd(Func<int,int, Image> print_Item2, Func<int, string> getParametrAnalitic,int ii=1)
+        public static void dd(Func<int,int, Image> print_Item2, Func<int, string> getParametrAnalitic,string pathLocal, int ii=1)
         {
+            PathLocal = pathLocal;
+
             print_Item2_ = print_Item2;
             getParametrAnalitic_ = getParametrAnalitic;
              var setupDlg = new PageSetupDialog();
@@ -230,7 +234,8 @@ namespace Tool
         static int Stop = 0;
         private static void PrintDoc_PrintPage1(object sender, PrintPageEventArgs e)
         {
-           if(Analitic.GetSettingOnAnalitic) Analitic.Save_Persont(print_Item2_(Start, 1), getParametrAnalitic_(Start));
+           if(AnaliticService.GetSettingOnAnalitic)
+                AnaliticService.Save_Persont(print_Item2_(Start, 1), getParametrAnalitic_(Start), PathLocal);
 
             e.Graphics.DrawImage(print_Item2_(Start,0), new Rectangle()
                  {

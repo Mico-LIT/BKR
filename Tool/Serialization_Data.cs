@@ -16,10 +16,10 @@ namespace Tool
         private Font font;
         private Print.Calibration_Data calibration_data;
         private List<Setting_Button> but;
-        private Tool.Analitic.Params par;
+        private Tool.Services.Analitic.Models.Params par;
 
         public Serialization_Data(Bitmap image, Font font, 
-            Print.Calibration_Data calibration_data, List<Setting_Button> but,Tool.Analitic.Params par)
+            Print.Calibration_Data calibration_data, List<Setting_Button> but, Tool.Services.Analitic.Models.Params par)
         {
             this.image = image;
             this.font = font;

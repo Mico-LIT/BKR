@@ -27,7 +27,7 @@ namespace Tool
                 IExcelDataReader edr = null;
                 if (df.FilterIndex == 1) { edr = ExcelReaderFactory.CreateOpenXmlReader(fs); }
                 if (df.FilterIndex == 2) { edr = ExcelReaderFactory.CreateBinaryReader(fs); }
-                edr.IsFirstRowAsColumnNames =false;
+                edr.IsFirstRowAsColumnNames = false;
                 dd = edr.AsDataSet();
                 edr.Close();
 
@@ -44,7 +44,7 @@ namespace Tool
 
         static public void Json(System.Data.DataTable dd)
         {
-            DataSet dsSorted = new DataSet();dsSorted.Tables.Add(dd);
+            DataSet dsSorted = new DataSet(); dsSorted.Tables.Add(dd);
 
             string json = JsonConvert.SerializeObject(dsSorted, Formatting.Indented);
             using (FileStream gg = new FileStream("DDD12.txt", FileMode.OpenOrCreate))
@@ -62,9 +62,9 @@ namespace Tool
             public string Date { get; set; }
         }
 
-        public static void ExportToExcel()
+        public static void ExportToExcel(string pathLocal)
         {
-            System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(Print.PATH_LOCAL+@"\Analitic");
+            System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(Path.Combine(pathLocal, @"\Analitic"));
 
             List<asd> fff = new List<asd>();
             var files = info.GetFiles("*.jpeg").ToList();
@@ -94,17 +94,17 @@ namespace Tool
                     });
                 }
             }
-                using (StreamWriter sw=new StreamWriter(new FileStream(info.FullName+@"\Analitic.csv",FileMode.Create),Encoding.UTF8))
+            using (StreamWriter sw = new StreamWriter(new FileStream(info.FullName + @"\Analitic.csv", FileMode.Create), Encoding.UTF8))
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("ФИО; НОМЕР;ПОВТОР;ДАТА");
+                foreach (asd items in fff)
                 {
-                    StringBuilder sb = new StringBuilder();
-                    sb.AppendLine("ФИО; НОМЕР;ПОВТОР;ДАТА");
-                    foreach (asd items in fff)
-                    {
-                        sb.AppendLine(String.Format("{0};{1};{2};{3}", items.FIO, items.Nomer, items.repeat,items.Date));
-                    }
-                    sw.Write(sb.ToString());
+                    sb.AppendLine(String.Format("{0};{1};{2};{3}", items.FIO, items.Nomer, items.repeat, items.Date));
                 }
-            
+                sw.Write(sb.ToString());
+            }
+
             #region 33
             //// Creating a Excel object. 
             //Microsoft.Office.Interop.Excel._Application excel = new Microsoft.Office.Interop.Excel.Application();

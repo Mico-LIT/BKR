@@ -18,7 +18,7 @@ using System.IO;
 using Microsoft.Win32;
 using System.Data;
 using System.ComponentModel;
-
+using Tool.Services.Analitic;
 
 namespace WKR2
 {
@@ -129,7 +129,7 @@ namespace WKR2
             var ddd = d12.SelectedIndex;
                 //Print_Item(ddd);
                 ShowMessAnalitic();
-                Tool.Print.dd(Print_Item2, GetParametrAnalitic,ddd+1);
+                Tool.Print.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal, ddd+1);
 
             }
             catch (Exception)
@@ -408,10 +408,10 @@ namespace WKR2
             switch (result)
             {
                 case MessageBoxResult.No:
-                    Tool.Analitic.GetSettingOnAnalitic = false;
+                    AnaliticService.GetSettingOnAnalitic = false;
                     break;
                 case MessageBoxResult.Yes:
-                    Tool.Analitic.GetSettingOnAnalitic = true;
+                    AnaliticService.GetSettingOnAnalitic = true;
                     break;
                 default:
                     break;
@@ -421,8 +421,8 @@ namespace WKR2
         private string GetParametrAnalitic(int Row)
         {
             string str=String.Format("{0}_{1}_{2}_", 
-                ((DataView)d12.ItemsSource).Table.Rows[Row].ItemArray[Tool.Analitic.PARAMS.Params_1].ToString(),
-                ((DataView)d12.ItemsSource).Table.Rows[Row].ItemArray[Tool.Analitic.PARAMS.Params_2].ToString(),
+                ((DataView)d12.ItemsSource).Table.Rows[Row].ItemArray[AnaliticService.PARAMS.Params_1].ToString(),
+                ((DataView)d12.ItemsSource).Table.Rows[Row].ItemArray[AnaliticService.PARAMS.Params_2].ToString(),
                 DateTime.Now.ToShortDateString()
                 );
             return str;
@@ -431,7 +431,7 @@ namespace WKR2
         private void Pehat(object sender, RoutedEventArgs e)
         {
             ShowMessAnalitic();
-            Tool.Print.dd(Print_Item2, GetParametrAnalitic);
+            Tool.Print.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal);
         }
 
 
@@ -580,7 +580,7 @@ namespace WKR2
         {
             try
             {
-                DirectoryInfo di = Directory.CreateDirectory(Print.PATH_LOCAL + @"\Patern");
+                DirectoryInfo di = Directory.CreateDirectory(Core.AppSettings.PathLocal + @"\Patern");
                 SaveFileDialog SFD = new SaveFileDialog();
                 SFD.Filter = "Dat files (*.dat)|*.dat";
                 SFD.DefaultExt = di.FullName;
@@ -606,7 +606,7 @@ namespace WKR2
                     Serialization_Data Se = new Serialization_Data(
                         bitmapORig, Print.font,
                         Print.calibration_data, but,
-                        Tool.Analitic.PARAMS
+                        AnaliticService.PARAMS
                         );
                     Se.Serialization(SFD.FileName);
                     MessageBox.Show("Сохранение прошло успешно");
@@ -624,7 +624,7 @@ namespace WKR2
             {
                 OpenFileDialog OFD = new OpenFileDialog();
                 OFD.Filter = "Dat files (*.dat)|*.dat";
-                OFD.InitialDirectory = Print.PATH_LOCAL;
+                OFD.InitialDirectory = Core.AppSettings.PathLocal;
                 if (OFD.ShowDialog() == true)
                 {
                     But_canvas.Clear();
@@ -634,7 +634,7 @@ namespace WKR2
                     //Tool.Print.But_font = ds.BF;
                     Print.font = ds.font;
                     Print.calibration_data = ds.calibration_data;
-                    Tool.Analitic.PARAMS = ds.par;
+                    AnaliticService.PARAMS = ds.par;
                     image.Source = ConvertToBitmapSource(ds.Image);
                     Button_SERi_Canvas(ds.But_canvas);
                     bitmapORig = ds.Image;
@@ -728,7 +728,7 @@ namespace WKR2
 
         private void IntoExcel(object sender, RoutedEventArgs e)
         {
-            Tool.ExcelWork.ExportToExcel();
+            Tool.ExcelWork.ExportToExcel(Core.AppSettings.PathLocal);
             MessageBox.Show("Выгрузка прошла успешно!");
         }
     }

@@ -20,7 +20,7 @@ namespace Tool
         public Font font { get; set; }
         public Calibration_Data calibration_data { get; set; }
         public List<Setting_Button> But_canvas { get; set; }
-        public Tool.Analitic.Params par { get; set; }
+        public Services.Analitic.Models.Params par { get; set; }
 
     }
     [Serializable]

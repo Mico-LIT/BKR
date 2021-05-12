@@ -65,6 +65,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Core\AppSettings.cs" />
     <Compile Include="View\Anallitic_Setings.xaml.cs">
       <DependentUpon>Anallitic_Setings.xaml</DependentUpon>
     </Compile>
