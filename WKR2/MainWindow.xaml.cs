@@ -612,7 +612,7 @@ namespace WKR2
                     MessageBox.Show("Сохранение прошло успешно");
                 }
             }
-            catch (Exception ee)
+            catch (Exception)
             {
                 MessageBox.Show("Ошибка при сохранении", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }

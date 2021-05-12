@@ -33,3 +33,9 @@ C:\Repositories\BKR\WKR2\obj\Debug\WKR2.csproj.CoreCompileInputs.cache
 C:\Repositories\BKR\WKR2\obj\Debug\WKR2.csproj.CopyComplete
 C:\Repositories\BKR\WKR2\obj\Debug\WKR2.exe
 C:\Repositories\BKR\WKR2\obj\Debug\WKR2.pdb
+C:\Repositories\BKR\WKR2\bin\Debug\ExcelDataReader.dll
+C:\Repositories\BKR\WKR2\bin\Debug\Tool.dll.config
+C:\Repositories\BKR\WKR2\bin\Debug\ExcelDataReader.pdb
+C:\Repositories\BKR\WKR2\bin\Debug\ExcelDataReader.xml
+C:\Repositories\BKR\WKR2\bin\Debug\ICSharpCode.SharpZipLib.pdb
+C:\Repositories\BKR\WKR2\bin\Debug\ICSharpCode.SharpZipLib.xml

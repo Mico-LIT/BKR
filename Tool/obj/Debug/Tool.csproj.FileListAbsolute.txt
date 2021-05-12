@@ -9,4 +9,6 @@ C:\Repositories\BKR\Tool\obj\Debug\Tool.csproj.CoreCompileInputs.cache
 C:\Repositories\BKR\Tool\obj\Debug\Tool.csproj.CopyComplete
 C:\Repositories\BKR\Tool\obj\Debug\Tool.dll
 C:\Repositories\BKR\Tool\obj\Debug\Tool.pdb
-C:\Repositories\BKR\Tool\obj\Debug\Tool.csprojAssemblyReference.cache
+C:\Repositories\BKR\Tool\bin\Debug\Tool.dll.config
+C:\Repositories\BKR\Tool\bin\Debug\ICSharpCode.SharpZipLib.pdb
+C:\Repositories\BKR\Tool\bin\Debug\ICSharpCode.SharpZipLib.xml
