@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\BKR\WKR2\obj\Debug\
+C:\Repositories\BKR\WKR2\obj\Debug\
 WKR2
 none
 false
 DEBUG;TRACE
-C:\BKR\WKR2\App.xaml
+C:\Repositories\BKR\WKR2\App.xaml
 71408276908
 
 112032210125
-151410550397
+141401720484
 MainWindow.xaml;View\Anallitic_Setings.xaml;View\Button_Calibration.xaml;View\Calibration.xaml;View\Poisk.xaml;View\PreView.xaml;View\SettingView.xaml;
 
 False

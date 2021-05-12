@@ -1,50 +1,35 @@
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\bin\Debug\WKR2.exe.config
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\bin\Debug\WKR2.exe
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\bin\Debug\WKR2.pdb
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.csprojResolveAssemblyReference.cache
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\MainWindow.g.cs
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\App.g.cs
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2_MarkupCompile.cache
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2_MarkupCompile.lref
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\MainWindow.baml
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.g.resources
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.Properties.Resources.resources
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.csproj.GenerateResource.Cache
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.exe
-c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\obj\Debug\WKR2.pdb
-C:\Users\redga\Documents\Visual Studio 2015\Projects\WKR2\WKR2\obj\Debug\Example.g.cs
-C:\Users\redga\Documents\Visual Studio 2015\Projects\WKR2\WKR2\obj\Debug\Example.baml
-C:\BKR\WKR2\bin\Debug\WKR2.exe.config
-C:\BKR\WKR2\bin\Debug\WKR2.exe
-C:\BKR\WKR2\bin\Debug\WKR2.pdb
-C:\BKR\WKR2\bin\Debug\Microsoft.QualityTools.Testing.Fakes.dll
-C:\BKR\WKR2\bin\Debug\Tool.dll
-C:\BKR\WKR2\bin\Debug\Excel.dll
-C:\BKR\WKR2\bin\Debug\Newtonsoft.Json.dll
-C:\BKR\WKR2\bin\Debug\ICSharpCode.SharpZipLib.dll
-C:\BKR\WKR2\bin\Debug\Tool.pdb
-C:\BKR\WKR2\bin\Debug\Excel.pdb
-C:\BKR\WKR2\bin\Debug\Newtonsoft.Json.xml
-C:\BKR\WKR2\obj\Debug\WKR2.csprojResolveAssemblyReference.cache
-C:\BKR\WKR2\obj\Debug\MainWindow.g.cs
-C:\BKR\WKR2\obj\Debug\View\Button_Calibration.g.cs
-C:\BKR\WKR2\obj\Debug\View\Calibration.g.cs
-C:\BKR\WKR2\obj\Debug\View\PreView.g.cs
-C:\BKR\WKR2\obj\Debug\View\SettingView.g.cs
-C:\BKR\WKR2\obj\Debug\App.g.cs
-C:\BKR\WKR2\obj\Debug\WKR2_MarkupCompile.cache
-C:\BKR\WKR2\obj\Debug\WKR2_MarkupCompile.lref
-C:\BKR\WKR2\obj\Debug\MainWindow.baml
-C:\BKR\WKR2\obj\Debug\View\Button_Calibration.baml
-C:\BKR\WKR2\obj\Debug\View\Calibration.baml
-C:\BKR\WKR2\obj\Debug\View\PreView.baml
-C:\BKR\WKR2\obj\Debug\View\SettingView.baml
-C:\BKR\WKR2\obj\Debug\WKR2.g.resources
-C:\BKR\WKR2\obj\Debug\WKR2.Properties.Resources.resources
-C:\BKR\WKR2\obj\Debug\WKR2.csproj.GenerateResource.Cache
-C:\BKR\WKR2\obj\Debug\WKR2.exe
-C:\BKR\WKR2\obj\Debug\WKR2.pdb
-C:\BKR\WKR2\obj\Debug\View\Poisk.g.cs
-C:\BKR\WKR2\obj\Debug\View\Poisk.baml
-C:\BKR\WKR2\obj\Debug\View\Anallitic_Setings.g.cs
-C:\BKR\WKR2\obj\Debug\View\Anallitic_Setings.baml
+C:\Repositories\BKR\WKR2\bin\Debug\WKR2.exe.config
+C:\Repositories\BKR\WKR2\bin\Debug\WKR2.exe
+C:\Repositories\BKR\WKR2\bin\Debug\WKR2.pdb
+C:\Repositories\BKR\WKR2\bin\Debug\Tool.dll
+C:\Repositories\BKR\WKR2\bin\Debug\Excel.dll
+C:\Repositories\BKR\WKR2\bin\Debug\Newtonsoft.Json.dll
+C:\Repositories\BKR\WKR2\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Repositories\BKR\WKR2\bin\Debug\Tool.pdb
+C:\Repositories\BKR\WKR2\bin\Debug\Excel.pdb
+C:\Repositories\BKR\WKR2\bin\Debug\Newtonsoft.Json.xml
+C:\Repositories\BKR\WKR2\obj\Debug\WKR2.csprojAssemblyReference.cache
+C:\Repositories\BKR\WKR2\obj\Debug\MainWindow.g.cs
+C:\Repositories\BKR\WKR2\obj\Debug\View\Anallitic_Setings.g.cs
+C:\Repositories\BKR\WKR2\obj\Debug\View\Button_Calibration.g.cs
+C:\Repositories\BKR\WKR2\obj\Debug\View\Calibration.g.cs
+C:\Repositories\BKR\WKR2\obj\Debug\View\Poisk.g.cs
+C:\Repositories\BKR\WKR2\obj\Debug\View\PreView.g.cs
+C:\Repositories\BKR\WKR2\obj\Debug\View\SettingView.g.cs
+C:\Repositories\BKR\WKR2\obj\Debug\App.g.cs
+C:\Repositories\BKR\WKR2\obj\Debug\WKR2_MarkupCompile.cache
+C:\Repositories\BKR\WKR2\obj\Debug\WKR2_MarkupCompile.lref
+C:\Repositories\BKR\WKR2\obj\Debug\MainWindow.baml
+C:\Repositories\BKR\WKR2\obj\Debug\View\Anallitic_Setings.baml
+C:\Repositories\BKR\WKR2\obj\Debug\View\Button_Calibration.baml
+C:\Repositories\BKR\WKR2\obj\Debug\View\Calibration.baml
+C:\Repositories\BKR\WKR2\obj\Debug\View\Poisk.baml
+C:\Repositories\BKR\WKR2\obj\Debug\View\PreView.baml
+C:\Repositories\BKR\WKR2\obj\Debug\View\SettingView.baml
+C:\Repositories\BKR\WKR2\obj\Debug\WKR2.g.resources
+C:\Repositories\BKR\WKR2\obj\Debug\WKR2.Properties.Resources.resources
+C:\Repositories\BKR\WKR2\obj\Debug\WKR2.csproj.GenerateResource.cache
+C:\Repositories\BKR\WKR2\obj\Debug\WKR2.csproj.CoreCompileInputs.cache
+C:\Repositories\BKR\WKR2\obj\Debug\WKR2.csproj.CopyComplete
+C:\Repositories\BKR\WKR2\obj\Debug\WKR2.exe
+C:\Repositories\BKR\WKR2\obj\Debug\WKR2.pdb
