@@ -28,7 +28,7 @@ namespace WKR2.View
             InitializeComponent();
             this.dd = dd;
             DataG.ItemsSource = dd;
-
+            
             //List<string> columnNameList = new List<string>();
             //foreach (DataColumn item in dd.Table.Columns)
             //{
@@ -50,6 +50,7 @@ namespace WKR2.View
 
         private void Button_Click_new(object sender, RoutedEventArgs e)
         {
+            DelRow.Reverse();
             DataView ff = (DataView)DataG.ItemsSource;
             foreach (string item in DelCol)ff.Table.Columns.Remove(item);
             foreach (int item in DelRow) ff.Table.Rows.RemoveAt(item);
@@ -57,6 +58,7 @@ namespace WKR2.View
             DataG.ItemsSource = ff;
             listColumn.Items.Clear();
             listRow.Items.Clear();
+            this.DialogResult = true;
             this.Close();
         }
 

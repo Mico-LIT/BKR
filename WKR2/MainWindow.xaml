@@ -13,35 +13,59 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition/>
-            <RowDefinition Height="0.4*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="0.37*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
+        <!--<Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="100"/>
-        </Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>-->
         <Menu>
-            <MenuItem Header="Файл">
-                <MenuItem Header="Открть" Click="open"></MenuItem>
-                <MenuItem Header="Выход"></MenuItem>
+            <MenuItem Header="Файл" MouseMove="MenuItem_Click_1">
+                <MenuItem Header="Открыть картинку" Click="Image_Download"  Name="D0" IsEnabled="True"></MenuItem>
+                <MenuItem Header="Открть Excel" Click="open"></MenuItem>
+                <MenuItem Header="Загрузить шаблон" Click="Download_Serial" Name="D1"></MenuItem>
+                <MenuItem Header="Сохранить шаблон" Click="Save_Serial"  Name="D2"></MenuItem>
+             
+                <MenuItem Header="Выход" Click="Exit"></MenuItem>
             </MenuItem>
-            <MenuItem Header="Предпросмотр" Click="Button_Click"></MenuItem>
-            <MenuItem Header="Печать" Click="Pehat"></MenuItem>
-            <MenuItem Header="Save" Click="Save_img"></MenuItem>
-            <MenuItem Header="Json" Click="JJson"></MenuItem>
+            <MenuItem Header="Предпросмотр" Click="MenuItem_Click"></MenuItem>
+            <MenuItem Header="Печать" Click="Pehat" Visibility="Visible"></MenuItem>
+            <MenuItem Header="Save" Click="Save_img" Visibility="Hidden"></MenuItem>
+            <MenuItem Header="Json" Click="JJson" Visibility="Hidden"></MenuItem>
+            <MenuItem Header="Шрифт" Click="Font_click"></MenuItem>
+            <MenuItem Header="Аналитика">
+                <MenuItem Header="Аналитика настройка" Click="Analitic"></MenuItem>
+                <MenuItem Header="Выгрузка в Exel" Click="IntoExcel" ></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Калибровка" Click="Calibration_Click"></MenuItem>
         </Menu>
 
-        <Image Grid.Row="1" Name="image" MouseDown="imag_click"></Image>
+        <Image Grid.Row="1" Name="image" MouseDown="imag_click">
+        </Image>
 
-        <Canvas Grid.Row="1" Name="grid_imag" Height="{Binding ElementName=image,Path=ActualHeight }" 
+        <Canvas Grid.RowSpan="3" Name="grid_imag" Height="{Binding ElementName=image,Path=ActualHeight }" 
               Width="{Binding ElementName=image,Path=ActualWidth }">
+           
         </Canvas>
         
-        <Label Grid.Row="1" Grid.Column="1" Width="200" Name="point"></Label>
-
-        <DataGrid Grid.Row="2" Name="d12" PreviewKeyDown="delete_row">
-             
+        <!--<Label Grid.Row="1" Grid.Column="1" Width="200" Name="point"></Label>-->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Name="poisk" Visibility="Collapsed">
+            <ComboBox Width="200" Name="Com"></ComboBox>
+            <TextBox Width="150"></TextBox>
+            <Button Width="50" Click="Poisk"> поиск</Button>
+        </StackPanel>
+        <DataGrid Grid.Row="3" Name="d12" PreviewKeyDown="delete_row" RowHeight="19" ColumnWidth="80" LoadingRow="d12_LoadingRow" AutoGeneratingColumn="d12_AutoGeneratingColumn" >
+            
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Добавить" Click="Add_Convas"></MenuItem>
+                    <MenuItem Header="Удалить" Click="Del_Button_Convas"></MenuItem>
+                    <MenuItem Header="Предпросмотр" Click="MenuItem_Click_2"></MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Печать">
+                <DataGridTemplateColumn Header="Печать" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
@@ -50,13 +74,14 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Печать">
+                
+                <!--<DataGridTemplateColumn Header="Печать">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox Margin="15,2,0,0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
         <!--Старое

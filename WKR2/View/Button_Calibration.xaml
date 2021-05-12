@@ -1,0 +1,95 @@
+﻿<Window x:Class="WKR2.View.Button_Calibration"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WKR2.View"
+        mc:Ignorable="d"
+        Title="Button_Calibration" Height="269.333" Width="230">
+    <Grid Name="d12">
+        <Grid.RowDefinitions>
+
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Name="down"  Click="down_Click" >
+            <Button.Background>
+                <ImageBrush ImageSource="/WKR2;component/Icon/strelki.jpg">
+                    <ImageBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="3" ScaleX="3" CenterY="1" CenterX="0.03"/>
+                            <SkewTransform CenterY="1" CenterX="0.03"/>
+                            <RotateTransform CenterY="1" CenterX="0.03"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </ImageBrush.RelativeTransform>
+                </ImageBrush>
+            </Button.Background>
+        </Button>
+        <Button Name="up"  Click="up_Click" Grid.Column="1"  >
+            <Button.Background>
+                <ImageBrush ImageSource="/WKR2;component/Icon/strelki.jpg">
+                    <ImageBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="1" ScaleX="3" ScaleY="3" CenterX="0.91"/>
+                            <SkewTransform CenterY="1" CenterX="0.91"/>
+                            <RotateTransform CenterY="1" CenterX="0.91"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </ImageBrush.RelativeTransform>
+                </ImageBrush>
+            </Button.Background>
+        </Button>
+        <Button Name="rigth"  Click="rigth_Click"  Grid.Row="1" >
+            <Button.Background>
+                <ImageBrush ImageSource="/WKR2;component/Icon/strelki.jpg">
+                    <ImageBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="3" ScaleY="3" CenterX="0.95"/>
+                            <SkewTransform CenterX="0.95"/>
+                            <RotateTransform CenterX="0.95"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </ImageBrush.RelativeTransform>
+                </ImageBrush>
+            </Button.Background>
+        </Button>
+        <Button Name="left"  Click="left_Click" Grid.Column="1" Grid.Row="1">
+            <Button.Background>
+                <ImageBrush ImageSource="/WKR2;component/Icon/strelki.jpg">
+                    <ImageBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="3" ScaleY="3"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </ImageBrush.RelativeTransform>
+                </ImageBrush>
+            </Button.Background>
+        </Button>
+
+        <TextBlock Grid.Row="2">Высота</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="1">Длина</TextBlock>
+        <TextBox Grid.Row="3" Text="{Binding Path=Height ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=Width,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <Button  Content="Шрифт" Grid.Row="1" Grid.Column="2" Name="But_font" Click="But_font_Click" FontFamily="Arial" >
+            <Button.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.LayoutTransform>
+        </Button>
+    </Grid>
+</Window>
