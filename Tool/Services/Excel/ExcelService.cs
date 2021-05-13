@@ -45,7 +45,7 @@ namespace Tool.Services.Excel
 
         public static void ExportToExcel(string pathLocal)
         {
-            System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(Path.Combine(pathLocal, @"\Analitic"));
+            System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(Path.Combine(pathLocal, "Analitic"));
 
             List<Settings> fff = new List<Settings>();
             var files = info.GetFiles("*.jpeg").ToList();

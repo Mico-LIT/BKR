@@ -389,7 +389,7 @@ namespace WKR2
 
         private void JJson(object sender, RoutedEventArgs e)
         {
-            Tool.Helper.Json(((DataView)d12.ItemsSource).ToTable());
+            Tool.Helper.JsonSerializeObject(((DataView)d12.ItemsSource).ToTable());
         }
 
         private void delete_row(object sender, KeyEventArgs e)
@@ -603,13 +603,17 @@ namespace WKR2
                         });
                     }
 
+                    DataPattern dataPattern = new DataPattern()
+                    {
+                        Image = bitmapORig,
+                        But_canvas = but,
+                        font = Print.font,
+                        calibration_data = Print.calibration_data,
+                        par = AnaliticService.PARAMS
+                    };
 
-                    Serialization_Data Se = new Serialization_Data(
-                        bitmapORig, Print.font,
-                        Print.calibration_data, but,
-                        AnaliticService.PARAMS
-                        );
-                    Se.Serialization(SFD.FileName);
+                    Helper.SerializationDataPattern(dataPattern, SFD.FileName);
+
                     MessageBox.Show("Сохранение прошло успешно");
                 }
             }
@@ -630,8 +634,9 @@ namespace WKR2
                 {
                     But_canvas.Clear();
                     grid_imag.Children.Clear();
-                    Tool.Serialization_Data De = new Serialization_Data();
-                    Data_Patern ds = De.DeSerialization(OFD.FileName);
+
+                    DataPattern ds = Helper.DeSerializationDataPattern(OFD.FileName);
+
                     //Tool.Print.But_font = ds.BF;
                     Print.font = ds.font;
                     Print.calibration_data = ds.calibration_data;

@@ -15,24 +15,19 @@ namespace Tool
 {
     public class Print
     {
-        [Serializable]
-        //Калибровка
-        public class Calibration_Data
-        {
-            public int X { get; set; }
-            public int Y { get; set; }
-        }
-
         static string PathLocal{ get; set; }
-
         static public Calibration_Data calibration_data=new Calibration_Data() { X=0,Y=0};
         //Картинка на печать
         static public Image iii;
         //Шрифт
         static public Font font=new Font("Arial", 15);
-
         static public Dictionary<System.Windows.Controls.Button, Font> But_font = new Dictionary<System.Windows.Controls.Button, Font>();
 
+        static int Start = 0;
+        static int Stop = 0;
+
+        private static Func<int, int, Image> print_Item2_;
+        private static Func<int, string> getParametrAnalitic_;
 
         static public Font Font()
         {
@@ -189,8 +184,7 @@ namespace Tool
             return result;
         }
 
-        private static Func<int, int, Image> print_Item2_;
-        private static Func<int, string> getParametrAnalitic_;
+     
         public static void dd(Func<int,int, Image> print_Item2, Func<int, string> getParametrAnalitic,string pathLocal, int ii=1)
         {
             PathLocal = pathLocal;
@@ -230,8 +224,7 @@ namespace Tool
             printDoc.Print();
         }
 
-        static int Start = 0;
-        static int Stop = 0;
+
         private static void PrintDoc_PrintPage1(object sender, PrintPageEventArgs e)
         {
            if(AnaliticService.GetSettingOnAnalitic)
@@ -254,5 +247,12 @@ namespace Tool
             Start++;
         }
 
+        [Serializable]
+        //Калибровка
+        public class Calibration_Data
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+        }
     }
 }

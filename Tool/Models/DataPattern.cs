@@ -13,7 +13,7 @@ using System.Windows.Forms;
 namespace Tool
 {
     [Serializable]
-    public class Data_Patern
+    public class DataPattern
     {
         
         public Bitmap Image { get; set; }
