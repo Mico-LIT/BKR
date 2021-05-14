@@ -59,6 +59,9 @@ namespace WKR2.Views
 
         private void Save_img(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show("Пока нет реализации, извините");
+            return;
+
             // белый листок
             //Dr.Bitmap b = new Dr.Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             ////Dr.Bitmap bmp = new Dr.Bitmap(@"c: \users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\ggh.jpg");
@@ -391,6 +394,9 @@ namespace WKR2.Views
 
         private void JJson(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show("Пока нет реализации, извините");
+            return;
+
             Tool.Services.Helper.JsonSerializeObject(((DataView)d12.ItemsSource).ToTable());
         }
 

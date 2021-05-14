@@ -8,8 +8,6 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid Name="GLABN_GRID">
 
-
-
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition/>
@@ -23,40 +21,48 @@
         <Menu>
             <MenuItem Header="Файл" MouseMove="MenuItem_Click_1">
                 <MenuItem Header="Открыть картинку" Click="Image_Download"  Name="D0" IsEnabled="True"></MenuItem>
-                <MenuItem Header="Открть Excel" Click="open"></MenuItem>
+                <MenuItem Header="Открыть Excel" Click="open"></MenuItem>
+
+                <Separator />
                 <MenuItem Header="Загрузить шаблон" Click="Download_Serial" Name="D1"></MenuItem>
                 <MenuItem Header="Сохранить шаблон" Click="Save_Serial"  Name="D2"></MenuItem>
-             
+
+                <Separator />
+                <MenuItem Header="Аналитика">
+                    <MenuItem Header="Аналитика настройка" Click="Analitic"></MenuItem>
+                    <MenuItem Header="Выгрузка в Exel" Click="IntoExcel" ></MenuItem>
+                </MenuItem>
+                <Separator />
+
                 <MenuItem Header="Выход" Click="Exit"></MenuItem>
             </MenuItem>
-            <MenuItem Header="Предпросмотр" Click="MenuItem_Click"></MenuItem>
-            <MenuItem Header="Печать" Click="Pehat" Visibility="Visible"></MenuItem>
-            <MenuItem Header="Save" Click="Save_img" Visibility="Hidden"></MenuItem>
-            <MenuItem Header="Json" Click="JJson" Visibility="Hidden"></MenuItem>
-            <MenuItem Header="Шрифт" Click="Font_click"></MenuItem>
-            <MenuItem Header="Аналитика">
-                <MenuItem Header="Аналитика настройка" Click="Analitic"></MenuItem>
-                <MenuItem Header="Выгрузка в Exel" Click="IntoExcel" ></MenuItem>
+            <MenuItem Header="Доп. Настройка">
+                <MenuItem Header="Предпросмотр" Click="MenuItem_Click"></MenuItem>
+                <MenuItem Header="Печать" Click="Pehat" Visibility="Visible"></MenuItem>
+                <MenuItem Header="Шрифт" Click="Font_click"></MenuItem>
+                <MenuItem Header="Калибровка" Click="Calibration_Click"></MenuItem>
+
+                <Separator/>
+                <MenuItem Header="Save" Click="Save_img" Visibility="Visible"></MenuItem>
+                <MenuItem Header="Json" Click="JJson" Visibility="Visible"></MenuItem>
             </MenuItem>
-            <MenuItem Header="Калибровка" Click="Calibration_Click"></MenuItem>
         </Menu>
 
-        <Image Grid.Row="1" Name="image" MouseDown="imag_click">
-        </Image>
+        <Image Grid.Row="1" Name="image" MouseDown="imag_click"></Image>
 
-        <Canvas Grid.RowSpan="3" Name="grid_imag" Height="{Binding ElementName=image,Path=ActualHeight }" 
-              Width="{Binding ElementName=image,Path=ActualWidth }">
-           
+        <Canvas Grid.RowSpan="3" Name="grid_imag"
+                Height="{Binding ElementName=image, Path=ActualHeight }" Width="{Binding ElementName=image, Path=ActualWidth }">
         </Canvas>
-        
+
         <!--<Label Grid.Row="1" Grid.Column="1" Width="200" Name="point"></Label>-->
+
         <StackPanel Grid.Row="2" Orientation="Horizontal" Name="poisk" Visibility="Collapsed">
             <ComboBox Width="200" Name="Com"></ComboBox>
             <TextBox Width="150"></TextBox>
-            <Button Width="50" Click="Poisk"> поиск</Button>
+            <Button Width="50" Click="Poisk">поиск</Button>
         </StackPanel>
+
         <DataGrid Grid.Row="3" Name="d12" PreviewKeyDown="delete_row" RowHeight="19" ColumnWidth="80" LoadingRow="d12_LoadingRow" AutoGeneratingColumn="d12_AutoGeneratingColumn" >
-            
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Добавить" Click="Add_Convas"></MenuItem>
@@ -74,7 +80,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
+
                 <!--<DataGridTemplateColumn Header="Печать">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -84,29 +90,32 @@
                 </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
+
         <!--Старое
         <Grid.RowDefinitions>
             <RowDefinition ></RowDefinition>
             <RowDefinition Height="32"></RowDefinition>
         </Grid.RowDefinitions>
         <Image Name="image" MouseDown="imag_click"></Image>
+        -->
 
+        <!--<Grid Name="grid_imag" MouseDown="imag_click" Height="{Binding ElementName=image,Path=ActualHeight }" 
+              Width="{Binding ElementName=image,Path=ActualWidth }"></Grid>
+        -->
 
-        --><!--<Grid Name="grid_imag" MouseDown="imag_click" Height="{Binding ElementName=image,Path=ActualHeight }" 
-              Width="{Binding ElementName=image,Path=ActualWidth }"></Grid>--><!--
-
+        <!--
         <Canvas Name="grid_imag" Grid.Row="0" Height="{Binding ElementName=image,Path=ActualHeight }" 
               Width="{Binding ElementName=image,Path=ActualWidth }">
              </Canvas>
-
-
-
+        
         <StackPanel Grid.Row="1" Orientation="Horizontal">
 
             <Button  Width="80" Content="save" Click="Save_img"></Button>
             <Label Width="200" Name="point"></Label>
             <Button Click="Button_Click"   Content="open"   />
-        </StackPanel>-->
+        </StackPanel>
+        
+        -->
 
     </Grid>
 </Window>
