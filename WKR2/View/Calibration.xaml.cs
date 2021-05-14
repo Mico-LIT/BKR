@@ -20,7 +20,7 @@ namespace WKR2.View
     public partial class Calibration : Window
     {
 
-        public Calibration(Tool.Print.Calibration_Data calibration_Data )
+        public Calibration(Tool.Calibration_Data calibration_Data )
         {
             InitializeComponent();
             so.DataContext = calibration_Data;

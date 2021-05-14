@@ -20,6 +20,8 @@ using System.Data;
 using System.ComponentModel;
 using Tool.Services.Analitic;
 using Tool.Services.Excel;
+using Tool.Services;
+using Tool.Services.Print;
 
 namespace WKR2
 {
@@ -130,7 +132,7 @@ namespace WKR2
             var ddd = d12.SelectedIndex;
                 //Print_Item(ddd);
                 ShowMessAnalitic();
-                Tool.Print.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal, ddd+1);
+                PrintService.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal, ddd+1);
 
             }
             catch (Exception)
@@ -167,8 +169,8 @@ namespace WKR2
                         }
                         string TEXT = (yy.Table.Rows[Item_Row].ItemArray[i]).ToString();
 
-                        var trt = Tool.Print.But_font.FirstOrDefault(x => f == x.Key).Value;
-                        if (trt == null) { trt = Tool.Print.font; }
+                        var trt = PrintService.But_font.FirstOrDefault(x => f == x.Key).Value;
+                        if (trt == null) { trt = PrintService.font; }
 
                         g.DrawString(TEXT, trt, Dr.Brushes.Black,
                             new Dr.RectangleF(
@@ -187,7 +189,7 @@ namespace WKR2
                 vie = Dr.Image.FromStream(tmpStrm);
             }
             b.Dispose();
-            Tool.Print.iii = vie;
+            PrintService.iii = vie;
             //Tool.Print.dd();
         }
         public void Previwe(int row=0)
@@ -227,8 +229,8 @@ namespace WKR2
                             }
                             string TEXT=(yy.Table.Rows[row].ItemArray[i]).ToString();
 
-                            var trt = Tool.Print.But_font.FirstOrDefault(x => f == x.Key).Value;
-                            if (trt == null) { trt = Tool.Print.font; }
+                            var trt = PrintService.But_font.FirstOrDefault(x => f == x.Key).Value;
+                            if (trt == null) { trt = PrintService.font; }
 
                             g.DrawString(TEXT/*+"123456786543213453421224234234"*/, trt, Dr.Brushes.Black,
                                 new Dr.RectangleF((float)PointImag.X, (float)PointImag.Y,(float)(f.Width*3.3), (float)(f.Height*3.3)));
@@ -251,7 +253,7 @@ namespace WKR2
             }
             b.Dispose();
 
-            Tool.Print.iii = vie;
+            PrintService.iii = vie;
             View.PreView pre = new View.PreView(vie);
             pre.WindowState = WindowState.Maximized;
             pre.ShowDialog();
@@ -389,7 +391,7 @@ namespace WKR2
 
         private void JJson(object sender, RoutedEventArgs e)
         {
-            Tool.Helper.JsonSerializeObject(((DataView)d12.ItemsSource).ToTable());
+            Tool.Services.Helper.JsonSerializeObject(((DataView)d12.ItemsSource).ToTable());
         }
 
         private void delete_row(object sender, KeyEventArgs e)
@@ -432,7 +434,7 @@ namespace WKR2
         private void Pehat(object sender, RoutedEventArgs e)
         {
             ShowMessAnalitic();
-            Tool.Print.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal);
+            PrintService.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal);
         }
 
 
@@ -465,8 +467,8 @@ namespace WKR2
                         }
                         string TEXT = (yy.Table.Rows[Item_Row].ItemArray[i]).ToString();
 
-                        var trt = Tool.Print.But_font.FirstOrDefault(x => f == x.Key).Value;
-                        if (trt == null) { trt = Tool.Print.font; }
+                        var trt = PrintService.But_font.FirstOrDefault(x => f == x.Key).Value;
+                        if (trt == null) { trt = PrintService.font; }
 
                         g.DrawString(TEXT, trt, Dr.Brushes.Black,
                             new Dr.RectangleF(
@@ -492,13 +494,13 @@ namespace WKR2
 
         private void Calibration_Click(object sender, RoutedEventArgs e)
         {
-            WKR2.View.Calibration gf = new View.Calibration( Tool.Print.calibration_data);
+            WKR2.View.Calibration gf = new View.Calibration(PrintService.calibration_data);
             gf.ShowDialog();
         }
 
         private void Font_click(object sender, RoutedEventArgs e)
         {
-            Tool.Print.font=Tool.Print.Font();
+            PrintService.font= PrintService.Font();
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -566,7 +568,7 @@ namespace WKR2
                 d12.SelectedIndex = -1;
                 if (h == null) return;
 
-                Tool.Print.But_font.Remove((Button)h);
+                PrintService.But_font.Remove((Button)h);
                 grid_imag.Children.Remove(h);
                 But_canvas.Remove(h);
             }
@@ -599,7 +601,7 @@ namespace WKR2
                             MarginL = ((Button)item).Margin.Left,
                             MarginR = ((Button)item).Margin.Right,
                             MarginT = ((Button)item).Margin.Top,
-                            Font=Tool.Print.But_font.FirstOrDefault(x=>x.Key== (Button)item).Value
+                            Font= PrintService.But_font.FirstOrDefault(x=>x.Key== (Button)item).Value
                         });
                     }
 
@@ -607,8 +609,8 @@ namespace WKR2
                     {
                         Image = bitmapORig,
                         But_canvas = but,
-                        font = Print.font,
-                        calibration_data = Print.calibration_data,
+                        font = PrintService.font,
+                        calibration_data = PrintService.calibration_data,
                         par = AnaliticService.PARAMS
                     };
 
@@ -638,8 +640,8 @@ namespace WKR2
                     DataPattern ds = Helper.DeSerializationDataPattern(OFD.FileName);
 
                     //Tool.Print.But_font = ds.BF;
-                    Print.font = ds.font;
-                    Print.calibration_data = ds.calibration_data;
+                    PrintService.font = ds.font;
+                    PrintService.calibration_data = ds.calibration_data;
                     AnaliticService.PARAMS = ds.par;
                     image.Source = ConvertToBitmapSource(ds.Image);
                     Button_SERi_Canvas(ds.But_canvas);
@@ -686,7 +688,7 @@ namespace WKR2
             };
                 //var df = But_canvas.Find(x => ((Button)x).Name == str);
                 //if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
-                if (item.Font!=null) Tool.Print.But_font.Add(but, item.Font);
+                if (item.Font!=null) PrintService.But_font.Add(but, item.Font);
             grid_imag.Children.Add(but);
             But_canvas.Add(but);
 

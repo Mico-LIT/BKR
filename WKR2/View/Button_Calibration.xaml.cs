@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Tool.Services.Print;
 
 namespace WKR2.View
 {
@@ -53,16 +54,16 @@ namespace WKR2.View
         private void But_font_Click(object sender, RoutedEventArgs e)
         {
 
-            var tt= Tool.Print.But_font.FirstOrDefault(x => bu == x.Key);
+            var tt= PrintService.But_font.FirstOrDefault(x => bu == x.Key);
             if (tt.Key != null)
             {
-                Font f = Tool.Print.Font(Tool.Print.But_font[bu]);
-                if (f!=null)Tool.Print.But_font[bu] = f;
+                Font f = PrintService.Font(PrintService.But_font[bu]);
+                if (f!=null) PrintService.But_font[bu] = f;
 
             }
             else {
-                Font f = Tool.Print.Font();
-                if (f != null) Tool.Print.But_font.Add(bu, f);
+                Font f = PrintService.Font();
+                if (f != null) PrintService.But_font.Add(bu, f);
             }
             
         

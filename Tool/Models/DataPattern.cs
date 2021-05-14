@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Drawing;
-using static Tool.Print;
+using static Tool.Services.Print.PrintService;
 using System.Windows;
 using d = System.Windows.Controls;
 using System.Runtime.Serialization;
@@ -23,6 +23,7 @@ namespace Tool
         public Services.Analitic.Models.Params par { get; set; }
 
     }
+
     [Serializable]
     public class Setting_Button
     {
@@ -34,5 +35,13 @@ namespace Tool
         public double MarginT { get; set; }
         public double MarginR { get; set; }
         public Font Font { get; set; }
+    }
+
+    [Serializable]
+    //Калибровка
+    public class Calibration_Data
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }

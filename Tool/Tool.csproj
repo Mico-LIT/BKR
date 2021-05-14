@@ -82,15 +82,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helper.cs" />
+    <Compile Include="Services\Helper.cs" />
     <Compile Include="Services\Analitic\AnaliticService.cs" />
     <Compile Include="Models\DataPattern.cs" />
     <Compile Include="Other\ImageWork.cs" />
-    <Compile Include="Print.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Analitic\Models\Params.cs" />
     <Compile Include="Services\Excel\ExcelService.cs" />
     <Compile Include="Services\Excel\Models\Settings.cs" />
+    <Compile Include="Services\Print\PrintService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

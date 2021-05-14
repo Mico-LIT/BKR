@@ -11,16 +11,16 @@ using System.Windows.Forms;
 using System.Runtime.Serialization;
 using Tool.Services.Analitic;
 
-namespace Tool
+namespace Tool.Services.Print
 {
-    public class Print
+    public class PrintService
     {
-        static string PathLocal{ get; set; }
-        static public Calibration_Data calibration_data=new Calibration_Data() { X=0,Y=0};
+        static string PathLocal { get; set; }
+        static public Calibration_Data calibration_data = new Calibration_Data() { X = 0, Y = 0 };
         //Картинка на печать
         static public Image iii;
         //Шрифт
-        static public Font font=new Font("Arial", 15);
+        static public Font font = new Font("Arial", 15);
         static public Dictionary<System.Windows.Controls.Button, Font> But_font = new Dictionary<System.Windows.Controls.Button, Font>();
 
         static int Start = 0;
@@ -31,11 +31,11 @@ namespace Tool
 
         static public Font Font()
         {
-            
+
             using (FontDialog Fontdialog = new FontDialog())
             {
-            Fontdialog.Font = font;
-            if (Fontdialog.ShowDialog() == DialogResult.OK) return Fontdialog.Font;
+                Fontdialog.Font = font;
+                if (Fontdialog.ShowDialog() == DialogResult.OK) return Fontdialog.Font;
                 return font;
             }
         }
@@ -66,10 +66,10 @@ namespace Tool
             //setupDlg.Reset();
 
             setupDlg.PageSettings = new System.Drawing.Printing.PageSettings();
-            setupDlg.PrinterSettings =  new System.Drawing.Printing.PrinterSettings();
+            setupDlg.PrinterSettings = new System.Drawing.Printing.PrinterSettings();
 
             setupDlg.PageSettings.Landscape = true;
-            setupDlg.PageSettings.Margins= new Margins(0, 0, 0, 0);
+            setupDlg.PageSettings.Margins = new Margins(0, 0, 0, 0);
 
             if (setupDlg.ShowDialog() == DialogResult.OK)
             {
@@ -102,7 +102,7 @@ namespace Tool
             printDoc.Print();
 
         }
-        
+
         private static void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
         {
             //e.PageSettings.Margins = new Margins(0,0,0,0);
@@ -177,21 +177,21 @@ namespace Tool
                 g.CompositingQuality = CompositingQuality.HighQuality;
                 g.SmoothingMode = SmoothingMode.HighQuality;
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                
+
                 g.DrawImage(image, 0, 0, nWidth, nHeight);
                 g.Dispose();
             }
             return result;
         }
 
-     
-        public static void dd(Func<int,int, Image> print_Item2, Func<int, string> getParametrAnalitic,string pathLocal, int ii=1)
+
+        public static void dd(Func<int, int, Image> print_Item2, Func<int, string> getParametrAnalitic, string pathLocal, int ii = 1)
         {
             PathLocal = pathLocal;
 
             print_Item2_ = print_Item2;
             getParametrAnalitic_ = getParametrAnalitic;
-             var setupDlg = new PageSetupDialog();
+            var setupDlg = new PageSetupDialog();
             var printDlg = new PrintDialog();
             var printDoc = new PrintDocument();
             printDoc.DocumentName = "Print Document";
@@ -210,16 +210,16 @@ namespace Tool
             else return;
             printDlg.AllowSomePages = true;
             printDlg.UseEXDialog = true;
-          
-           printDlg.PrinterSettings.FromPage=printDlg.PrinterSettings.ToPage = ii;
+
+            printDlg.PrinterSettings.FromPage = printDlg.PrinterSettings.ToPage = ii;
             if (printDlg.ShowDialog() == DialogResult.OK)
             {
                 printDoc.PrinterSettings = printDlg.PrinterSettings;
 
             }
             else return;
-            Start=printDlg.PrinterSettings.FromPage-1;
-            Stop=printDlg.PrinterSettings.ToPage-1;
+            Start = printDlg.PrinterSettings.FromPage - 1;
+            Stop = printDlg.PrinterSettings.ToPage - 1;
             printDoc.PrintPage += PrintDoc_PrintPage1; ;
             printDoc.Print();
         }
@@ -227,16 +227,16 @@ namespace Tool
 
         private static void PrintDoc_PrintPage1(object sender, PrintPageEventArgs e)
         {
-           if(AnaliticService.GetSettingOnAnalitic)
+            if (AnaliticService.GetSettingOnAnalitic)
                 AnaliticService.Save_Persont(print_Item2_(Start, 1), getParametrAnalitic_(Start), PathLocal);
 
-            e.Graphics.DrawImage(print_Item2_(Start,0), new Rectangle()
-                 {
-                     Height = e.PageSettings.PaperSize.Width,
-                     Width = e.PageSettings.PaperSize.Height,
-                     X = calibration_data.X,
-                     Y = calibration_data.Y,
-                 });
+            e.Graphics.DrawImage(print_Item2_(Start, 0), new Rectangle()
+            {
+                Height = e.PageSettings.PaperSize.Width,
+                Width = e.PageSettings.PaperSize.Height,
+                X = calibration_data.X,
+                Y = calibration_data.Y,
+            });
 
             if (Start == Stop)
             {
@@ -246,13 +246,6 @@ namespace Tool
             else e.HasMorePages = true;
             Start++;
         }
-
-        [Serializable]
-        //Калибровка
-        public class Calibration_Data
-        {
-            public int X { get; set; }
-            public int Y { get; set; }
-        }
     }
+
 }
