@@ -199,6 +199,13 @@ namespace WKR2.Views
         {
             try
             {
+
+            if (bitmapORig == null)
+            {
+                MessageBox.Show("Нужно загрузить шаблон\\картинку для работы", "Информация");
+                return;
+            }
+
             int tt = 0;
             //Dr.Bitmap bitmapORig = this.bitmapORig;
             Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width+tt, bitmapORig.Height+tt, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
