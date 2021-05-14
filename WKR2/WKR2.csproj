@@ -141,6 +141,8 @@
     </EmbeddedResource>
     <None Include="Others\Analitic\Analitic.csv" />
     <None Include="Others\Patern\rrrr.dat" />
+    <None Include="Others\TestData.xls" />
+    <None Include="Others\Исправления и доработки.docx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -192,7 +194,9 @@
   <ItemGroup>
     <Resource Include="Core\Contents\strelki.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Others\new12.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
