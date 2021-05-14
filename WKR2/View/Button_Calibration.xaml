@@ -22,7 +22,7 @@
 
         <Button Name="down"  Click="down_Click" >
             <Button.Background>
-                <ImageBrush ImageSource="/WKR2;component/Icon/strelki.jpg">
+                <ImageBrush ImageSource="/WKR2;component/Core/Contents/strelki.jpg">
                     <ImageBrush.RelativeTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleY="3" ScaleX="3" CenterY="1" CenterX="0.03"/>
@@ -36,7 +36,7 @@
         </Button>
         <Button Name="up"  Click="up_Click" Grid.Column="1"  >
             <Button.Background>
-                <ImageBrush ImageSource="/WKR2;component/Icon/strelki.jpg">
+                <ImageBrush ImageSource="/WKR2;component/Core/Contents/strelki.jpg">
                     <ImageBrush.RelativeTransform>
                         <TransformGroup>
                             <ScaleTransform CenterY="1" ScaleX="3" ScaleY="3" CenterX="0.91"/>
@@ -50,7 +50,7 @@
         </Button>
         <Button Name="rigth"  Click="rigth_Click"  Grid.Row="1" >
             <Button.Background>
-                <ImageBrush ImageSource="/WKR2;component/Icon/strelki.jpg">
+                <ImageBrush ImageSource="/WKR2;component/Core/Contents/strelki.jpg">
                     <ImageBrush.RelativeTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleX="3" ScaleY="3" CenterX="0.95"/>
@@ -64,7 +64,7 @@
         </Button>
         <Button Name="left"  Click="left_Click" Grid.Column="1" Grid.Row="1">
             <Button.Background>
-                <ImageBrush ImageSource="/WKR2;component/Icon/strelki.jpg">
+                <ImageBrush ImageSource="/WKR2;component/Core/Contents/strelki.jpg">
                     <ImageBrush.RelativeTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleX="3" ScaleY="3"/>

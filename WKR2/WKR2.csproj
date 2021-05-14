@@ -152,16 +152,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Contents\ExamplePattern.jpg" />
+    <Resource Include="Core\Contents\ExamplePattern.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tool\Tool.csproj">
       <Project>{13296843-052d-42da-acd9-1b6fbbbbc1e9}</Project>
       <Name>Tool</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Icon\strelki.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Others\32132.jpeg" />
@@ -192,6 +189,10 @@
     <Resource Include="Others\DDD12.txt" />
     <Resource Include="Others\PreView.jpeg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Core\Contents\strelki.jpg" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
