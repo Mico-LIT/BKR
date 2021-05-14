@@ -11,21 +11,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace WKR2.View
+namespace WKR2.Views
 {
     /// <summary>
     /// Логика взаимодействия для Poisk.xaml
     /// </summary>
     public partial class Poisk : Window
     {
-        private MainWindow mainWindow;
+        private _MainWindow mainWindow;
 
         public Poisk()
         {
             InitializeComponent();
         }
 
-        public Poisk(MainWindow mainWindow)
+        public Poisk(_MainWindow mainWindow)
         {
             this.mainWindow = mainWindow;
             //mainWindow.Print_Item(3);

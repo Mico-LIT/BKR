@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Dr = System.Drawing;
 
-namespace WKR2.View
+namespace WKR2.Views
 {
     /// <summary>
     /// Логика взаимодействия для PreView.xaml

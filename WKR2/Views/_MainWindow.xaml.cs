@@ -23,19 +23,19 @@ using Tool.Services.Excel;
 using Tool.Services;
 using Tool.Services.Print;
 
-namespace WKR2
+namespace WKR2.Views
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class _MainWindow : Window
     {
         public Point PointImag;     // координаты кнопки 
         public Image imageORig;     //оригинал загружен
         public Dr.Bitmap bitmapORig;//оригинал загружен
         private List<UIElement> But_canvas = new List<UIElement>();
 
-        public MainWindow()
+        public _MainWindow()
         {
             InitializeComponent(); IssEnabled();
             //List<Date> fd = new List<Date>() { new Date() { jsdkf = "423", NAme = "dsf4", NAme1 = "fs43" } };
@@ -254,7 +254,7 @@ namespace WKR2
             b.Dispose();
 
             PrintService.iii = vie;
-            View.PreView pre = new View.PreView(vie);
+            Views.PreView pre = new Views.PreView(vie);
             pre.WindowState = WindowState.Maximized;
             pre.ShowDialog();
 
@@ -333,7 +333,7 @@ namespace WKR2
             DataView dd = ExcelService.LoadrExcel();
                 //if (dd != null) d12.ItemsSource = dd;
            
-            View.SettingView vv = new View.SettingView(dd);
+            Views.SettingView vv = new Views.SettingView(dd);
             if(dd!=null)
             if (vv.ShowDialog()== true)
             {
@@ -377,7 +377,7 @@ namespace WKR2
                 but.MouseMove += new MouseEventHandler(MouseMove);
                 but.Click += (r, t) => {
                     Button bu = r as Button;
-                    View.Button_Calibration ff = new View.Button_Calibration(ref bu);
+                    Views.Button_Calibration ff = new Views.Button_Calibration(ref bu);
                     ff.ShowDialog();
                 };
             //var df=But_canvas.Find(x => ((Button)x).Name == str);
@@ -494,7 +494,7 @@ namespace WKR2
 
         private void Calibration_Click(object sender, RoutedEventArgs e)
         {
-            WKR2.View.Calibration gf = new View.Calibration(PrintService.calibration_data);
+            WKR2.Views.Calibration gf = new Views.Calibration(PrintService.calibration_data);
             gf.ShowDialog();
         }
 
@@ -517,7 +517,7 @@ namespace WKR2
         private void Image_Download(object sender, RoutedEventArgs e)
         {
 
-            View.Anallitic_Setings AS = new View.Anallitic_Setings(Com.Items);
+            Views.Anallitic_Setings AS = new Views.Anallitic_Setings(Com.Items);
             AS.ShowDialog();
             OpenFileDialog OFD = new OpenFileDialog();
             OFD.Filter = "Jpeg files (*.jpeg)|*.jpeg;*.jpg| PNG files (*.PNG)|*.png|Все файлы (*.*)|*.*";
@@ -683,7 +683,7 @@ namespace WKR2
             but.MouseMove += new MouseEventHandler(MouseMove);
             but.Click += (r, t) => {
                 Button bu = r as Button;
-                View.Button_Calibration ff = new View.Button_Calibration(ref bu);
+                Views.Button_Calibration ff = new Views.Button_Calibration(ref bu);
                 ff.ShowDialog();
             };
                 //var df = But_canvas.Find(x => ((Button)x).Name == str);
@@ -711,7 +711,7 @@ namespace WKR2
 
         private void Poisk(object sender, RoutedEventArgs e)
         {
-            var fg = new View.Poisk(this);
+            var fg = new Views.Poisk(this);
             fg.Show();
         }
 
@@ -724,7 +724,7 @@ namespace WKR2
 
         private void Analitic(object sender, RoutedEventArgs e)
         {
-            View.Anallitic_Setings an = new View.Anallitic_Setings(Com.Items);
+            Views.Anallitic_Setings an = new Views.Anallitic_Setings(Com.Items);
 
             an.ShowDialog();
         }

@@ -66,22 +66,22 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\AppSettings.cs" />
-    <Compile Include="View\Anallitic_Setings.xaml.cs">
+    <Compile Include="Views\Anallitic_Setings.xaml.cs">
       <DependentUpon>Anallitic_Setings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Button_Calibration.xaml.cs">
+    <Compile Include="Views\Button_Calibration.xaml.cs">
       <DependentUpon>Button_Calibration.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Calibration.xaml.cs">
+    <Compile Include="Views\Calibration.xaml.cs">
       <DependentUpon>Calibration.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Poisk.xaml.cs">
+    <Compile Include="Views\Poisk.xaml.cs">
       <DependentUpon>Poisk.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SettingView.xaml.cs">
+    <Compile Include="Views\SettingView.xaml.cs">
       <DependentUpon>SettingView.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\_MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -89,37 +89,37 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Views\_MainWindow.xaml.cs">
+      <DependentUpon>_MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\Anallitic_Setings.xaml">
+    <Page Include="Views\Anallitic_Setings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Button_Calibration.xaml">
+    <Page Include="Views\Button_Calibration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Calibration.xaml">
+    <Page Include="Views\Calibration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Poisk.xaml">
+    <Page Include="Views\Poisk.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\PreView.xaml">
+    <Page Include="Views\PreView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SettingView.xaml">
+    <Page Include="Views\SettingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="View\PreView.xaml.cs">
+    <Compile Include="Views\PreView.xaml.cs">
       <DependentUpon>PreView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">

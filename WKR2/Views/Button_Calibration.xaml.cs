@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Tool.Services.Print;
 
-namespace WKR2.View
+namespace WKR2.Views
 {
     /// <summary>
     /// Логика взаимодействия для Button_Calibration.xaml

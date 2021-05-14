@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace WKR2.View
+namespace WKR2.Views
 {
     /// <summary>
     /// Логика взаимодействия для Calibration.xaml
