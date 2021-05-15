@@ -18,27 +18,32 @@ namespace Tool.Services.Excel
     {
         public static DataView LoadrExcel()
         {
-            DataSet dd;
-            OpenFileDialog df = new OpenFileDialog() { ValidateNames = true };
-            df.Filter = "Xlsx files (*.xlsx)|*.xlsx|xls files (*.xls)|*.xls";
+            DataSet dateSet;
+            OpenFileDialog openFD = new OpenFileDialog() { ValidateNames = true };
+            openFD.Filter = "xls files (*.xls)|*.xls|Xlsx files (*.xlsx)|*.xlsx";
 
-            if (df.ShowDialog() == true)
+            if (openFD.ShowDialog() == true)
             {
-                FileStream fs = new FileStream(df.FileName, FileMode.Open, FileAccess.Read);
-                IExcelDataReader edr = null;
-                if (df.FilterIndex == 1) { edr = ExcelReaderFactory.CreateOpenXmlReader(fs); }
-                if (df.FilterIndex == 2) { edr = ExcelReaderFactory.CreateBinaryReader(fs); }
-                edr.IsFirstRowAsColumnNames = false;
-                dd = edr.AsDataSet();
-                edr.Close();
+                using (FileStream fs = new FileStream(openFD.FileName, FileMode.Open, FileAccess.Read))
+                {
+                    IExcelDataReader edr = null;
+                    if (openFD.FilterIndex == 1) { edr = ExcelReaderFactory.CreateBinaryReader(fs); }
+                    if (openFD.FilterIndex == 2) { edr = ExcelReaderFactory.CreateOpenXmlReader(fs); }
 
-                //string json = JsonConvert.SerializeObject(dd, Formatting.Indented);
-                //using (FileStream gg = new FileStream("DDD12.txt", FileMode.OpenOrCreate))
-                //{
-                //    byte[] array = System.Text.Encoding.Default.GetBytes(json);
-                //    gg.Write(array,0,array.Length);
-                //}
-                return dd.Tables[0].DefaultView; //внизу экселя есть странички
+                    using (edr)
+                    {
+                        edr.IsFirstRowAsColumnNames = false;
+                        dateSet = edr.AsDataSet();
+                    }
+                    return dateSet.Tables[0].DefaultView; //внизу экселя есть странички
+
+                    //string json = JsonConvert.SerializeObject(dd, Formatting.Indented);
+                    //using (FileStream gg = new FileStream("DDD12.txt", FileMode.OpenOrCreate))
+                    //{
+                    //    byte[] array = System.Text.Encoding.Default.GetBytes(json);
+                    //    gg.Write(array,0,array.Length);
+                    //}
+                }
             }
             return null;
         }
