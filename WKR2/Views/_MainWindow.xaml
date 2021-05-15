@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WKR2.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Выпускная квалификационная работа" Height="350" Width="525" MinHeight="430" MinWidth="500">
     <Grid Name="GLABN_GRID">
 
         <Grid.RowDefinitions>
@@ -18,7 +18,7 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>-->
-        <Menu>
+        <Menu Grid.Row="0">
             <MenuItem Header="Файл" MouseMove="MenuItem_Click_1">
                 <MenuItem Header="Открыть картинку" Click="Image_Download"  Name="D0" IsEnabled="True"></MenuItem>
                 <MenuItem Header="Открыть Excel" Click="open"></MenuItem>
@@ -28,43 +28,64 @@
                 <MenuItem Header="Сохранить шаблон" Click="Save_Serial"  Name="D2"></MenuItem>
 
                 <Separator />
-                <MenuItem Header="Аналитика">
+                <MenuItem Header="Аналитика" Name="D3">
                     <MenuItem Header="Аналитика настройка" Click="Analitic"></MenuItem>
                     <MenuItem Header="Выгрузка в Exel" Click="IntoExcel" ></MenuItem>
                 </MenuItem>
-                <Separator />
 
+                <Separator />
+                <MenuItem Header="Запустить ''Пример''"></MenuItem>
+
+                <Separator />
                 <MenuItem Header="Выход" Click="Exit"></MenuItem>
             </MenuItem>
-            <MenuItem Header="Доп. Настройка">
-                <MenuItem Header="Предпросмотр" Click="MenuItem_Click"></MenuItem>
-                <MenuItem Header="Печать" Click="Pehat" Visibility="Visible"></MenuItem>
+            <MenuItem Header="Настройки">
                 <MenuItem Header="Шрифт" Click="Font_click"></MenuItem>
                 <MenuItem Header="Калибровка" Click="Calibration_Click"></MenuItem>
 
-                <Separator/>
+                <!-- Доп Функционал
+                <MenuItem Header="Предпросмотр" Click="MenuItem_Click"></MenuItem>
+                <MenuItem Header="Печать" Click="Pehat" Visibility="Visible"></MenuItem>
                 <MenuItem Header="Save" Click="Save_img" Visibility="Visible"></MenuItem>
                 <MenuItem Header="Json" Click="JJson" Visibility="Visible"></MenuItem>
+                <Separator/>
+                -->
+
             </MenuItem>
+
         </Menu>
+        <Border Grid.Row="1" Grid.RowSpan="2" Background="GhostWhite" BorderBrush="Silver" BorderThickness="1" CornerRadius="20,20,20,20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Предпросмотр" Click="MenuItem_Click" Name="D4"></MenuItem>
+                    </ContextMenu>
+                </Grid.ContextMenu>
+                <Image Name="image" MouseDown="imag_click" Panel.ZIndex="1"></Image>
+                <TextBlock TextWrapping="Wrap" Width="350" Height="100" FontSize="25" TextAlignment="Center">Нужно загрузить данные и шаблон\картинку для работы!</TextBlock>
+            </Grid>
+        </Border>
 
-        <Image Grid.Row="1" Name="image" MouseDown="imag_click"></Image>
-
-        <Canvas Grid.RowSpan="3" Name="grid_imag"
+        <Canvas Grid.Row="1" Grid.RowSpan="2" Name="grid_imag"
                 Height="{Binding ElementName=image, Path=ActualHeight }" Width="{Binding ElementName=image, Path=ActualWidth }">
         </Canvas>
 
         <!--<Label Grid.Row="1" Grid.Column="1" Width="200" Name="point"></Label>-->
 
+        <!-- Поиск Доп Функционал-->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Name="poisk" Visibility="Collapsed">
             <ComboBox Width="200" Name="Com"></ComboBox>
             <TextBox Width="150"></TextBox>
-            <Button Width="50" Click="Poisk">поиск</Button>
+            <Button Width="50" Click="Poisk">Поиск</Button>
         </StackPanel>
+        <!---->
 
         <DataGrid Grid.Row="3" Name="d12" PreviewKeyDown="delete_row" RowHeight="19" ColumnWidth="80" LoadingRow="d12_LoadingRow" AutoGeneratingColumn="d12_AutoGeneratingColumn" >
             <DataGrid.ContextMenu>
-                <ContextMenu>
+                <ContextMenu Opened="ContextMenu_Opened">
                     <MenuItem Header="Добавить" Click="Add_Convas"></MenuItem>
                     <MenuItem Header="Удалить" Click="Del_Button_Convas"></MenuItem>
                     <MenuItem Header="Предпросмотр" Click="MenuItem_Click_2"></MenuItem>

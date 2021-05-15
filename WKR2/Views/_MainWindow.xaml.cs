@@ -711,15 +711,15 @@ namespace WKR2.Views
         {
             IssEnabled();
         }
-        private void IssEnabled() {
-            if (d12.Columns.Count>1) 
+        private void IssEnabled() 
+        {
+            if (d12.Items.Count > 0) 
             {
-                D0.IsEnabled = D1.IsEnabled = D2.IsEnabled=poisk.IsEnabled = true;
-                if (image.Source==null) D2.IsEnabled = false;
-                else D2.IsEnabled = true;
+                D0.IsEnabled = D1.IsEnabled = D2.IsEnabled = D3.IsEnabled = D4.IsEnabled = poisk.IsEnabled = true;               
+                D2.IsEnabled = (image.Source == null) ? false : true;        
             }
-            else{ D0.IsEnabled = D1.IsEnabled = D2.IsEnabled = poisk.IsEnabled = false; }
-
+            else            
+                D0.IsEnabled = D1.IsEnabled = D2.IsEnabled = D3.IsEnabled = D4.IsEnabled = poisk.IsEnabled = false;
         }
 
         private void Poisk(object sender, RoutedEventArgs e)
@@ -751,6 +751,17 @@ namespace WKR2.Views
         {
             ExcelService.ExportToExcel(Core.AppSettings.PathLocal);
             MessageBox.Show("Выгрузка прошла успешно!");
+        }
+
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            var contextMenu = (System.Windows.Controls.ContextMenu)sender;
+
+            if (contextMenu == null)
+                throw new InvalidOperationException();
+         
+            foreach (MenuItem item in ((ContextMenu)e.Source).Items)
+                item.IsEnabled = (d12.Columns.Count <= 1) ? false : true;                
         }
     }
 }
