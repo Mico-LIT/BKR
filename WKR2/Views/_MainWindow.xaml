@@ -19,29 +19,28 @@
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>-->
         <Menu Grid.Row="0">
-            <MenuItem Header="Файл" MouseMove="MenuItem_Click_1">
-                <MenuItem Header="Открыть картинку" Click="OpenImageMI_Click"   Name="MIOpenImage" IsEnabled="True"></MenuItem>
-                <MenuItem Header="Открыть Excel"    Click="OpenExcelMI_Click"   Name="OpenExcelMI" ></MenuItem>
+            <MenuItem Header="Файл" MouseMove="MenuItem_GroupFile_MouseMove">
+                <MenuItem Header="Открыть картинку" Click="MenuItem_OpenImage_Click"   Name="MIOpenImage" IsEnabled="True"></MenuItem>
+                <MenuItem Header="Открыть Excel"    Click="MenuItem_OpenExcel_Click"   Name="MIOpenExcel" ></MenuItem>
 
                 <Separator />
-                <MenuItem Header="Загрузить шаблон" Click="DownloadPatternMI_Click"  Name="MIDownloadPattern"></MenuItem>
-                <MenuItem Header="Сохранить шаблон" Click="Save_Serial"  Name="MISavePattent"></MenuItem>
+                <MenuItem Header="Загрузить шаблон" Click="MenuItem_DownloadPattern_Click"  Name="MIDownloadPattern"></MenuItem>
+                <MenuItem Header="Сохранить шаблон" Click="MenuItem_Save_Serial"  Name="MISavePattent"></MenuItem>
 
                 <Separator />
                 <MenuItem Header="Аналитика" Name="MIGroupAnalitic">
-                    <MenuItem Header="Аналитика настройка" Click="SettingAnalitic_Click"></MenuItem>
-                    <MenuItem Header="Выгрузка в Exel" Click="ExportExcel_Click" ></MenuItem>
+                    <MenuItem Header="Аналитика настройка" Click="MenuItem_SettingAnalitic_Click"></MenuItem>
+                    <MenuItem Header="Выгрузка в Exel" Click="MenuItem_ExportExcel_Click" ></MenuItem>
                 </MenuItem>
 
                 <Separator />
-                <MenuItem Header="Выход" Click="Exit"></MenuItem>
+                <MenuItem Header="Выход" Click="MenuItem_Exit_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="Настройки">
-                <MenuItem Header="Шрифт" Click="Font_click"></MenuItem>
-                <MenuItem Header="Калибровка" Click="Calibration_Click"></MenuItem>
+                <MenuItem Header="Шрифт" Click="MenuItem_Font_click"></MenuItem>
+                <MenuItem Header="Калибровка" Click="MenuItem_Calibration_Click"></MenuItem>
 
                 <!-- Доп Функционал
-                <MenuItem Header="Предпросмотр" Click="MenuItem_Click"></MenuItem>
                 <MenuItem Header="Печать" Click="Pehat" Visibility="Visible"></MenuItem>
                 <MenuItem Header="Save" Click="Save_img" Visibility="Visible"></MenuItem>
                 <MenuItem Header="Json" Click="JJson" Visibility="Visible"></MenuItem>
@@ -49,9 +48,9 @@
                 -->
 
             </MenuItem>
-            
+
             <Separator/>
-            <MenuItem Header="Запустить ''Пример''" Name="OpenExample" Click="OpenExample_Click"></MenuItem>
+            <MenuItem Header="Запустить ''Пример''" Name="OpenExample" Click="MenuItem_OpenExample_Click"></MenuItem>
         </Menu>
         <Border Grid.Row="1" Grid.RowSpan="2" Background="GhostWhite" BorderBrush="Silver" BorderThickness="1" CornerRadius="20,20,20,20">
             <Grid>
@@ -60,16 +59,16 @@
                 </Grid.RowDefinitions>
                 <Grid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Предпросмотр" Click="MenuItem_Click" Name="D4"></MenuItem>
+                        <MenuItem Header="Предпросмотр" Click="MenuItem_PreView_Click" Name="MIPreView"></MenuItem>
                     </ContextMenu>
                 </Grid.ContextMenu>
-                <Image Name="image" MouseDown="imag_click" Panel.ZIndex="1"></Image>
+                <Image Name="ImageMain" MouseDown="ImageMain_MouseDown" Panel.ZIndex="1"></Image>
                 <TextBlock TextWrapping="Wrap" Width="350" Height="100" FontSize="25" TextAlignment="Center">Нужно загрузить данные и шаблон\картинку для работы!</TextBlock>
             </Grid>
         </Border>
 
         <Canvas Grid.Row="1" Grid.RowSpan="2" Name="CanvasForImage"
-                Height="{Binding ElementName=image, Path=ActualHeight }" Width="{Binding ElementName=image, Path=ActualWidth }">
+                Height="{Binding ElementName=ImageMain, Path=ActualHeight }" Width="{Binding ElementName=ImageMain, Path=ActualWidth }">
         </Canvas>
 
         <!--<Label Grid.Row="1" Grid.Column="1" Width="200" Name="point"></Label>-->
@@ -82,13 +81,13 @@
         </StackPanel>
         <!---->
 
-        <DataGrid Grid.Row="3" Name="DataGridMain" PreviewKeyDown="delete_row"  ColumnWidth="80" LoadingRow="d12_LoadingRow"
-                  AutoGeneratingColumn="d12_AutoGeneratingColumn" >
+        <DataGrid Grid.Row="3" Name="DataGridMain" PreviewKeyDown="DataGridMain_PreviewKeyDown"  ColumnWidth="80" LoadingRow="DataGridMain_LoadingRow"
+                  AutoGeneratingColumn="DataGridMain_AutoGeneratingColumn" >
             <DataGrid.ContextMenu>
-                <ContextMenu Opened="ContextMenu_Opened">
-                    <MenuItem Header="Добавить" Click="Add_Convas"></MenuItem>
-                    <MenuItem Header="Удалить" Click="Del_Button_Convas"></MenuItem>
-                    <MenuItem Header="Предпросмотр" Click="MenuItem_Click_2"></MenuItem>
+                <ContextMenu Opened="ContextMenu_DGM_Opened">
+                    <MenuItem Header="Добавить" Click="MenuItem_DGM_AddConvasOnButton"></MenuItem>
+                    <MenuItem Header="Удалить" Click="MenuItem_DGM_ButtonRemoveOnConvas"></MenuItem>
+                    <MenuItem Header="Предпросмотр" Click="MenuItem_DGM_PreView"></MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
@@ -96,7 +95,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Button Content="Печать" Click="Button_Click" Margin="1"/>
+                                <Button Content="Печать" Click="DataGridMain_Button_PrintItem_Click" Margin="1"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
