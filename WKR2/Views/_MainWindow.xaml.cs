@@ -32,10 +32,10 @@ namespace WKR2.Views
     /// </summary>
     public partial class _MainWindow : Window
     {
-        public Point PointImag;     // координаты кнопки 
-        public Image imageORig;     //оригинал загружен
-        public Dr.Bitmap bitmapORig;//оригинал загружен
-        private List<UIElement> But_canvas = new List<UIElement>();
+        Point pointImag;     // координаты кнопки 
+        Image imageORig;     //оригинал загружен
+        Dr.Bitmap bitmapORig;//оригинал загружен
+        List<UIElement> canvasOnButtons = new List<UIElement>();
 
         public _MainWindow()
         {
@@ -56,7 +56,6 @@ namespace WKR2.Views
             //    grid_imag.Children.Add(but);
             //}
             //d12.ItemsSource = fd;
-
         }
 
         private void Save_img(object sender, RoutedEventArgs e)
@@ -79,7 +78,6 @@ namespace WKR2.Views
             //Dr.Bitmap bmp = new Dr.Bitmap(@"c: \users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\ggh.png");
             ////bmp = b;
 
-
             Dr.Bitmap bmp = new Dr.Bitmap(@"C:\BKR\WKR2\ggh.jpg");
             Dr.Bitmap b = new Dr.Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
 
@@ -100,11 +98,11 @@ namespace WKR2.Views
 
                             double pixelWidth = image.Source.Width;
                             double pixelHeight = image.Source.Height;
-                            PointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
-                            PointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
+                            pointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
+                            pointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
 
                             g.DrawString("Информационная конференция IT Corparation", font, Dr.Brushes.Black,
-                       (float)PointImag.X, (float)PointImag.Y);
+                       (float)pointImag.X, (float)pointImag.Y);
                         }
                     }
 
@@ -128,7 +126,6 @@ namespace WKR2.Views
             //point.Content = String.Format("x={0}  Y={1}", PointImag.X, PointImag.Y); 
         }
 
-
         //новое окно 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -151,6 +148,7 @@ namespace WKR2.Views
                 throw;
             }
         }
+
         //забросил метод
         public void Print_Item(int Item_Row)
         {
@@ -170,8 +168,8 @@ namespace WKR2.Views
                         int i = 0;
                         double pixelWidth = image.Source.Width;
                         double pixelHeight = image.Source.Height;
-                        PointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
-                        PointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
+                        pointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
+                        pointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
                         var yy = (DataView)DataGridMain.ItemsSource;
                         foreach (DataColumn ii in yy.Table.Columns)
                         {
@@ -185,8 +183,8 @@ namespace WKR2.Views
 
                         g.DrawString(TEXT, trt, Dr.Brushes.Black,
                             new Dr.RectangleF(
-                                (float)PointImag.X,
-                                (float)PointImag.Y,
+                                (float)pointImag.X,
+                                (float)pointImag.Y,
                                 (float)(f.Width * 3.3),
                                 (float)(f.Height * 3.3)));
                     }
@@ -207,7 +205,6 @@ namespace WKR2.Views
         {
             try
             {
-
                 if (bitmapORig == null)
                 {
                     MessageBox.Show("Нужно загрузить шаблон\\картинку для работы", "Информация");
@@ -237,8 +234,8 @@ namespace WKR2.Views
                             int i = 0;
                             double pixelWidth = image.Source.Width;
                             double pixelHeight = image.Source.Height;
-                            PointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
-                            PointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
+                            pointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
+                            pointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
                             var yy = (DataView)DataGridMain.ItemsSource;
                             foreach (DataColumn ii in yy.Table.Columns)
                             {
@@ -251,7 +248,7 @@ namespace WKR2.Views
                             if (trt == null) { trt = PrintService.FontCurrent; }
 
                             g.DrawString(TEXT/*+"123456786543213453421224234234"*/, trt, Dr.Brushes.Black,
-                                new Dr.RectangleF((float)PointImag.X, (float)PointImag.Y, (float)(f.Width * 3.3), (float)(f.Height * 3.3)));
+                                new Dr.RectangleF((float)pointImag.X, (float)pointImag.Y, (float)(f.Width * 3.3), (float)(f.Height * 3.3)));
 
                             //     g.DrawString(TEXT+"</br> 3efdvgt4", font, Dr.Brushes.Black,
                             //(float)PointImag.X, (float)PointImag.Y);
@@ -341,12 +338,6 @@ namespace WKR2.Views
         //}
         #endregion
 
-
-        private void d12_LoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            var fg = e.Row.Header = (e.Row.GetIndex() + 1).ToString() + "    ";
-
-        }
         // сколько кнопок надо на разментку 
         private void Button_ADD_Canvas(string str)
         {
@@ -371,7 +362,7 @@ namespace WKR2.Views
 
 
             CanvasForImage.Children.Add(but);
-            But_canvas.Add(but);
+            canvasOnButtons.Add(but);
             //}
         }
 
@@ -380,7 +371,7 @@ namespace WKR2.Views
             MessageBox.Show("Пока нет реализации, извините");
             return;
 
-            Tool.Services.Helper.JsonSerializeObject(((DataView)DataGridMain.ItemsSource).ToTable());
+            Helper.JsonSerializeObject(((DataView)DataGridMain.ItemsSource).ToTable());
         }
 
         private void delete_row(object sender, KeyEventArgs e)
@@ -394,6 +385,7 @@ namespace WKR2.Views
                 //d12.Items.Remove(d12.SelectedItem);// напрямую с ним работать нельзя надо посредника DataTable
             }
         }
+
         private void ShowMessAnalitic()
         {
             MessageBoxResult result = MessageBox.Show("Включить аналитик?!", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Information);
@@ -426,7 +418,6 @@ namespace WKR2.Views
             PrintService.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal);
         }
 
-
         public Dr.Image Print_Item2(int Item_Row, int rez = 0)
         {
             Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width, bitmapORig.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
@@ -446,8 +437,8 @@ namespace WKR2.Views
                         int i = 0;
                         double pixelWidth = image.Source.Width;
                         double pixelHeight = image.Source.Height;
-                        PointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
-                        PointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
+                        pointImag.X = (pixelWidth * f.Margin.Left) / image.ActualWidth;
+                        pointImag.Y = (pixelHeight * f.Margin.Top) / image.ActualHeight;
                         var yy = (DataView)DataGridMain.ItemsSource;
                         foreach (DataColumn ii in yy.Table.Columns)
                         {
@@ -461,8 +452,8 @@ namespace WKR2.Views
 
                         g.DrawString(TEXT, trt, Dr.Brushes.Black,
                             new Dr.RectangleF(
-                                (float)PointImag.X,
-                                (float)PointImag.Y,
+                                (float)pointImag.X,
+                                (float)pointImag.Y,
                                 (float)(f.Width * 3.3),
                                 (float)(f.Height * 3.3)));
                     }
@@ -480,28 +471,17 @@ namespace WKR2.Views
 
         }
 
+        private void d12_LoadingRow(object sender, DataGridRowEventArgs e) => e.Row.Header = $"{(e.Row.GetIndex() + 1)}    ";
+        private void Calibration_Click(object sender, RoutedEventArgs e) => new Views.Calibration(PrintService.CalibrationData).ShowDialog();
+        private void Font_click(object sender, RoutedEventArgs e) => PrintService.FontCurrent = PrintService.Font();
+        private void MenuItem_Click(object sender, RoutedEventArgs e) => Previwe();
+        private void Exit(object sender, RoutedEventArgs e) => this.Close();
+        private void MenuItem_Click_1(object sender, MouseEventArgs e) => IssEnabled();
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e) => Previwe(DataGridMain.SelectedIndex);
 
-        private void Calibration_Click(object sender, RoutedEventArgs e)
-        {
-            WKR2.Views.Calibration gf = new Views.Calibration(PrintService.CalibrationData);
-            gf.ShowDialog();
-        }
-
-        private void Font_click(object sender, RoutedEventArgs e)
-        {
-            PrintService.FontCurrent = PrintService.Font();
-        }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            Previwe();
-        }
-
-        private void Exit(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
+        // Не реализовано
+        private void Poisk(object sender, RoutedEventArgs e) => new Views.Poisk(this).Show();
+        //
 
         //Зачем сука???
         //public void Clear_button()
@@ -534,15 +514,14 @@ namespace WKR2.Views
         {
             try
             {
-
                 string fg = (string)DataGridMain.CurrentCell.Column.Header;
-                var h = But_canvas.FindLast(x => ((Button)x).Name == fg);
+                var h = canvasOnButtons.FindLast(x => ((Button)x).Name == fg);
                 DataGridMain.SelectedIndex = -1;
                 if (h == null) return;
 
                 PrintService.ButtonFontDictionary.Remove((Button)h);
                 CanvasForImage.Children.Remove(h);
-                But_canvas.Remove(h);
+                canvasOnButtons.Remove(h);
             }
             catch (Exception ex)
             {
@@ -602,10 +581,10 @@ namespace WKR2.Views
         {
             BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap
             (
-            bitmap.GetHbitmap(),
-            IntPtr.Zero,
-            Int32Rect.Empty,
-            BitmapSizeOptions.FromEmptyOptions()
+                bitmap.GetHbitmap(),
+                IntPtr.Zero,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions()
             );
             return bitmapSource;
         }
@@ -614,8 +593,6 @@ namespace WKR2.Views
         {
             foreach (Setting_Button item in lis)
             {
-
-
                 Button but = new Button()
                 {
                     Name = item.Name,
@@ -637,14 +614,10 @@ namespace WKR2.Views
                 //if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
                 if (item.Font != null) PrintService.ButtonFontDictionary.Add(but, item.Font);
                 CanvasForImage.Children.Add(but);
-                But_canvas.Add(but);
-
+                canvasOnButtons.Add(but);
             }
         }
-        private void MenuItem_Click_1(object sender, MouseEventArgs e)
-        {
-            IssEnabled();
-        }
+
         private void IssEnabled()
         {
             if (DataGridMain.Items.Count > 0)
@@ -657,29 +630,17 @@ namespace WKR2.Views
                 MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled = MISavePattent.IsEnabled = MIGroupAnalitic.IsEnabled = D4.IsEnabled = poisk.IsEnabled = false;
         }
 
-        private void Poisk(object sender, RoutedEventArgs e)
-        {
-            var fg = new Views.Poisk(this);
-            fg.Show();
-        }
+
 
         private void d12_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-
             //e.Column.Header =;
-
         }
 
         private void SettingAnalitic_Click(object sender, RoutedEventArgs e)
         {
             Views.AnalliticSetings an = new Views.AnalliticSetings(Com.Items);
-
             an.ShowDialog();
-        }
-
-        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
-        {
-            Previwe(DataGridMain.SelectedIndex);
         }
 
         private void ExportExcel_Click(object sender, RoutedEventArgs e)
@@ -730,7 +691,7 @@ namespace WKR2.Views
                     bitmapORig = new Dr.Bitmap(stream);
                 }
 
-                But_canvas.Clear();
+                canvasOnButtons.Clear();
                 CanvasForImage.Children.Clear();
 
                 // для поиска
@@ -757,7 +718,7 @@ namespace WKR2.Views
                 image.Source = new BitmapImage(new Uri(OFD.FileName));                                   //генирится ошибка вот тут 
                 imageORig = image;
                 bitmapORig = new Dr.Bitmap(new BitmapImage(new Uri(OFD.FileName)).UriSource.LocalPath); //генирится ошибка вот тут 
-                But_canvas.Clear();
+                canvasOnButtons.Clear();
                 CanvasForImage.Children.Clear();
             }
         }
@@ -805,7 +766,7 @@ namespace WKR2.Views
                 OFD.InitialDirectory = Core.AppSettings.PathLocal;
                 if (OFD.ShowDialog() == true)
                 {
-                    But_canvas.Clear();
+                    canvasOnButtons.Clear();
                     CanvasForImage.Children.Clear();
 
                     DataPattern ds = Helper.DeSerializationDataPattern(OFD.FileName);
