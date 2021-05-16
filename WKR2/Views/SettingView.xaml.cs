@@ -38,11 +38,18 @@ namespace WKR2.Views
             //listV.ItemsSource =new List<string> ();
         }
 
+        protected override void OnContentRendered(EventArgs e)
+        {
+            MessageBox.Show("Выберите нужные данные для работы!", "Информация");
+            base.OnContentRendered(e);
+        }
+        
         private void MenuItem_Click_Delete_Column(object sender, RoutedEventArgs e)
         {
             DelCol.Remove(listColumn.SelectedItem.ToString());
             listColumn.Items.Remove(listColumn.SelectedItem);
         }
+        
         private void MenuItem_Click_Delete_Row(object sender, RoutedEventArgs e)
         {
             DelRow.Remove(int.Parse(listRow.SelectedItem.ToString()));
