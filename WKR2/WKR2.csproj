@@ -139,6 +139,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExampleData\TestData.xls" />
     <None Include="Others\Analitic\Analitic.csv" />
     <None Include="Others\Patern\rrrr.dat" />
     <None Include="Others\TestData.xls" />
@@ -196,6 +197,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Others\new12.jpg" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="ExampleData\ImageTemplate.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

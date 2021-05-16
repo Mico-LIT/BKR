@@ -22,6 +22,8 @@ using Tool.Services.Analitic;
 using Tool.Services.Excel;
 using Tool.Services;
 using Tool.Services.Print;
+using WKR2.Core;
+using System.Reflection;
 
 namespace WKR2.Views
 {
@@ -768,6 +770,52 @@ namespace WKR2.Views
          
             foreach (MenuItem item in ((ContextMenu)e.Source).Items)
                 item.IsEnabled = (d12.Columns.Count <= 1) ? false : true;                
+        }
+
+        private void OpenExample_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+
+                //загругка данных
+                using (Stream stream = assembly.GetManifestResourceStream(AppSettings.ResourceNameTestData)) 
+                { 
+                    DataView dd = ExcelService.LoadrExcel(stream);
+                    grid_imag.Children.Clear();
+                    d12.ItemsSource = null;
+                    d12.ItemsSource = dd;
+                }
+
+                //загруска картинки\шаблона
+                using (var stream = assembly.GetManifestResourceStream(AppSettings.ResourceNameImageTemplate))
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = stream;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+
+                    image.Source = bitmap;
+                    imageORig = image;
+
+                    bitmapORig = new Dr.Bitmap(stream);
+                }
+                
+                But_canvas.Clear();
+                grid_imag.Children.Clear();
+
+                // для поиска
+                foreach (var item in d12.Columns)                
+                    if (item is DataGridTextColumn) Com.Items.Add((string)item.Header);
+
+                IssEnabled();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при загрузке!");
+            }
         }
     }
 }

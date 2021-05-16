@@ -34,9 +34,6 @@
                 </MenuItem>
 
                 <Separator />
-                <MenuItem Header="Запустить ''Пример''"></MenuItem>
-
-                <Separator />
                 <MenuItem Header="Выход" Click="Exit"></MenuItem>
             </MenuItem>
             <MenuItem Header="Настройки">
@@ -52,7 +49,9 @@
                 -->
 
             </MenuItem>
-
+            
+            <Separator/>
+            <MenuItem Header="Запустить ''Пример''" Name="OpenExample" Click="OpenExample_Click"></MenuItem>
         </Menu>
         <Border Grid.Row="1" Grid.RowSpan="2" Background="GhostWhite" BorderBrush="Silver" BorderThickness="1" CornerRadius="20,20,20,20">
             <Grid>

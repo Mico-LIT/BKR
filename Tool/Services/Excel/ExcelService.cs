@@ -16,6 +16,22 @@ namespace Tool.Services.Excel
 {
     public static class ExcelService
     {
+        public static DataView LoadrExcel(Stream stream)
+        {
+            DataSet dateSet;
+            using (stream)
+            {
+                IExcelDataReader excelDataReader = ExcelReaderFactory.CreateBinaryReader(stream);
+
+                using (excelDataReader)
+                {
+                    excelDataReader.IsFirstRowAsColumnNames = false;
+                    dateSet = excelDataReader.AsDataSet();
+                }
+            }
+            return dateSet.Tables[0].DefaultView; //внизу экселя есть странички
+        }
+        
         public static DataView LoadrExcel()
         {
             DataSet dateSet;
