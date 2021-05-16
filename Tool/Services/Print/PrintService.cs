@@ -15,40 +15,52 @@ namespace Tool.Services.Print
 {
     public class PrintService
     {
-        static string PathLocal { get; set; }
-        static public Calibration_Data calibration_data = new Calibration_Data() { X = 0, Y = 0 };
-        //Картинка на печать
-        static public Image iii;
-        //Шрифт
-        static public Font font = new Font("Arial", 15);
-        static public Dictionary<System.Windows.Controls.Button, Font> But_font = new Dictionary<System.Windows.Controls.Button, Font>();
+        private static Font fontDefault = new Font("Arial", 15);
+        private static Font fontCurrent;
 
-        static int Start = 0;
-        static int Stop = 0;
+        private static Dictionary<System.Windows.Controls.Button, Font>
+            buttonFontDictionary = new Dictionary<System.Windows.Controls.Button, Font>();
 
+        private static string pathLocal;
+        private static int Start = 0;
+        private static int Stop = 0;
         private static Func<int, int, Image> print_Item2_;
         private static Func<int, string> getParametrAnalitic_;
 
+        public static Calibration_Data CalibrationData { get; set; } = new Calibration_Data() { X = 0, Y = 0 };
+        public static Image ImageCurrent { get; set; } //Картинка на печать
+        public static Font FontCurrent  //Шрифт
+        {
+            get { return fontCurrent ?? fontDefault; }
+            set { fontCurrent = value; }
+        }
+        public static Dictionary<System.Windows.Controls.Button, Font> ButtonFontDictionary => buttonFontDictionary;
+
         static public Font Font()
         {
-
             using (FontDialog Fontdialog = new FontDialog())
             {
-                Fontdialog.Font = font;
-                if (Fontdialog.ShowDialog() == DialogResult.OK) return Fontdialog.Font;
-                return font;
+                Fontdialog.Font = fontDefault;
+                if (Fontdialog.ShowDialog() == DialogResult.OK)
+                    return Fontdialog.Font;
+
+                return fontDefault;
             }
         }
+
         static public Font Font(Font s)
         {
-
             using (FontDialog Fontdialog = new FontDialog())
             {
                 Fontdialog.Font = s;
-                if (Fontdialog.ShowDialog() == DialogResult.OK) return Fontdialog.Font;
+
+                if (Fontdialog.ShowDialog() == DialogResult.OK)
+                    return Fontdialog.Font;
+
                 return null;
             }
         }
+
         static public void dd(int ii)
         {
             Start = Stop = ii;
@@ -105,17 +117,20 @@ namespace Tool.Services.Print
 
         private static void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
         {
+            if (ImageCurrent == null)
+                throw new ArgumentNullException(nameof(ImageCurrent));
+
             //e.PageSettings.Margins = new Margins(0,0,0,0);
             //var df=e.PageBounds;
             //e.Graphics.DrawString("Приведд уродец", new System.Drawing.Font("Arial", 12),System.Drawing.Brushes.Black,1800,100);
             //e.Graphics.DrawImage(ResizeOrigImg(iii,(int)(df.Width*1.5),(int)(df.Height*1.5) ), 0,0);
             //e.Graphics.DrawImage(iii, e.MarginBounds);
-            e.Graphics.DrawImage(iii, new Rectangle()
+            e.Graphics.DrawImage(ImageCurrent, new Rectangle()
             {
                 Height = e.PageSettings.PaperSize.Width,
                 Width = e.PageSettings.PaperSize.Height,
-                X = calibration_data.X,
-                Y = calibration_data.Y,
+                X = CalibrationData.X,
+                Y = CalibrationData.Y,
             });
             //Rectangle m = e.MarginBounds;
 
@@ -187,7 +202,7 @@ namespace Tool.Services.Print
 
         public static void dd(Func<int, int, Image> print_Item2, Func<int, string> getParametrAnalitic, string pathLocal, int ii = 1)
         {
-            PathLocal = pathLocal;
+            PrintService.pathLocal = pathLocal;
 
             print_Item2_ = print_Item2;
             getParametrAnalitic_ = getParametrAnalitic;
@@ -228,14 +243,14 @@ namespace Tool.Services.Print
         private static void PrintDoc_PrintPage1(object sender, PrintPageEventArgs e)
         {
             if (AnaliticService.GetSettingOnAnalitic)
-                AnaliticService.Save_Persont(print_Item2_(Start, 1), getParametrAnalitic_(Start), PathLocal);
+                AnaliticService.Save_Persont(print_Item2_(Start, 1), getParametrAnalitic_(Start), pathLocal);
 
             e.Graphics.DrawImage(print_Item2_(Start, 0), new Rectangle()
             {
                 Height = e.PageSettings.PaperSize.Width,
                 Width = e.PageSettings.PaperSize.Height,
-                X = calibration_data.X,
-                Y = calibration_data.Y,
+                X = CalibrationData.X,
+                Y = CalibrationData.Y,
             });
 
             if (Start == Stop)
