@@ -22,10 +22,10 @@ namespace WKR2.Views
     /// </summary>
     public partial class PreView : Window
     {
-        public PreView(Dr.Image im) 
+        public PreView(Dr.Image image) 
         {
             InitializeComponent();
-            img.Source = Convert(im);
+            img.Source = Convert(image);
         }
 
         public BitmapImage Convert(Dr.Image img)
@@ -35,15 +35,14 @@ namespace WKR2.Views
                 img.Save(memory, ImageFormat.Png);
                 memory.Position = 0;
 
-                var bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = memory;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
+                var bi = new BitmapImage();
+                bi.BeginInit();
+                bi.StreamSource = memory;
+                bi.CacheOption = BitmapCacheOption.OnLoad;
+                bi.EndInit();
 
-                return bitmapImage;
+                return bi;
             }
         }
-
     }
 }
