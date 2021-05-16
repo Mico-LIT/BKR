@@ -66,8 +66,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\AppSettings.cs" />
-    <Compile Include="Views\Anallitic_Setings.xaml.cs">
-      <DependentUpon>Anallitic_Setings.xaml</DependentUpon>
+    <Compile Include="Views\AnalliticSetings.xaml.cs">
+      <DependentUpon>AnalliticSetings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Button_Calibration.xaml.cs">
       <DependentUpon>Button_Calibration.xaml</DependentUpon>
@@ -93,7 +93,7 @@
       <DependentUpon>_MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\Anallitic_Setings.xaml">
+    <Page Include="Views\AnalliticSetings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

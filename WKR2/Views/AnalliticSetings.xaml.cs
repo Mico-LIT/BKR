@@ -16,21 +16,23 @@ namespace WKR2.Views
     /// <summary>
     /// Логика взаимодействия для Anallitic_Setings.xaml
     /// </summary>
-    public partial class Anallitic_Setings : Window
+    public partial class AnalliticSetings : Window
     {
-        
-
-        public Anallitic_Setings()
+        public AnalliticSetings()
         {
             InitializeComponent();
-
         }
 
-        public Anallitic_Setings(ItemCollection items):this()
+        public AnalliticSetings(ItemCollection items) : this()
         {
-            d1.ItemsSource = items; //d1.SelectedIndex = 0;
-            d2.ItemsSource = items; //d2.SelectedIndex = 0;
-            so.DataContext = Tool.Services.Analitic.AnaliticService.PARAMS;
+            comboBoxId.ItemsSource = items; //d1.SelectedIndex = 0;
+            comboBoxFIO.ItemsSource = items; //d2.SelectedIndex = 0;
+            stackPanel.DataContext = Tool.Services.Analitic.AnaliticService.PARAMS;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
