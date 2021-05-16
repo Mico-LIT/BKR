@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WKR2.Views"
         mc:Ignorable="d"
         Title="Выпускная квалификационная работа" Height="350" Width="525" MinHeight="430" MinWidth="500">
-    <Grid Name="GLABN_GRID">
+    <Grid Name="GLOBAL_GRID">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -20,17 +20,17 @@
         </Grid.ColumnDefinitions>-->
         <Menu Grid.Row="0">
             <MenuItem Header="Файл" MouseMove="MenuItem_Click_1">
-                <MenuItem Header="Открыть картинку" Click="Image_Download"  Name="D0" IsEnabled="True"></MenuItem>
-                <MenuItem Header="Открыть Excel" Click="open"></MenuItem>
+                <MenuItem Header="Открыть картинку" Click="OpenImageMI_Click"   Name="MIOpenImage" IsEnabled="True"></MenuItem>
+                <MenuItem Header="Открыть Excel"    Click="OpenExcelMI_Click"   Name="OpenExcelMI" ></MenuItem>
 
                 <Separator />
-                <MenuItem Header="Загрузить шаблон" Click="Download_Serial" Name="D1"></MenuItem>
-                <MenuItem Header="Сохранить шаблон" Click="Save_Serial"  Name="D2"></MenuItem>
+                <MenuItem Header="Загрузить шаблон" Click="DownloadPatternMI_Click"  Name="MIDownloadPattern"></MenuItem>
+                <MenuItem Header="Сохранить шаблон" Click="Save_Serial"  Name="MISavePattent"></MenuItem>
 
                 <Separator />
-                <MenuItem Header="Аналитика" Name="D3">
-                    <MenuItem Header="Аналитика настройка" Click="Analitic"></MenuItem>
-                    <MenuItem Header="Выгрузка в Exel" Click="IntoExcel" ></MenuItem>
+                <MenuItem Header="Аналитика" Name="MIGroupAnalitic">
+                    <MenuItem Header="Аналитика настройка" Click="SettingAnalitic_Click"></MenuItem>
+                    <MenuItem Header="Выгрузка в Exel" Click="ExportExcel_Click" ></MenuItem>
                 </MenuItem>
 
                 <Separator />
@@ -68,7 +68,7 @@
             </Grid>
         </Border>
 
-        <Canvas Grid.Row="1" Grid.RowSpan="2" Name="grid_imag"
+        <Canvas Grid.Row="1" Grid.RowSpan="2" Name="CanvasForImage"
                 Height="{Binding ElementName=image, Path=ActualHeight }" Width="{Binding ElementName=image, Path=ActualWidth }">
         </Canvas>
 
@@ -78,11 +78,12 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" Name="poisk" Visibility="Collapsed">
             <ComboBox Width="200" Name="Com"></ComboBox>
             <TextBox Width="150"></TextBox>
-            <Button Width="50" Click="Poisk">Поиск</Button>
+            <Button Width="50">Поиск</Button>
         </StackPanel>
         <!---->
 
-        <DataGrid Grid.Row="3" Name="d12" PreviewKeyDown="delete_row"  ColumnWidth="80" LoadingRow="d12_LoadingRow" AutoGeneratingColumn="d12_AutoGeneratingColumn" >
+        <DataGrid Grid.Row="3" Name="DataGridMain" PreviewKeyDown="delete_row"  ColumnWidth="80" LoadingRow="d12_LoadingRow"
+                  AutoGeneratingColumn="d12_AutoGeneratingColumn" >
             <DataGrid.ContextMenu>
                 <ContextMenu Opened="ContextMenu_Opened">
                     <MenuItem Header="Добавить" Click="Add_Convas"></MenuItem>
