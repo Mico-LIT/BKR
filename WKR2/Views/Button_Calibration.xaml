@@ -5,10 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WKR2.Views"
         mc:Ignorable="d"
-        Title="Button_Calibration" Height="269.333" Width="230">
-    <Grid Name="d12">
+        Title="Калибровка элемента" Height="269" Width="230">
+    <Grid Name="gridCallibration">
         <Grid.RowDefinitions>
-
             <RowDefinition />
             <RowDefinition />
             <RowDefinition Height="20" />
@@ -79,8 +78,10 @@
 
         <TextBlock Grid.Row="2">Высота</TextBlock>
         <TextBlock Grid.Row="2" Grid.Column="1">Длина</TextBlock>
-        <TextBox Grid.Row="3" Text="{Binding Path=Height ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=Width,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        
+        <TextBox Grid.Row="3" Text="{Binding Path=Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        
         <Button  Content="Шрифт" Grid.Row="1" Grid.Column="2" Name="But_font" Click="But_font_Click" FontFamily="Arial" >
             <Button.LayoutTransform>
                 <TransformGroup>

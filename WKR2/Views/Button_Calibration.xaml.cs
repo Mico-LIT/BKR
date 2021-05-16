@@ -21,55 +21,51 @@ namespace WKR2.Views
     /// </summary>
     public partial class Button_Calibration : Window
     {
-        private Button bu;
+        private Button buttonRef;
 
-        public Button_Calibration( ref Button bu)
+        public Button_Calibration(ref Button button)
         {
-            this.bu = bu;
+            this.buttonRef = button;
             InitializeComponent();
-            d12.DataContext = bu;
+            gridCallibration.DataContext = button;
         }
 
         private void down_Click(object sender, RoutedEventArgs e)
         {
-            bu.Margin = new Thickness(bu.Margin.Left, bu.Margin.Top + 1, 0, 0);
+            buttonRef.Margin = new Thickness(buttonRef.Margin.Left, buttonRef.Margin.Top + 1, 0, 0);
             //bu.Height = 500;
         }
 
         private void up_Click(object sender, RoutedEventArgs e)
         {
-            bu.Margin = new Thickness(bu.Margin.Left, bu.Margin.Top - 1, 0, 0);
+            buttonRef.Margin = new Thickness(buttonRef.Margin.Left, buttonRef.Margin.Top - 1, 0, 0);
         }
 
         private void rigth_Click(object sender, RoutedEventArgs e)
         {
-            bu.Margin = new Thickness(bu.Margin.Left+1, bu.Margin.Top , 0, 0);
+            buttonRef.Margin = new Thickness(buttonRef.Margin.Left + 1, buttonRef.Margin.Top, 0, 0);
         }
 
         private void left_Click(object sender, RoutedEventArgs e)
         {
-            bu.Margin = new Thickness(bu.Margin.Left-1, bu.Margin.Top , 0, 0);
+            buttonRef.Margin = new Thickness(buttonRef.Margin.Left - 1, buttonRef.Margin.Top, 0, 0);
         }
 
         private void But_font_Click(object sender, RoutedEventArgs e)
         {
+            var button = PrintService.ButtonFontDictionary.FirstOrDefault(x => buttonRef == x.Key);
 
-            var tt= PrintService.But_font.FirstOrDefault(x => bu == x.Key);
-            if (tt.Key != null)
+            if (button.Key != null)
             {
-                Font f = PrintService.Font(PrintService.But_font[bu]);
-                if (f!=null) PrintService.But_font[bu] = f;
+                Font font = PrintService.Font(PrintService.ButtonFontDictionary[buttonRef]);
+                if (font != null) PrintService.ButtonFontDictionary[buttonRef] = font;
 
             }
-            else {
-                Font f = PrintService.Font();
-                if (f != null) PrintService.But_font.Add(bu, f);
+            else
+            {
+                Font font = PrintService.Font();
+                if (font != null) PrintService.ButtonFontDictionary.Add(buttonRef, font);
             }
-            
-        
-
-
-
         }
     }
 }

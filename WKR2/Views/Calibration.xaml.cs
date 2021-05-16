@@ -19,11 +19,15 @@ namespace WKR2.Views
     /// </summary>
     public partial class Calibration : Window
     {
-
         public Calibration(Tool.Calibration_Data calibration_Data )
         {
             InitializeComponent();
-            so.DataContext = calibration_Data;
+            GridCalibration.DataContext = calibration_Data;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
