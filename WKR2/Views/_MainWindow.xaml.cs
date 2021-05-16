@@ -172,8 +172,8 @@ namespace WKR2.Views
                         }
                         string TEXT = (yy.Table.Rows[Item_Row].ItemArray[i]).ToString();
 
-                        var trt = PrintService.But_font.FirstOrDefault(x => f == x.Key).Value;
-                        if (trt == null) { trt = PrintService.font; }
+                        var trt = PrintService.ButtonFontDictionary.FirstOrDefault(x => f == x.Key).Value;
+                        if (trt == null) { trt = PrintService.FontCurrent; }
 
                         g.DrawString(TEXT, trt, Dr.Brushes.Black,
                             new Dr.RectangleF(
@@ -192,7 +192,7 @@ namespace WKR2.Views
                 vie = Dr.Image.FromStream(tmpStrm);
             }
             b.Dispose();
-            PrintService.iii = vie;
+            PrintService.ImageCurrent = vie;
             //Tool.Print.dd();
         }
         public void Previwe(int row=0)
@@ -239,8 +239,8 @@ namespace WKR2.Views
                             }
                             string TEXT=(yy.Table.Rows[row].ItemArray[i]).ToString();
 
-                            var trt = PrintService.But_font.FirstOrDefault(x => f == x.Key).Value;
-                            if (trt == null) { trt = PrintService.font; }
+                            var trt = PrintService.ButtonFontDictionary.FirstOrDefault(x => f == x.Key).Value;
+                            if (trt == null) { trt = PrintService.FontCurrent; }
 
                             g.DrawString(TEXT/*+"123456786543213453421224234234"*/, trt, Dr.Brushes.Black,
                                 new Dr.RectangleF((float)PointImag.X, (float)PointImag.Y,(float)(f.Width*3.3), (float)(f.Height*3.3)));
@@ -263,7 +263,7 @@ namespace WKR2.Views
             }
             b.Dispose();
 
-            PrintService.iii = vie;
+            PrintService.ImageCurrent = vie;
             Views.PreView pre = new Views.PreView(vie);
             pre.WindowState = WindowState.Maximized;
             pre.ShowDialog();
@@ -480,8 +480,8 @@ namespace WKR2.Views
                         }
                         string TEXT = (yy.Table.Rows[Item_Row].ItemArray[i]).ToString();
 
-                        var trt = PrintService.But_font.FirstOrDefault(x => f == x.Key).Value;
-                        if (trt == null) { trt = PrintService.font; }
+                        var trt = PrintService.ButtonFontDictionary.FirstOrDefault(x => f == x.Key).Value;
+                        if (trt == null) { trt = PrintService.FontCurrent; }
 
                         g.DrawString(TEXT, trt, Dr.Brushes.Black,
                             new Dr.RectangleF(
@@ -507,13 +507,13 @@ namespace WKR2.Views
 
         private void Calibration_Click(object sender, RoutedEventArgs e)
         {
-            WKR2.Views.Calibration gf = new Views.Calibration(PrintService.calibration_data);
+            WKR2.Views.Calibration gf = new Views.Calibration(PrintService.CalibrationData);
             gf.ShowDialog();
         }
 
         private void Font_click(object sender, RoutedEventArgs e)
         {
-            PrintService.font= PrintService.Font();
+            PrintService.FontCurrent = PrintService.Font();
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -530,7 +530,7 @@ namespace WKR2.Views
         private void Image_Download(object sender, RoutedEventArgs e)
         {
 
-            Views.Anallitic_Setings AS = new Views.Anallitic_Setings(Com.Items);
+            Views.AnalliticSetings AS = new Views.AnalliticSetings(Com.Items);
             AS.ShowDialog();
             OpenFileDialog OFD = new OpenFileDialog();
             OFD.Filter = "Jpeg files (*.jpeg)|*.jpeg;*.jpg| PNG files (*.PNG)|*.png|Все файлы (*.*)|*.*";
@@ -581,7 +581,7 @@ namespace WKR2.Views
                 d12.SelectedIndex = -1;
                 if (h == null) return;
 
-                PrintService.But_font.Remove((Button)h);
+                PrintService.ButtonFontDictionary.Remove((Button)h);
                 grid_imag.Children.Remove(h);
                 But_canvas.Remove(h);
             }
@@ -614,7 +614,7 @@ namespace WKR2.Views
                             MarginL = ((Button)item).Margin.Left,
                             MarginR = ((Button)item).Margin.Right,
                             MarginT = ((Button)item).Margin.Top,
-                            Font= PrintService.But_font.FirstOrDefault(x=>x.Key== (Button)item).Value
+                            Font= PrintService.ButtonFontDictionary.FirstOrDefault(x=>x.Key== (Button)item).Value
                         });
                     }
 
@@ -622,8 +622,8 @@ namespace WKR2.Views
                     {
                         Image = bitmapORig,
                         But_canvas = but,
-                        font = PrintService.font,
-                        calibration_data = PrintService.calibration_data,
+                        font = PrintService.FontCurrent,
+                        calibration_data = PrintService.CalibrationData,
                         par = AnaliticService.PARAMS
                     };
 
@@ -653,8 +653,8 @@ namespace WKR2.Views
                     DataPattern ds = Helper.DeSerializationDataPattern(OFD.FileName);
 
                     //Tool.Print.But_font = ds.BF;
-                    PrintService.font = ds.font;
-                    PrintService.calibration_data = ds.calibration_data;
+                    PrintService.FontCurrent = ds.font;
+                    PrintService.CalibrationData = ds.calibration_data;
                     AnaliticService.PARAMS = ds.par;
                     image.Source = ConvertToBitmapSource(ds.Image);
                     Button_SERi_Canvas(ds.But_canvas);
@@ -701,7 +701,7 @@ namespace WKR2.Views
             };
                 //var df = But_canvas.Find(x => ((Button)x).Name == str);
                 //if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
-                if (item.Font!=null) PrintService.But_font.Add(but, item.Font);
+                if (item.Font!=null) PrintService.ButtonFontDictionary.Add(but, item.Font);
             grid_imag.Children.Add(but);
             But_canvas.Add(but);
 
@@ -737,7 +737,7 @@ namespace WKR2.Views
 
         private void Analitic(object sender, RoutedEventArgs e)
         {
-            Views.Anallitic_Setings an = new Views.Anallitic_Setings(Com.Items);
+            Views.AnalliticSetings an = new Views.AnalliticSetings(Com.Items);
 
             an.ShowDialog();
         }
