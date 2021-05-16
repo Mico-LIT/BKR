@@ -132,7 +132,13 @@ namespace WKR2.Views
         {
             try
             {
-            var ddd = d12.SelectedIndex;
+                if (bitmapORig == null)
+                {
+                    MessageBox.Show("Нужно загрузить шаблон\\картинку для работы", "Информация");
+                    return;
+                }
+
+                var ddd = d12.SelectedIndex;
                 //Print_Item(ddd);
                 ShowMessAnalitic();
                 PrintService.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal, ddd+1);

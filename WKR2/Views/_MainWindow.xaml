@@ -83,7 +83,7 @@
         </StackPanel>
         <!---->
 
-        <DataGrid Grid.Row="3" Name="d12" PreviewKeyDown="delete_row" RowHeight="19" ColumnWidth="80" LoadingRow="d12_LoadingRow" AutoGeneratingColumn="d12_AutoGeneratingColumn" >
+        <DataGrid Grid.Row="3" Name="d12" PreviewKeyDown="delete_row"  ColumnWidth="80" LoadingRow="d12_LoadingRow" AutoGeneratingColumn="d12_AutoGeneratingColumn" >
             <DataGrid.ContextMenu>
                 <ContextMenu Opened="ContextMenu_Opened">
                     <MenuItem Header="Добавить" Click="Add_Convas"></MenuItem>
@@ -92,11 +92,11 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="" >
+                <DataGridTemplateColumn Header="">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Button Content="Печать" Click="Button_Click"/>
+                                <Button Content="Печать" Click="Button_Click" Margin="1"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
