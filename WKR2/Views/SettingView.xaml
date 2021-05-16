@@ -5,38 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WKR2.Views"
         mc:Ignorable="d"
-        Title="SettingView" Height="500" Width="600">
+        Title="Настройка данных" Height="500" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="auto"/>
-
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <TextBlock  Text="Строки"/>
-            <TextBlock Grid.Column="1"  Text="Колонки"/>
-            <ListView Margin="0,20,0,0" Name="listRow" BorderBrush="Red">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" Text="Строки"/>
+        <TextBlock Grid.Column="1" Text="Колонки"/>
+
+        <ListView Grid.Column="0" Margin="0,20,0,0" Name="listRow" BorderBrush="Red">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Delete" Click="MenuItem_Click_Delete_Row"></MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
-            <ListView Margin="0,20,0,0" Grid.Column="1" Name="listColumn" BorderBrush="Red">
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Delete" Click="MenuItem_Click_Delete"></MenuItem>
-                    </ContextMenu>
-                </ListView.ContextMenu>
-            </ListView>
-        </Grid>
-        <Button Grid.Row="1" Content="Готово" Click="Button_Click_new" Height="60" Background="#FFFFADAD"/>
-        <DataGrid  Grid.Row="2" Name="DataG" PreviewKeyDown="delete" SelectionUnit="CellOrRowHeader">
+
+        <ListView Grid.Column="1" Margin="0,20,0,0" Name="listColumn" BorderBrush="Red">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Delete" Click="MenuItem_Click_Delete_Column"></MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
+
+        <Button Grid.Row="1" Grid.ColumnSpan="2" Content="Готово" Click="Button_Click_Ready" Height="60" Background="#FFFFADAD"/>
+
+        <DataGrid Grid.Row="2" Grid.ColumnSpan="2" Name="DataCurrent" PreviewKeyDown="delete" SelectionUnit="CellOrRowHeader" LoadingRow="DataCurrent_LoadingRow">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Удалить строку" Click="Delete_Row"></MenuItem>

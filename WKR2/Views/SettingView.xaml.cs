@@ -20,15 +20,16 @@ namespace WKR2.Views
     /// </summary>
     public partial class SettingView : Window
     {
-        private DataView dd;
-        private List<string>  DelCol =new List<string> ();
+        //private DataView dataView;
+        private List<string> DelCol = new List<string>();
         private List<int> DelRow = new List<int>();
-        public SettingView(DataView dd)
+        public SettingView(DataView dataView)
         {
             InitializeComponent();
-            this.dd = dd;
-            DataG.ItemsSource = dd;
-            
+            DataCurrent.ItemsSource = dataView;
+
+            //this.dataView = dataView;
+
             //List<string> columnNameList = new List<string>();
             //foreach (DataColumn item in dd.Table.Columns)
             //{
@@ -37,7 +38,7 @@ namespace WKR2.Views
             //listV.ItemsSource =new List<string> ();
         }
 
-        private void MenuItem_Click_Delete(object sender, RoutedEventArgs e)
+        private void MenuItem_Click_Delete_Column(object sender, RoutedEventArgs e)
         {
             DelCol.Remove(listColumn.SelectedItem.ToString());
             listColumn.Items.Remove(listColumn.SelectedItem);
@@ -48,27 +49,30 @@ namespace WKR2.Views
             listRow.Items.Remove(listRow.SelectedItem);
         }
 
-        private void Button_Click_new(object sender, RoutedEventArgs e)
+        private void Button_Click_Ready(object sender, RoutedEventArgs e)
         {
+            DataView dataView = (DataView)DataCurrent.ItemsSource;
+            if (dataView == null)
+                throw new InvalidOperationException();
+
+            foreach (string item in DelCol) dataView.Table.Columns.Remove(item); // Удаление по имени
             DelRow.Reverse();
-            DataView ff = (DataView)DataG.ItemsSource;
-            foreach (string item in DelCol)ff.Table.Columns.Remove(item);
-            foreach (int item in DelRow) ff.Table.Rows.RemoveAt(item);
-            DataG.ItemsSource = null;
-            DataG.ItemsSource = ff;
-            listColumn.Items.Clear();
-            listRow.Items.Clear();
+            foreach (int item in DelRow) dataView.Table.Rows.RemoveAt(item); // Удаление по индексу
+
+            DataCurrent.ItemsSource = null;
+            DataCurrent.ItemsSource = dataView;
+
             this.DialogResult = true;
             this.Close();
         }
 
         private void Delete_Collumn(object sender, RoutedEventArgs e)
         {
-            foreach (DataGridCellInfo item in DataG.SelectedCells)
+            foreach (DataGridCellInfo item in DataCurrent.SelectedCells)
             {
-            string df1 = item.Column.Header.ToString();
-            var hh = DelCol.Find(x => x == df1);
-            if (hh == null) { DelCol.Add(df1); listColumn.Items.Add(df1); }
+                string df1 = item.Column.Header.ToString();
+                var hh = DelCol.Find(x => x == df1);
+                if (hh == null) { DelCol.Add(df1); listColumn.Items.Add(df1); }
             }
         }
 
@@ -79,27 +83,44 @@ namespace WKR2.Views
 
         public void del_row()
         {
-            DataView gg = (DataView)DataG.ItemsSource;
-            foreach (DataGridCellInfo item in DataG.SelectedCells)
+            DataView dataView = (DataView)DataCurrent.ItemsSource;
+            foreach (DataGridCellInfo item in DataCurrent.SelectedCells)
             {
-                int gggh = item.Column.DisplayIndex;
-                string gggh1 = item.Column.Header.ToString();
+                int tmp = item.Column.DisplayIndex;
+                string tmp1 = item.Column.Header.ToString();
             }
             //gg.Table.Rows.RemoveAt(DataG.SelectedIndex);
-            DataG.ItemsSource = null;
-            DataG.ItemsSource = gg;
+            DataCurrent.ItemsSource = null;
+            DataCurrent.ItemsSource = dataView;
         }
 
         private void Delete_Row(object sender, RoutedEventArgs e)
         {
-            foreach (DataGridCellInfo item in DataG.SelectedCells)
+            foreach (DataGridCellInfo item in DataCurrent.SelectedCells)
             {
                 DataRowView pp = (DataRowView)item.Item;
-                int INT_ROW=DataG.Items.IndexOf(pp);
-                var hh = DelRow.FindIndex(x => x == INT_ROW);
-                if (hh == -1) { DelRow.Add(INT_ROW); listRow.Items.Add(INT_ROW); }
+                int index = DataCurrent.Items.IndexOf(pp);
+                var find = DelRow.FindIndex(x => x == index);
+
+                if (find == -1)
+                {
+                    DelRow.Add(index);
+                    listRow.Items.Add(index);
+                }
             }
         }
-    }
 
+        private void DataCurrent_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = $"{e.Row.GetIndex()}    ";
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            listColumn.Items.Clear();
+            listRow.Items.Clear();
+
+            base.OnClosed(e);
+        }
+    }
 }
