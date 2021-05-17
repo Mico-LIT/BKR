@@ -39,7 +39,7 @@ namespace WKR2.Views
 
         public _MainWindow()
         {
-            InitializeComponent(); IssEnabled();
+            InitializeComponent(); IssEnabledAllElementsControl();
             //List<Date> fd = new List<Date>() { new Date() { jsdkf = "423", NAme = "dsf4", NAme1 = "fs43" } };
 
             //image.Source = ImageWork.Load();                                   //генирится ошибка вот тут 
@@ -56,42 +56,6 @@ namespace WKR2.Views
             //    grid_imag.Children.Add(but);
             //}
             //d12.ItemsSource = fd;
-        }
-
-        //Вывод кардинат где нажал 
-        private void ImageMain_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //PointImag = e.GetPosition(image);
-            //double pixelWidth = image.Source.Width;
-            //double pixelHeight = image.Source.Height;
-            //PointImag.X = (pixelWidth * PointImag.X ) / image.ActualWidth;
-            //PointImag.Y = (pixelHeight * PointImag.Y )/ image.ActualHeight;
-
-
-            //point.Content = String.Format("x={0}  Y={1}", PointImag.X, PointImag.Y); 
-        }
-
-        //новое окно 
-        private void DataGridMain_Button_PrintItem_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (bitmapORig == null)
-                {
-                    MessageBox.Show("Нужно загрузить шаблон\\картинку для работы", "Информация");
-                    return;
-                }
-
-                var ddd = DataGridMain.SelectedIndex;
-                //Print_Item(ddd);
-                ShowMessAnalitic();
-                PrintService.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal, ddd + 1);
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
         }
 
         public void Previwe(int row = 0)
@@ -173,72 +137,7 @@ namespace WKR2.Views
             }
         }
 
-        #region Other Code
-
-        //bool m_IsPressed;
-        //private void Button_MouseMove(object sender, MouseEventArgs e)
-        //{
-        //    if (m_IsPressed)
-        //    {
-        //        Button bb = sender as Button;
-        //        TranslateTransform transform = new TranslateTransform();
-        //        transform.X = Mouse.GetPosition(GLABN_GRID).X;
-        //        transform.Y = Mouse.GetPosition(GLABN_GRID).Y;
-        //        bb.RenderTransform = transform;
-        //    }
-        //}
-
-        //private void MouseDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    m_IsPressed = true;
-        //}
-
-        //private void Button_MouseUp(object sender, MouseButtonEventArgs e)
-        //{
-
-        //}
-
-        //
-        //public void Clear_button()
-        //{
-        //    for (int i = grid_imag.Children.Count-1; i >= 0 ; i--)
-        //    {
-        //        Button pp = grid_imag.Children[i] as Button;
-        //        if (pp != null) grid_imag.Children.Remove(pp);
-        //    }
-        //}
-
-        #endregion
-
-        // сколько кнопок надо на разментку 
-        private void Button_ADD_Canvas(string str)
-        {
-            DataView colbot = (DataView)DataGridMain.ItemsSource;
-
-            //foreach (DataColumn item in colbot.Table.Columns)
-            //{
-            //var but = new Button() { Name = item.ColumnName, Height = 20, Width = 100, Content = "**" + item.ColumnName + "**", Margin = new Thickness(0, 0, 0, 0) };
-
-            Button but = new Button() { Name = str, Height = 20, Width = 100, Content = "**" + str + "**", Margin = new Thickness(0, 0, 0, 0) };
-            but.MouseDown += new MouseButtonEventHandler(MouseDown);
-            but.MouseUp += new MouseButtonEventHandler(MouseUp);
-            but.MouseMove += new MouseEventHandler(MouseMove);
-            but.Click += (r, t) =>
-            {
-                Button bu = r as Button;
-                Views.Button_Calibration ff = new Views.Button_Calibration(ref bu);
-                ff.ShowDialog();
-            };
-            //var df=But_canvas.Find(x => ((Button)x).Name == str);
-            //if (df != null) but.Content = "Копия " + but.Name;//throw new Exception() { Source = " Елемент такой уже добавлен!" };
-
-
-            CanvasForImage.Children.Add(but);
-            canvasOnButtons.Add(but);
-            //}
-        }
-
-        private void ShowMessAnalitic()
+        private void ShowMessageBoxAnalitic()
         {
             MessageBoxResult result = MessageBox.Show("Включить аналитик?!", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Information);
             switch (result)
@@ -317,21 +216,209 @@ namespace WKR2.Views
 
         }
 
+        private void Button_SERi_Canvas(List<Setting_Button> lis)
+        {
+            foreach (Setting_Button item in lis)
+            {
+                Button but = new Button()
+                {
+                    Name = item.Name,
+                    Height = item.Height,
+                    Width = item.Width,
+                    Content = "**" + item.Name + "**",
+                    Margin = new Thickness(item.MarginL, item.MarginT, item.MarginR, item.MarginB)
+                };
+                but.MouseDown += new MouseButtonEventHandler(MouseDown);
+                but.MouseUp += new MouseButtonEventHandler(MouseUp);
+                but.MouseMove += new MouseEventHandler(MouseMove);
+                but.Click += (r, t) =>
+                {
+                    Button bu = r as Button;
+                    Views.Button_Calibration ff = new Views.Button_Calibration(ref bu);
+                    ff.ShowDialog();
+                };
+                //var df = But_canvas.Find(x => ((Button)x).Name == str);
+                //if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
+                if (item.Font != null) PrintService.ButtonFontDictionary.Add(but, item.Font);
+                CanvasForImage.Children.Add(but);
+                canvasOnButtons.Add(but);
+            }
+        }
+
+
+        //Вывод кардинат где нажал 
+        private void ImageMain_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+#if DEBUG
+
+            pointImag = e.GetPosition(ImageMain);
+            double pixelWidth = ImageMain.Source.Width;
+            double pixelHeight = ImageMain.Source.Height;
+            pointImag.X = (pixelWidth * pointImag.X) / ImageMain.ActualWidth;
+            pointImag.Y = (pixelHeight * pointImag.Y) / ImageMain.ActualHeight;
+
+
+            point.Content = String.Format("x={0}  Y={1}", pointImag.X, pointImag.Y);
+
+#endif
+        }
+
+        private void IssEnabledAllElementsControl()
+        {
+            if (DataGridMain.Items.Count > 0)
+            {
+                MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled = MISavePattent.IsEnabled =
+                MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = poisk.IsEnabled = true;
+
+                MISavePattent.IsEnabled = (ImageMain.Source == null) ? false : true;
+            }
+            else
+                MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled = MISavePattent.IsEnabled =
+                MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = poisk.IsEnabled = false;
+        }
+
+        private void ButtonAddOnCanvas(string nameButton)
+        {
+            DataView colbot = (DataView)DataGridMain.ItemsSource;
+
+            //foreach (DataColumn item in colbot.Table.Columns)
+            //{
+            //var but = new Button() { Name = item.ColumnName, Height = 20, Width = 100, Content = "**" + item.ColumnName + "**", Margin = new Thickness(0, 0, 0, 0) };
+
+            Button but = new Button()
+            {
+                Name = nameButton,
+                Height = 20,
+                Width = 100,
+                Content = "**" + nameButton + "**",
+                Margin = new Thickness(0, 0, 0, 0)
+            };
+
+            but.MouseDown += new MouseButtonEventHandler(MouseDown);
+            but.MouseUp += new MouseButtonEventHandler(MouseUp);
+            but.MouseMove += new MouseEventHandler(MouseMove);
+            but.Click += (r, t) =>
+            {
+                Button bu = r as Button;
+                Views.Button_Calibration ff = new Views.Button_Calibration(ref bu);
+                ff.ShowDialog();
+            };
+
+            //var df=But_canvas.Find(x => ((Button)x).Name == str);
+            //if (df != null) but.Content = "Копия " + but.Name;//throw new Exception() { Source = " Елемент такой уже добавлен!" };
+
+
+            CanvasForImage.Children.Add(but);
+            canvasOnButtons.Add(but);
+            //}
+        }
+
+        #region Mouse Event
+
+        bool isMoved = false;
+        Point startMovePosition;
+        private void MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                isMoved = true;
+                startMovePosition = e.GetPosition(this);
+            }
+        }
+        private void MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton == MouseButtonState.Released)
+            {
+                isMoved = false;
+
+            }
+        }
+        private void MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isMoved)
+            {
+                Point currentPoint = e.GetPosition(CanvasForImage);
+
+                Button rect = sender as Button;
+                rect.Margin = new Thickness(currentPoint.X - 10, currentPoint.Y - 10, 0, 0);
+            }
+        }
+
+        #endregion
+
+        #region DataGridMain
+
         private void DataGridMain_LoadingRow(object sender, DataGridRowEventArgs e) => e.Row.Header = $"{(e.Row.GetIndex() + 1)}    ";
+
+        private void DataGridMain_ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            var contextMenu = (System.Windows.Controls.ContextMenu)sender;
+
+            if (contextMenu == null)
+                throw new InvalidOperationException();
+
+            foreach (MenuItem item in ((ContextMenu)e.Source).Items)
+                item.IsEnabled = (DataGridMain.Columns.Count <= 1) ? false : true;
+        }
+
+        //новое окно 
+        private void DataGridMain_Button_PrintItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (bitmapORig == null)
+                {
+                    MessageBox.Show("Нужно загрузить шаблон\\картинку для работы", "Информация");
+                    return;
+                }
+
+                var ddd = DataGridMain.SelectedIndex;
+                //Print_Item(ddd);
+                ShowMessageBoxAnalitic();
+                PrintService.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal, ddd + 1);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private void DataGridMain_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                DataView gg = (DataView)DataGridMain.ItemsSource;
+                gg.Table.Rows.RemoveAt(DataGridMain.SelectedIndex);
+                DataGridMain.ItemsSource = null;
+                DataGridMain.ItemsSource = gg;
+                //d12.Items.Remove(d12.SelectedItem);// напрямую с ним работать нельзя надо посредника DataTable
+            }
+        }
+
+        private void DataGridMain_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            //e.Column.Header =;
+        }
+
+        #endregion
+
+        #region MenuItem
+
         private void MenuItem_Calibration_Click(object sender, RoutedEventArgs e) => new Views.Calibration(PrintService.CalibrationData).ShowDialog();
         private void MenuItem_Font_click(object sender, RoutedEventArgs e) => PrintService.FontCurrent = PrintService.Font();
         private void MenuItem_PreView_Click(object sender, RoutedEventArgs e) => Previwe();
         private void MenuItem_Exit_Click(object sender, RoutedEventArgs e) => this.Close();
-        private void MenuItem_GroupFile_MouseMove(object sender, MouseEventArgs e) => IssEnabled();
-        private void MenuItem_DGM_PreView(object sender, RoutedEventArgs e) => Previwe(DataGridMain.SelectedIndex);
+        private void MenuItem_GroupFile_MouseMove(object sender, MouseEventArgs e) => IssEnabledAllElementsControl();
 
+        private void MenuItem_DGM_PreView(object sender, RoutedEventArgs e) => Previwe(DataGridMain.SelectedIndex);
         private void MenuItem_DGM_AddConvasOnButton(object sender, RoutedEventArgs e)
         {
             try
             {
                 string fg = (string)DataGridMain.CurrentCell.Column.Header;
                 DataGridMain.SelectedIndex = -1;
-                Button_ADD_Canvas(fg);
+                ButtonAddOnCanvas(fg);
             }
             catch (Exception ex)
             {
@@ -340,7 +427,6 @@ namespace WKR2.Views
             }
 
         }
-
         private void MenuItem_DGM_ButtonRemoveOnConvas(object sender, RoutedEventArgs e)
         {
             try
@@ -359,6 +445,155 @@ namespace WKR2.Views
                 MessageBox.Show(ex.Source);
                 DataGridMain.SelectedIndex = -1;
             }
+        }
+
+
+        private void MenuItem_OpenExample_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+
+                //загругка данных
+                using (Stream stream = assembly.GetManifestResourceStream(AppSettings.ResourceNameTestData))
+                {
+                    DataView dd = ExcelService.LoadrExcel(stream);
+                    CanvasForImage.Children.Clear();
+                    DataGridMain.ItemsSource = null;
+                    DataGridMain.ItemsSource = dd;
+                }
+
+                //загруска картинки\шаблона
+                using (var stream = assembly.GetManifestResourceStream(AppSettings.ResourceNameImageTemplate))
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = stream;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+
+                    ImageMain.Source = bitmap;
+                    imageORig = ImageMain;
+
+                    bitmapORig = new Dr.Bitmap(stream);
+                }
+
+                canvasOnButtons.Clear();
+                CanvasForImage.Children.Clear();
+
+                // для поиска
+                foreach (var item in DataGridMain.Columns)
+                    if (item is DataGridTextColumn) Com.Items.Add((string)item.Header);
+
+                IssEnabledAllElementsControl();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при загрузке!");
+            }
+        }
+
+        private void MenuItem_OpenImage_Click(object sender, RoutedEventArgs e)
+        {
+            Views.AnalliticSetings AS = new Views.AnalliticSetings(Com.Items);
+            AS.ShowDialog();
+            OpenFileDialog OFD = new OpenFileDialog();
+            OFD.Filter = "Jpeg files (*.jpeg)|*.jpeg;*.jpg| PNG files (*.PNG)|*.png|Все файлы (*.*)|*.*";
+            if (OFD.ShowDialog() == true)
+            {
+                //Clear_button();
+                ImageMain.Source = new BitmapImage(new Uri(OFD.FileName));                                   //генирится ошибка вот тут 
+                imageORig = ImageMain;
+                bitmapORig = new Dr.Bitmap(new BitmapImage(new Uri(OFD.FileName)).UriSource.LocalPath); //генирится ошибка вот тут 
+                canvasOnButtons.Clear();
+                CanvasForImage.Children.Clear();
+            }
+        }
+
+        private void MenuItem_OpenExcel_Click(object sender, RoutedEventArgs e)
+        {
+            //Clear_button();
+            try
+            {
+                DataView dd = ExcelService.LoadrExcel();
+                //if (dd != null) d12.ItemsSource = dd;
+
+                Views.SettingView vv = new Views.SettingView(dd);
+                if (dd != null)
+                    if (vv.ShowDialog() == true)
+                    {
+                        CanvasForImage.Children.Clear();
+                        DataGridMain.ItemsSource = null;
+                        DataGridMain.ItemsSource = dd;
+                        DataView colbot = dd;
+                        var ff = DataGridMain.Columns;
+                        foreach (var item in ff)
+                        {
+                            if (item is DataGridTextColumn) Com.Items.Add((string)item.Header);
+                        }
+                    }
+
+                IssEnabledAllElementsControl();
+
+                //Сохранить в Json Парметр Excel измененого
+                //Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Ошибка при загрузке!");
+            }
+        }
+
+        private void MenuItem_DownloadPattern_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog OFD = new OpenFileDialog();
+                OFD.Filter = "Dat files (*.dat)|*.dat";
+                OFD.InitialDirectory = Core.AppSettings.PathLocal;
+                if (OFD.ShowDialog() == true)
+                {
+                    canvasOnButtons.Clear();
+                    CanvasForImage.Children.Clear();
+
+                    DataPattern dataPatternModel = Helper.DeSerializationDataPattern(OFD.FileName);
+
+                    //Tool.Print.But_font = ds.BF;
+                    PrintService.FontCurrent = dataPatternModel.font;
+                    PrintService.CalibrationData = dataPatternModel.calibration_data;
+                    AnaliticService.PARAMS = dataPatternModel.par;
+
+                    BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap
+                    (
+                        dataPatternModel.Image.GetHbitmap(),
+                        IntPtr.Zero,
+                        Int32Rect.Empty,
+                        BitmapSizeOptions.FromEmptyOptions()
+                    );
+
+                    ImageMain.Source = bitmapSource;
+                    Button_SERi_Canvas(dataPatternModel.But_canvas);
+                    bitmapORig = dataPatternModel.Image;
+                    MessageBox.Show("Загрузка прошла успешно");
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Ошибка при загрузки", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void MenuItem_SettingAnalitic_Click(object sender, RoutedEventArgs e)
+        {
+            Views.AnalliticSetings an = new Views.AnalliticSetings(Com.Items);
+            an.ShowDialog();
+        }
+
+        private void MenuItem_ExportExcel_Click(object sender, RoutedEventArgs e)
+        {
+            ExcelService.ExportToExcel(Core.AppSettings.PathLocal);
+            MessageBox.Show("Выгрузка прошла успешно!");
         }
 
         private void MenuItem_Save_Serial(object sender, RoutedEventArgs e)
@@ -407,246 +642,14 @@ namespace WKR2.Views
             }
         }
 
-        private BitmapSource ConvertToBitmapSource(Dr.Bitmap bitmap)
-        {
-            BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap
-            (
-                bitmap.GetHbitmap(),
-                IntPtr.Zero,
-                Int32Rect.Empty,
-                BitmapSizeOptions.FromEmptyOptions()
-            );
-            return bitmapSource;
-        }
 
-        private void Button_SERi_Canvas(List<Setting_Button> lis)
-        {
-            foreach (Setting_Button item in lis)
-            {
-                Button but = new Button()
-                {
-                    Name = item.Name,
-                    Height = item.Height,
-                    Width = item.Width,
-                    Content = "**" + item.Name + "**",
-                    Margin = new Thickness(item.MarginL, item.MarginT, item.MarginR, item.MarginB)
-                };
-                but.MouseDown += new MouseButtonEventHandler(MouseDown);
-                but.MouseUp += new MouseButtonEventHandler(MouseUp);
-                but.MouseMove += new MouseEventHandler(MouseMove);
-                but.Click += (r, t) =>
-                {
-                    Button bu = r as Button;
-                    Views.Button_Calibration ff = new Views.Button_Calibration(ref bu);
-                    ff.ShowDialog();
-                };
-                //var df = But_canvas.Find(x => ((Button)x).Name == str);
-                //if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
-                if (item.Font != null) PrintService.ButtonFontDictionary.Add(but, item.Font);
-                CanvasForImage.Children.Add(but);
-                canvasOnButtons.Add(but);
-            }
-        }
-
-        private void IssEnabled()
-        {
-            if (DataGridMain.Items.Count > 0)
-            {
-                MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled = MISavePattent.IsEnabled
-                    = MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = poisk.IsEnabled = true;
-                MISavePattent.IsEnabled = (ImageMain.Source == null) ? false : true;
-            }
-            else
-                MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled = MISavePattent.IsEnabled = MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = poisk.IsEnabled = false;
-        }
-
-        private void MenuItem_SettingAnalitic_Click(object sender, RoutedEventArgs e)
-        {
-            Views.AnalliticSetings an = new Views.AnalliticSetings(Com.Items);
-            an.ShowDialog();
-        }
-
-        private void MenuItem_ExportExcel_Click(object sender, RoutedEventArgs e)
-        {
-            ExcelService.ExportToExcel(Core.AppSettings.PathLocal);
-            MessageBox.Show("Выгрузка прошла успешно!");
-        }
-
-        private void ContextMenu_DGM_Opened(object sender, RoutedEventArgs e)
-        {
-            var contextMenu = (System.Windows.Controls.ContextMenu)sender;
-
-            if (contextMenu == null)
-                throw new InvalidOperationException();
-
-            foreach (MenuItem item in ((ContextMenu)e.Source).Items)
-                item.IsEnabled = (DataGridMain.Columns.Count <= 1) ? false : true;
-        }
-
-        private void MenuItem_OpenExample_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-
-                //загругка данных
-                using (Stream stream = assembly.GetManifestResourceStream(AppSettings.ResourceNameTestData))
-                {
-                    DataView dd = ExcelService.LoadrExcel(stream);
-                    CanvasForImage.Children.Clear();
-                    DataGridMain.ItemsSource = null;
-                    DataGridMain.ItemsSource = dd;
-                }
-
-                //загруска картинки\шаблона
-                using (var stream = assembly.GetManifestResourceStream(AppSettings.ResourceNameImageTemplate))
-                {
-                    var bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.StreamSource = stream;
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.EndInit();
-                    bitmap.Freeze();
-
-                    ImageMain.Source = bitmap;
-                    imageORig = ImageMain;
-
-                    bitmapORig = new Dr.Bitmap(stream);
-                }
-
-                canvasOnButtons.Clear();
-                CanvasForImage.Children.Clear();
-
-                // для поиска
-                foreach (var item in DataGridMain.Columns)
-                    if (item is DataGridTextColumn) Com.Items.Add((string)item.Header);
-
-                IssEnabled();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ошибка при загрузке!");
-            }
-        }
-
-        private void MenuItem_OpenImage_Click(object sender, RoutedEventArgs e)
-        {
-            Views.AnalliticSetings AS = new Views.AnalliticSetings(Com.Items);
-            AS.ShowDialog();
-            OpenFileDialog OFD = new OpenFileDialog();
-            OFD.Filter = "Jpeg files (*.jpeg)|*.jpeg;*.jpg| PNG files (*.PNG)|*.png|Все файлы (*.*)|*.*";
-            if (OFD.ShowDialog() == true)
-            {
-                //Clear_button();
-                ImageMain.Source = new BitmapImage(new Uri(OFD.FileName));                                   //генирится ошибка вот тут 
-                imageORig = ImageMain;
-                bitmapORig = new Dr.Bitmap(new BitmapImage(new Uri(OFD.FileName)).UriSource.LocalPath); //генирится ошибка вот тут 
-                canvasOnButtons.Clear();
-                CanvasForImage.Children.Clear();
-            }
-        }
-
-        private void MenuItem_OpenExcel_Click(object sender, RoutedEventArgs e)
-        {
-            //Clear_button();
-            try
-            {
-                DataView dd = ExcelService.LoadrExcel();
-                //if (dd != null) d12.ItemsSource = dd;
-
-                Views.SettingView vv = new Views.SettingView(dd);
-                if (dd != null)
-                    if (vv.ShowDialog() == true)
-                    {
-                        CanvasForImage.Children.Clear();
-                        DataGridMain.ItemsSource = null;
-                        DataGridMain.ItemsSource = dd;
-                        DataView colbot = dd;
-                        var ff = DataGridMain.Columns;
-                        foreach (var item in ff)
-                        {
-                            if (item is DataGridTextColumn) Com.Items.Add((string)item.Header);
-                        }
-                    }
-
-                IssEnabled();
-
-                //Сохранить в Json Парметр Excel измененого
-                //Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Ошибка при загрузке!");
-            }
-        }
-
-        private void MenuItem_DownloadPattern_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                OpenFileDialog OFD = new OpenFileDialog();
-                OFD.Filter = "Dat files (*.dat)|*.dat";
-                OFD.InitialDirectory = Core.AppSettings.PathLocal;
-                if (OFD.ShowDialog() == true)
-                {
-                    canvasOnButtons.Clear();
-                    CanvasForImage.Children.Clear();
-
-                    DataPattern ds = Helper.DeSerializationDataPattern(OFD.FileName);
-
-                    //Tool.Print.But_font = ds.BF;
-                    PrintService.FontCurrent = ds.font;
-                    PrintService.CalibrationData = ds.calibration_data;
-                    AnaliticService.PARAMS = ds.par;
-                    ImageMain.Source = ConvertToBitmapSource(ds.Image);
-                    Button_SERi_Canvas(ds.But_canvas);
-                    bitmapORig = ds.Image;
-                    MessageBox.Show("Загрузка прошла успешно");
-                }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Ошибка при загрузки", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        #region Движение мыши
-
-        bool isMoved = false;
-        Point startMovePosition;
-        private void MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.RightButton == MouseButtonState.Pressed)
-            {
-                isMoved = true;
-                startMovePosition = e.GetPosition(this);
-            }
-        }
-        private void MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if (e.RightButton == MouseButtonState.Released)
-            {
-                isMoved = false;
-
-            }
-        }
-        public void MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isMoved)
-            {
-                Point currentPoint = e.GetPosition(CanvasForImage);
-
-                Button rect = sender as Button;
-                rect.Margin = new Thickness(currentPoint.X - 10, currentPoint.Y - 10, 0, 0);
-            }
-        }
 
         #endregion
 
         #region Код для 2-ой версии проекта
 
         //забросил метод
-        public void Print_Item(int Item_Row)
+        private void Print_Item(int Item_Row)
         {
             Dr.Bitmap b = new Dr.Bitmap(bitmapORig.Width, bitmapORig.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             Dr.Image vie;
@@ -708,7 +711,7 @@ namespace WKR2.Views
 
         private void Pehat(object sender, RoutedEventArgs e)
         {
-            ShowMessAnalitic();
+            ShowMessageBoxAnalitic();
             PrintService.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal);
         }
 
@@ -771,21 +774,41 @@ namespace WKR2.Views
 
         #endregion
 
-        private void DataGridMain_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete)
-            {
-                DataView gg = (DataView)DataGridMain.ItemsSource;
-                gg.Table.Rows.RemoveAt(DataGridMain.SelectedIndex);
-                DataGridMain.ItemsSource = null;
-                DataGridMain.ItemsSource = gg;
-                //d12.Items.Remove(d12.SelectedItem);// напрямую с ним работать нельзя надо посредника DataTable
-            }
-        }
+        #region Other Code
 
-        private void DataGridMain_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            //e.Column.Header =;
-        }
+        //bool m_IsPressed;
+        //private void Button_MouseMove(object sender, MouseEventArgs e)
+        //{
+        //    if (m_IsPressed)
+        //    {
+        //        Button bb = sender as Button;
+        //        TranslateTransform transform = new TranslateTransform();
+        //        transform.X = Mouse.GetPosition(GLABN_GRID).X;
+        //        transform.Y = Mouse.GetPosition(GLABN_GRID).Y;
+        //        bb.RenderTransform = transform;
+        //    }
+        //}
+
+        //private void MouseDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    m_IsPressed = true;
+        //}
+
+        //private void Button_MouseUp(object sender, MouseButtonEventArgs e)
+        //{
+
+        //}
+
+        //
+        //public void Clear_button()
+        //{
+        //    for (int i = grid_imag.Children.Count-1; i >= 0 ; i--)
+        //    {
+        //        Button pp = grid_imag.Children[i] as Button;
+        //        if (pp != null) grid_imag.Children.Remove(pp);
+        //    }
+        //}
+
+        #endregion
     }
 }

@@ -71,7 +71,7 @@
                 Height="{Binding ElementName=ImageMain, Path=ActualHeight }" Width="{Binding ElementName=ImageMain, Path=ActualWidth }">
         </Canvas>
 
-        <!--<Label Grid.Row="1" Grid.Column="1" Width="200" Name="point"></Label>-->
+        <Label Grid.Row="1" Height="35" Width="250" Name="point" HorizontalAlignment="Center" VerticalAlignment="Top"></Label>
 
         <!-- Поиск Доп Функционал-->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Name="poisk" Visibility="Collapsed">
@@ -84,7 +84,7 @@
         <DataGrid Grid.Row="3" Name="DataGridMain" PreviewKeyDown="DataGridMain_PreviewKeyDown"  ColumnWidth="80" LoadingRow="DataGridMain_LoadingRow"
                   AutoGeneratingColumn="DataGridMain_AutoGeneratingColumn" >
             <DataGrid.ContextMenu>
-                <ContextMenu Opened="ContextMenu_DGM_Opened">
+                <ContextMenu Opened="DataGridMain_ContextMenu_Opened">
                     <MenuItem Header="Добавить" Click="MenuItem_DGM_AddConvasOnButton"></MenuItem>
                     <MenuItem Header="Удалить" Click="MenuItem_DGM_ButtonRemoveOnConvas"></MenuItem>
                     <MenuItem Header="Предпросмотр" Click="MenuItem_DGM_PreView"></MenuItem>
