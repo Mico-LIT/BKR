@@ -44,5 +44,21 @@ namespace WKR2.Views
                 return bi;
             }
         }
+
+        private void img_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+#if DEBUG
+
+            Point pointImage = e.GetPosition(img);
+            double pixelWidth = img.Source.Width;
+            double pixelHeight = img.Source.Height;
+            pointImage.X = (pixelWidth * pointImage.X) / img.ActualWidth;
+            pointImage.Y = (pixelHeight * pointImage.Y) / img.ActualHeight;
+
+
+            point.Content = String.Format("x={0}  Y={1}", pointImage.X, pointImage.Y);
+
+#endif
+        }
     }
 }

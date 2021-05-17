@@ -7,6 +7,8 @@
         mc:Ignorable="d"
         Title="Предпросмотр" Height="500" Width="500">
     <Grid>
-        <Image Name="img"></Image>
+        <Image Name="img" MouseDown="img_MouseDown"></Image>
+        <Label Grid.Row="1" Height="35" Width="250" Name="point" HorizontalAlignment="Center" VerticalAlignment="Top"></Label>
+
     </Grid>
 </Window>
