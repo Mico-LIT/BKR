@@ -62,13 +62,13 @@
                         <MenuItem Header="Предпросмотр" Click="MenuItem_PreView_Click" Name="MIPreView"></MenuItem>
                     </ContextMenu>
                 </Grid.ContextMenu>
-                <Image Name="ImageMain" MouseDown="ImageMain_MouseDown" Panel.ZIndex="1"></Image>
+                <Image Name="ImageMainControl" MouseDown="ImageMain_MouseDown" Panel.ZIndex="1"></Image>
                 <TextBlock TextWrapping="Wrap" Width="350" Height="100" FontSize="25" TextAlignment="Center">Нужно загрузить данные и шаблон\картинку для работы!</TextBlock>
             </Grid>
         </Border>
 
         <Canvas Grid.Row="1" Grid.RowSpan="2" Name="CanvasForImage"
-                Height="{Binding ElementName=ImageMain, Path=ActualHeight }" Width="{Binding ElementName=ImageMain, Path=ActualWidth }">
+                Height="{Binding ElementName=ImageMainControl, Path=ActualHeight }" Width="{Binding ElementName=ImageMainControl, Path=ActualWidth }">
         </Canvas>
 
         <Label Grid.Row="1" Height="35" Width="250" Name="point" HorizontalAlignment="Center" VerticalAlignment="Top"></Label>
