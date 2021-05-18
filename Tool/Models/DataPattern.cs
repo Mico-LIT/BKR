@@ -19,13 +19,13 @@ namespace Tool
         public Bitmap Image { get; set; }
         public Font font { get; set; }
         public Calibration_Data calibration_data { get; set; }
-        public List<Setting_Button> But_canvas { get; set; }
+        public List<SettingButton> But_canvas { get; set; }
         public Services.Analitic.Models.Params par { get; set; }
 
     }
 
     [Serializable]
-    public class Setting_Button
+    public class SettingButton
     {
         public string Name { get; set; }
         public double Height { get; set; }
