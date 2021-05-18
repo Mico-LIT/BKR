@@ -32,8 +32,6 @@ namespace WKR2.Views
     /// </summary>
     public partial class _MainWindow : Window
     {
-        Point pointImage;     // координаты кнопки 
-        Image imageCopyControl;     //оригинал загружен
         Drawing.Bitmap bitmapImageOriginal;//оригинал загружен
         List<UIElement> canvasOnButtons = new List<UIElement>();
 
@@ -84,6 +82,8 @@ namespace WKR2.Views
 
                     //using (var font = new Dr.Font("Arial", 15))
                     //{
+
+                    Point pointImage = new Point();
 
                     foreach (var itemUI in CanvasForImage.Children)
                     {
@@ -188,6 +188,7 @@ namespace WKR2.Views
             {
                 if (rez == 0) g.Clear(System.Drawing.Color.White);
 
+                Point pointImage = new Point();
 
                 foreach (var item in CanvasForImage.Children)
                 {
@@ -264,13 +265,13 @@ namespace WKR2.Views
         private void ImageMain_MouseDown(object sender, MouseButtonEventArgs e)
         {
 #if DEBUG
+            Point pointImage = new Point();
 
             pointImage = e.GetPosition(ImageMainControl);
             double pixelWidth = ImageMainControl.Source.Width;
             double pixelHeight = ImageMainControl.Source.Height;
             pointImage.X = (pixelWidth * pointImage.X) / ImageMainControl.ActualWidth;
             pointImage.Y = (pixelHeight * pointImage.Y) / ImageMainControl.ActualHeight;
-
 
             point.Content = String.Format("x={0}  Y={1}", pointImage.X, pointImage.Y);
 
@@ -491,7 +492,6 @@ namespace WKR2.Views
                     bitmapImage.Freeze();
 
                     ImageMainControl.Source = bitmapImage;
-                    imageCopyControl = ImageMainControl;
 
                     bitmapImageOriginal = new Drawing.Bitmap(stream);
                 }
@@ -521,7 +521,6 @@ namespace WKR2.Views
             {
                 //Clear_button();
                 ImageMainControl.Source = new BitmapImage(new Uri(OFD.FileName));                                   //генирится ошибка вот тут 
-                imageCopyControl = ImageMainControl;
                 bitmapImageOriginal = new Drawing.Bitmap(new BitmapImage(new Uri(OFD.FileName)).UriSource.LocalPath); //генирится ошибка вот тут 
                 canvasOnButtons.Clear();
                 CanvasForImage.Children.Clear();
@@ -675,6 +674,7 @@ namespace WKR2.Views
             {
                 g.Clear(System.Drawing.Color.White);
 
+                Point pointImage = new Point();
 
                 foreach (var item in CanvasForImage.Children)
                 {
@@ -753,6 +753,8 @@ namespace WKR2.Views
 
             //Dr.Bitmap bmp = new Dr.Bitmap(@"c: \users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\ggh.png");
             ////bmp = b;
+
+            Point pointImage = new Point();
 
             Drawing.Bitmap bmp = new Drawing.Bitmap(@"C:\BKR\WKR2\ggh.jpg");
             Drawing.Bitmap b = new Drawing.Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
