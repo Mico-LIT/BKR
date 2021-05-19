@@ -50,7 +50,7 @@
             </MenuItem>
 
             <Separator/>
-            <MenuItem Header="Запустить ''Пример''" Name="OpenExample" Click="MenuItem_OpenExample_Click"></MenuItem>
+            <MenuItem Header="Запустить ''Пример''" Name="OpenExample" Click="MenuItem_OpenExampleWorkProgram_Click"></MenuItem>
         </Menu>
         <Border Grid.Row="1" Grid.RowSpan="2" Background="GhostWhite" BorderBrush="Silver" BorderThickness="1" CornerRadius="20,20,20,20">
             <Grid>
@@ -81,8 +81,7 @@
         </StackPanel>
         <!---->
 
-        <DataGrid Grid.Row="3" Name="DataGridMain" PreviewKeyDown="DataGridMain_PreviewKeyDown"  ColumnWidth="80" LoadingRow="DataGridMain_LoadingRow"
-                  AutoGeneratingColumn="DataGridMain_AutoGeneratingColumn" >
+        <DataGrid Grid.Row="3" Name="DataGridMain" PreviewKeyDown="DataGridMain_PreviewKeyDown"  ColumnWidth="80" LoadingRow="DataGridMain_LoadingRow">
             <DataGrid.ContextMenu>
                 <ContextMenu Opened="DataGridMain_ContextMenu_Opened">
                     <MenuItem Header="Добавить" Click="MenuItem_DGM_AddConvasOnButton"></MenuItem>

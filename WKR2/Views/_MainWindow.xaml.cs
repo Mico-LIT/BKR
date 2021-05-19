@@ -90,39 +90,39 @@ namespace WKR2.Views
                         {
                             //if (itemUI is Button)
                             //{
-                                int i = 0;
-                                Button buttonOnCanvas = itemUI;
+                            int i = 0;
+                            Button buttonOnCanvas = itemUI;
 
-                                double pixelWidth = ((BitmapImage)ImageMainControl.Source).PixelWidth;
-                                double pixelHeight = ((BitmapImage)ImageMainControl.Source).PixelHeight;
-                                pointImage.X = (pixelWidth * buttonOnCanvas.Margin.Left) / ImageMainControl.ActualWidth;
-                                pointImage.Y = (pixelHeight * buttonOnCanvas.Margin.Top) / ImageMainControl.ActualHeight;
+                            double pixelWidth = ((BitmapImage)ImageMainControl.Source).PixelWidth;
+                            double pixelHeight = ((BitmapImage)ImageMainControl.Source).PixelHeight;
+                            pointImage.X = (pixelWidth * buttonOnCanvas.Margin.Left) / ImageMainControl.ActualWidth;
+                            pointImage.Y = (pixelHeight * buttonOnCanvas.Margin.Top) / ImageMainControl.ActualHeight;
 
-                                DataView sourceDGM = (DataView)DataGridMain.ItemsSource;
-                                foreach (DataColumn dataColumn in sourceDGM.Table.Columns)
-                                {
-                                    if (dataColumn.ColumnName == buttonOnCanvas.Name) break;
-                                    i++;
-                                }
-                                string text = (sourceDGM.Table.Rows[row].ItemArray[i]).ToString();
+                            DataView sourceDGM = (DataView)DataGridMain.ItemsSource;
+                            foreach (DataColumn dataColumn in sourceDGM.Table.Columns)
+                            {
+                                if (dataColumn.ColumnName == buttonOnCanvas.Name) break;
+                                i++;
+                            }
+                            string text = (sourceDGM.Table.Rows[row].ItemArray[i]).ToString();
 
-                                Drawing.Font font = PrintService.ButtonFontDictionary.FirstOrDefault(x => buttonOnCanvas == x.Key).Value;
+                            Drawing.Font font = PrintService.ButtonFontDictionary.FirstOrDefault(x => buttonOnCanvas == x.Key).Value;
 
-                                if (font == null)
-                                    font = PrintService.FontCurrent;
+                            if (font == null)
+                                font = PrintService.FontCurrent;
 
-                                const float magicNumber = 3.3f;
+                            const float magicNumber = 3.3f;
 
-                                graphics.DrawString(text, font, Drawing.Brushes.Black, new Drawing.RectangleF
-                                    (
-                                        (float)pointImage.X,
-                                        (float)pointImage.Y,
-                                        (float)(buttonOnCanvas.Width * magicNumber),
-                                        (float)(buttonOnCanvas.Height * magicNumber))
-                                    );
+                            graphics.DrawString(text, font, Drawing.Brushes.Black, new Drawing.RectangleF
+                                (
+                                    (float)pointImage.X,
+                                    (float)pointImage.Y,
+                                    (float)(buttonOnCanvas.Width * magicNumber),
+                                    (float)(buttonOnCanvas.Height * magicNumber))
+                                );
 
-                                //     g.DrawString(TEXT+"</br> 3efdvgt4", font, Dr.Brushes.Black,
-                                //(float)PointImag.X, (float)PointImag.Y);
+                            //     g.DrawString(TEXT+"</br> 3efdvgt4", font, Dr.Brushes.Black,
+                            //(float)PointImag.X, (float)PointImag.Y);
                             //}
                         }
 
@@ -258,7 +258,7 @@ namespace WKR2.Views
 
                 //var df = But_canvas.Find(x => ((Button)x).Name == str);
                 //if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
-                if (item.Font != null) 
+                if (item.Font != null)
                     PrintService.ButtonFontDictionary.Add(button, item.Font);
 
                 CanvasForImage.Children.Add(button);
@@ -288,15 +288,21 @@ namespace WKR2.Views
         {
             if (DataGridMain.Items.Count > 0)
             {
-                MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled = MISavePattent.IsEnabled =
+                MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled =
                 MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = poisk.IsEnabled = true;
 
-                MISavePattent.IsEnabled = (ImageMainControl.Source == null) ? false : true;
+                MISavePattent.IsEnabled = (ImageMainControl.Source != null);
+
+                foreach (MenuItem item in DataGridMain.ContextMenu.Items)
+                    item.IsEnabled = true;
             }
             else
             {
                 MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled = MISavePattent.IsEnabled =
                   MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = poisk.IsEnabled = false;
+
+                foreach (MenuItem item in DataGridMain.ContextMenu.Items)
+                    item.IsEnabled = false;
             }
         }
 
@@ -339,13 +345,13 @@ namespace WKR2.Views
         #region Mouse Event
 
         bool isMoved = false;
-        Point startMovePosition;
+
         private void MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.RightButton == MouseButtonState.Pressed)
             {
                 isMoved = true;
-                startMovePosition = e.GetPosition(this);
+                Point startMovePosition = e.GetPosition(this);
             }
         }
         private void MouseUp(object sender, MouseButtonEventArgs e)
@@ -373,18 +379,15 @@ namespace WKR2.Views
 
         private void DataGridMain_LoadingRow(object sender, DataGridRowEventArgs e) => e.Row.Header = $"{(e.Row.GetIndex() + 1)}    ";
 
+        // TODO !
         private void DataGridMain_ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
-            var contextMenu = (System.Windows.Controls.ContextMenu)sender;
+            //var contextMenu = (ContextMenu)sender;
 
-            if (contextMenu == null)
-                throw new InvalidOperationException();
-
-            foreach (MenuItem item in ((ContextMenu)e.Source).Items)
-                item.IsEnabled = (DataGridMain.Columns.Count <= 1) ? false : true;
+            //if (contextMenu == null)
+            //    throw new InvalidOperationException();
         }
 
-        //новое окно 
         private void DataGridMain_Button_PrintItem_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -395,15 +398,14 @@ namespace WKR2.Views
                     return;
                 }
 
-                var ddd = DataGridMain.SelectedIndex;
+                var selectedIndex = DataGridMain.SelectedIndex + 1;
                 //Print_Item(ddd);
                 ShowMessageBoxAnalitic();
-                PrintService.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal, ddd + 1);
-
+                PrintService.Print(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal, selectedIndex);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -419,16 +421,12 @@ namespace WKR2.Views
             }
         }
 
-        private void DataGridMain_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            //e.Column.Header =;
-        }
-
         #endregion
 
         #region MenuItem
 
-        private void MenuItem_Calibration_Click(object sender, RoutedEventArgs e) => new Views.Calibration(PrintService.CalibrationData).ShowDialog();
+        private void MenuItem_Calibration_Click(object sender, RoutedEventArgs e)
+            => new Views.Calibration(PrintService.CalibrationData).ShowDialog();
         private void MenuItem_Font_click(object sender, RoutedEventArgs e) => PrintService.FontCurrent = PrintService.Font();
         private void MenuItem_PreView_Click(object sender, RoutedEventArgs e) => Previwe();
         private void MenuItem_Exit_Click(object sender, RoutedEventArgs e) => this.Close();
@@ -442,9 +440,9 @@ namespace WKR2.Views
                 if (DataGridMain.CurrentCell.Column == null)
                     return;
 
-                string fg = (string)DataGridMain.CurrentCell.Column.Header;
+                string nameButton = (string)DataGridMain.CurrentCell.Column.Header;
                 DataGridMain.SelectedIndex = -1;
-                ButtonAddOnCanvas(fg);
+                ButtonAddOnCanvas(nameButton);
             }
             catch (Exception ex)
             {
@@ -457,14 +455,15 @@ namespace WKR2.Views
         {
             try
             {
-                string fg = (string)DataGridMain.CurrentCell.Column.Header;
-                var h = canvasOnButtons.FindLast(x => ((Button)x).Name == fg);
+                string nameButton = (string)DataGridMain.CurrentCell.Column.Header;
+                var buttonFind = canvasOnButtons.FindLast(x => ((Button)x).Name == nameButton);
                 DataGridMain.SelectedIndex = -1;
-                if (h == null) return;
 
-                PrintService.ButtonFontDictionary.Remove((Button)h);
-                CanvasForImage.Children.Remove(h);
-                canvasOnButtons.Remove(h);
+                if (buttonFind == null) return;
+
+                PrintService.ButtonFontDictionary.Remove((Button)buttonFind);
+                CanvasForImage.Children.Remove(buttonFind);
+                canvasOnButtons.Remove(buttonFind);
             }
             catch (Exception ex)
             {
@@ -473,8 +472,7 @@ namespace WKR2.Views
             }
         }
 
-
-        private void MenuItem_OpenExample_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_OpenExampleWorkProgram_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -490,7 +488,7 @@ namespace WKR2.Views
                 }
 
                 //загруска картинки\шаблона
-                using (var stream = assembly.GetManifestResourceStream(AppSettings.ResourceNameImageTemplate))
+                using (Stream stream = assembly.GetManifestResourceStream(AppSettings.ResourceNameImageTemplate))
                 {
                     var bitmapImage = new BitmapImage();
                     bitmapImage.BeginInit();
@@ -521,14 +519,15 @@ namespace WKR2.Views
 
         private void MenuItem_OpenImage_Click(object sender, RoutedEventArgs e)
         {
-            Views.AnalliticSetings AS = new Views.AnalliticSetings(Com.Items);
-            AS.ShowDialog();
-            OpenFileDialog OFD = new OpenFileDialog();
-            OFD.Filter = "Jpeg files (*.jpeg)|*.jpeg;*.jpg| PNG files (*.PNG)|*.png|Все файлы (*.*)|*.*";
-            if (OFD.ShowDialog() == true)
-            {
+            Views.AnalliticSetings windowAnaliticSettings = new Views.AnalliticSetings(Com.Items);
+            windowAnaliticSettings.ShowDialog();
 
-                var uri = new Uri(OFD.FileName);
+            const string filter = "Jpeg files (*.jpeg)|*.jpeg;*.jpg| PNG files (*.PNG)|*.png|Все файлы (*.*)|*.*";
+            OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = filter };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                Uri uri = new Uri(openFileDialog.FileName);
                 //Clear_button();
                 ImageMainControl.Source = new BitmapImage(uri);
                 bitmapImageOriginal = new Drawing.Bitmap(uri.LocalPath);
@@ -542,23 +541,24 @@ namespace WKR2.Views
             //Clear_button();
             try
             {
-                DataView dd = ExcelService.LoadrExcel();
+                DataView dataView = ExcelService.LoadrExcel();
                 //if (dd != null) d12.ItemsSource = dd;
+                if (dataView == null)
+                    return;
 
-                Views.SettingView vv = new Views.SettingView(dd);
-                if (dd != null)
-                    if (vv.ShowDialog() == true)
-                    {
-                        CanvasForImage.Children.Clear();
-                        DataGridMain.ItemsSource = null;
-                        DataGridMain.ItemsSource = dd;
-                        DataView colbot = dd;
-                        var ff = DataGridMain.Columns;
-                        foreach (var item in ff)
-                        {
-                            if (item is DataGridTextColumn) Com.Items.Add((string)item.Header);
-                        }
-                    }
+                Views.SettingView windowSettinView = new Views.SettingView(dataView);
+                if (windowSettinView.ShowDialog() == true)
+                {
+                    CanvasForImage.Children.Clear();
+                    DataGridMain.ItemsSource = null;
+                    DataGridMain.ItemsSource = dataView;
+
+                    //TODO для поиска 
+                    var columns = DataGridMain.Columns.OfType<DataGridTextColumn>();
+                    foreach (var item in columns)
+                        Com.Items.Add((string)item.Header);
+                    //
+                }
 
                 IssEnabledAllElementsControl();
 
@@ -575,20 +575,20 @@ namespace WKR2.Views
         {
             try
             {
-                OpenFileDialog OFD = new OpenFileDialog();
-                OFD.Filter = "Dat files (*.dat)|*.dat";
-                OFD.InitialDirectory = Core.AppSettings.PathLocal;
-                if (OFD.ShowDialog() == true)
+                const string filter = "Dat files (*.dat)|*.dat";
+                OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = filter, InitialDirectory = Core.AppSettings.PathLocal };
+
+                if (openFileDialog.ShowDialog() == true)
                 {
                     canvasOnButtons.Clear();
                     CanvasForImage.Children.Clear();
 
-                    DataPattern dataPatternModel = Helper.DeSerializationDataPattern(OFD.FileName);
+                    DataPattern dataPatternModel = Helper.DeSerializationDataPattern(openFileDialog.FileName);
 
                     //Tool.Print.But_font = ds.BF;
-                    PrintService.FontCurrent = dataPatternModel.font;
-                    PrintService.CalibrationData = dataPatternModel.calibration_data;
-                    AnaliticService.PARAMS = dataPatternModel.par;
+                    PrintService.FontCurrent = dataPatternModel.Font;
+                    PrintService.CalibrationData = dataPatternModel.CalibrationData;
+                    AnaliticService.PARAMS = dataPatternModel.Params;
 
                     BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap
                     (
@@ -599,7 +599,9 @@ namespace WKR2.Views
                     );
 
                     ImageMainControl.Source = bitmapSource;
-                    Button_SERi_Canvas(dataPatternModel.But_canvas);
+
+                    Button_SERi_Canvas(dataPatternModel.SettingButtons);
+
                     bitmapImageOriginal = dataPatternModel.Image;
                     MessageBox.Show("Загрузка прошла успешно");
                 }
@@ -611,10 +613,7 @@ namespace WKR2.Views
         }
 
         private void MenuItem_SettingAnalitic_Click(object sender, RoutedEventArgs e)
-        {
-            Views.AnalliticSetings an = new Views.AnalliticSetings(Com.Items);
-            an.ShowDialog();
-        }
+            => new Views.AnalliticSetings(Com.Items).ShowDialog();
 
         private void MenuItem_ExportExcel_Click(object sender, RoutedEventArgs e)
         {
@@ -626,38 +625,44 @@ namespace WKR2.Views
         {
             try
             {
-                DirectoryInfo di = Directory.CreateDirectory(Core.AppSettings.PathLocal + @"\Patern");
-                SaveFileDialog SFD = new SaveFileDialog();
-                SFD.Filter = "Dat files (*.dat)|*.dat";
-                SFD.DefaultExt = di.FullName;
-                if (SFD.ShowDialog() == true)
+                const string filter = "Dat files (*.dat)|*.dat";
+                DirectoryInfo directoryInfo = Directory.CreateDirectory(Core.AppSettings.PathLocal + @"\Patern");
+
+                SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = filter, DefaultExt = directoryInfo.FullName };
+
+                if (saveFileDialog.ShowDialog() == true)
                 {
-                    List<SettingButton> but = new List<SettingButton>();
+                    List<SettingButton> SettingButtons = new List<SettingButton>();
+
                     foreach (UIElement item in CanvasForImage.Children)
                     {
-                        but.Add(new SettingButton()
+                        var button = (Button)item;
+
+                        SettingButtons.Add(new SettingButton()
                         {
-                            Name = ((Button)item).Name,
-                            Height = ((Button)item).Height,
-                            Width = ((Button)item).Width,
-                            MarginB = ((Button)item).Margin.Bottom,
-                            MarginL = ((Button)item).Margin.Left,
-                            MarginR = ((Button)item).Margin.Right,
-                            MarginT = ((Button)item).Margin.Top,
-                            Font = PrintService.ButtonFontDictionary.FirstOrDefault(x => x.Key == (Button)item).Value
+                            Font = PrintService.ButtonFontDictionary.FirstOrDefault(x => x.Key == (Button)item).Value,
+                            Name = button.Name,
+
+                            Width = button.Width,
+                            Height = button.Height,
+
+                            MarginB = button.Margin.Bottom,
+                            MarginL = button.Margin.Left,
+                            MarginR = button.Margin.Right,
+                            MarginT = button.Margin.Top,
                         });
                     }
 
                     DataPattern dataPattern = new DataPattern()
                     {
+                        Font = PrintService.FontCurrent,
                         Image = bitmapImageOriginal,
-                        But_canvas = but,
-                        font = PrintService.FontCurrent,
-                        calibration_data = PrintService.CalibrationData,
-                        par = AnaliticService.PARAMS
+                        Params = AnaliticService.PARAMS,
+                        SettingButtons = SettingButtons,
+                        CalibrationData = PrintService.CalibrationData,
                     };
 
-                    Helper.SerializationDataPattern(dataPattern, SFD.FileName);
+                    Helper.SerializationDataPattern(dataPattern, saveFileDialog.FileName);
 
                     MessageBox.Show("Сохранение прошло успешно");
                 }
@@ -667,8 +672,6 @@ namespace WKR2.Views
                 MessageBox.Show("Ошибка при сохранении", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-
 
         #endregion
 
@@ -739,7 +742,7 @@ namespace WKR2.Views
         private void Pehat(object sender, RoutedEventArgs e)
         {
             ShowMessageBoxAnalitic();
-            PrintService.dd(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal);
+            PrintService.Print(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal);
         }
 
         private void Poisk(object sender, RoutedEventArgs e) => new Views.Poisk(this).Show();
