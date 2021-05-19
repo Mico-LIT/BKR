@@ -14,14 +14,12 @@ namespace Tool
 {
     [Serializable]
     public class DataPattern
-    {
-        
+    {        
         public Bitmap Image { get; set; }
-        public Font font { get; set; }
-        public Calibration_Data calibration_data { get; set; }
-        public List<SettingButton> But_canvas { get; set; }
-        public Services.Analitic.Models.Params par { get; set; }
-
+        public Font Font { get; set; }
+        public Calibration_Data CalibrationData { get; set; }
+        public List<SettingButton> SettingButtons { get; set; }
+        public Services.Analitic.Models.Params Params { get; set; }
     }
 
     [Serializable]
