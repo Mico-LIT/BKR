@@ -246,14 +246,15 @@ namespace WKR2.Views
                     Margin = new Thickness(item.MarginL, item.MarginT, item.MarginR, item.MarginB)
                 };
 
-                button.MouseDown += new MouseButtonEventHandler(MouseDown);
-                button.MouseUp += new MouseButtonEventHandler(MouseUp);
-                button.MouseMove += new MouseEventHandler(MouseMove);
-                button.Click += (sender, e) =>
+                button.PreviewMouseDown += new MouseButtonEventHandler(MouseDown);
+                button.PreviewMouseUp += new MouseButtonEventHandler(MouseUp);
+                button.PreviewMouseMove += new MouseEventHandler(MouseMove);
+                button.MouseRightButtonDown += (sender, e) =>
                 {
                     Button buttonCurrent = sender as Button;
                     Views.Button_Calibration windowButtonCalibration = new Views.Button_Calibration(ref buttonCurrent);
                     windowButtonCalibration.ShowDialog();
+                    e.Handled = true;
                 };
 
                 //var df = But_canvas.Find(x => ((Button)x).Name == str);
@@ -323,14 +324,15 @@ namespace WKR2.Views
                 Margin = new Thickness(0, 0, 0, 0)
             };
 
-            button.MouseDown += new MouseButtonEventHandler(MouseDown);
-            button.MouseUp += new MouseButtonEventHandler(MouseUp);
-            button.MouseMove += new MouseEventHandler(MouseMove);
-            button.Click += (sender, e) =>
+            button.PreviewMouseDown += new MouseButtonEventHandler(MouseDown);
+            button.PreviewMouseUp += new MouseButtonEventHandler(MouseUp);
+            button.PreviewMouseMove += new MouseEventHandler(MouseMove);
+            button.MouseRightButtonDown += (sender, e) =>
             {
                 Button buttonCurrent = sender as Button;
                 Views.Button_Calibration windowButtonCalibration = new Views.Button_Calibration(ref buttonCurrent);
                 windowButtonCalibration.ShowDialog();
+                e.Handled = true;
             };
 
             //var df=But_canvas.Find(x => ((Button)x).Name == str);
@@ -348,7 +350,7 @@ namespace WKR2.Views
 
         private void MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.RightButton == MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
                 isMoved = true;
                 Point startMovePosition = e.GetPosition(this);
@@ -356,10 +358,9 @@ namespace WKR2.Views
         }
         private void MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (e.RightButton == MouseButtonState.Released)
+            if (e.LeftButton == MouseButtonState.Released)
             {
                 isMoved = false;
-
             }
         }
         private void MouseMove(object sender, MouseEventArgs e)
