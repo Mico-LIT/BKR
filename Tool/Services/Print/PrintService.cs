@@ -36,11 +36,12 @@ namespace Tool.Services.Print
         }
         public static Dictionary<System.Windows.Controls.Button, Font> ButtonFontDictionary => buttonFontDictionary;
 
-        static public Font Font()
+        public static Font Font(Font font = null)
         {
             using (FontDialog Fontdialog = new FontDialog())
             {
-                Fontdialog.Font = fontDefault;
+                Fontdialog.Font = font ?? fontDefault;
+
                 if (Fontdialog.ShowDialog() == DialogResult.OK)
                     return Fontdialog.Font;
 
@@ -48,20 +49,70 @@ namespace Tool.Services.Print
             }
         }
 
-        static public Font Font(Font s)
+        public static void Print(Func<int, int, Image> print_Item2, Func<int, string> getParametrAnalitic, string pathLocal, int ii = 1)
         {
-            using (FontDialog Fontdialog = new FontDialog())
+            PrintService.pathLocal = pathLocal;
+
+            print_Item2_ = print_Item2;
+            getParametrAnalitic_ = getParametrAnalitic;
+            var setupDlg = new PageSetupDialog();
+            var printDlg = new PrintDialog();
+            var printDoc = new PrintDocument();
+            printDoc.DocumentName = "Print Document";
+
+            setupDlg.PageSettings = new System.Drawing.Printing.PageSettings();
+            setupDlg.PrinterSettings = new System.Drawing.Printing.PrinterSettings();
+
+            setupDlg.PageSettings.Landscape = true;
+            setupDlg.PageSettings.Margins = new Margins(0, 0, 0, 0);
+
+            if (setupDlg.ShowDialog() == DialogResult.OK)
             {
-                Fontdialog.Font = s;
-
-                if (Fontdialog.ShowDialog() == DialogResult.OK)
-                    return Fontdialog.Font;
-
-                return null;
+                printDoc.DefaultPageSettings = setupDlg.PageSettings;
+                printDoc.PrinterSettings = setupDlg.PrinterSettings;
             }
+            else return;
+            printDlg.AllowSomePages = true;
+            printDlg.UseEXDialog = true;
+
+            printDlg.PrinterSettings.FromPage = printDlg.PrinterSettings.ToPage = ii;
+            if (printDlg.ShowDialog() == DialogResult.OK)
+            {
+                printDoc.PrinterSettings = printDlg.PrinterSettings;
+
+            }
+            else return;
+            Start = printDlg.PrinterSettings.FromPage - 1;
+            Stop = printDlg.PrinterSettings.ToPage - 1;
+            printDoc.PrintPage += PrintDoc_PrintPage1; ;
+            printDoc.Print();
         }
 
-        static public void dd(int ii)
+        static void PrintDoc_PrintPage1(object sender, PrintPageEventArgs e)
+        {
+            if (AnaliticService.GetSettingOnAnalitic)
+                AnaliticService.Save_Persont(print_Item2_(Start, 1), getParametrAnalitic_(Start), pathLocal);
+
+            e.Graphics.DrawImage(print_Item2_(Start, 0), new Rectangle()
+            {
+                Height = e.PageSettings.PaperSize.Width,
+                Width = e.PageSettings.PaperSize.Height,
+                X = CalibrationData.X,
+                Y = CalibrationData.Y,
+            });
+
+            if (Start == Stop)
+            {
+                e.HasMorePages = false;
+                Start = Stop = 0;
+            }
+            else e.HasMorePages = true;
+            Start++;
+        }
+
+        #region OtherCode
+
+        static void dd(int ii)
         {
             Start = Stop = ii;
             var setupDlg = new PageSetupDialog();
@@ -115,7 +166,7 @@ namespace Tool.Services.Print
 
         }
 
-        private static void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
+        static void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
         {
             if (ImageCurrent == null)
                 throw new ArgumentNullException(nameof(ImageCurrent));
@@ -145,7 +196,8 @@ namespace Tool.Services.Print
             //e.Graphics.DrawImage(iii, m);
 
         }
-        public static Bitmap ResizeImage(Image image, int width, int height)
+
+        static Bitmap ResizeImage(Image image, int width, int height)
         {
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
@@ -170,7 +222,7 @@ namespace Tool.Services.Print
             return destImage;
         }
 
-        public static Image ResizeOrigImg(Image image, int nWidth, int nHeight)
+        static Image ResizeOrigImg(Image image, int nWidth, int nHeight)
         {
             int newWidth, newHeight;
             var coefH = (double)nHeight / (double)image.Height;
@@ -199,68 +251,7 @@ namespace Tool.Services.Print
             return result;
         }
 
+        #endregion
 
-        public static void dd(Func<int, int, Image> print_Item2, Func<int, string> getParametrAnalitic, string pathLocal, int ii = 1)
-        {
-            PrintService.pathLocal = pathLocal;
-
-            print_Item2_ = print_Item2;
-            getParametrAnalitic_ = getParametrAnalitic;
-            var setupDlg = new PageSetupDialog();
-            var printDlg = new PrintDialog();
-            var printDoc = new PrintDocument();
-            printDoc.DocumentName = "Print Document";
-
-            setupDlg.PageSettings = new System.Drawing.Printing.PageSettings();
-            setupDlg.PrinterSettings = new System.Drawing.Printing.PrinterSettings();
-
-            setupDlg.PageSettings.Landscape = true;
-            setupDlg.PageSettings.Margins = new Margins(0, 0, 0, 0);
-
-            if (setupDlg.ShowDialog() == DialogResult.OK)
-            {
-                printDoc.DefaultPageSettings = setupDlg.PageSettings;
-                printDoc.PrinterSettings = setupDlg.PrinterSettings;
-            }
-            else return;
-            printDlg.AllowSomePages = true;
-            printDlg.UseEXDialog = true;
-
-            printDlg.PrinterSettings.FromPage = printDlg.PrinterSettings.ToPage = ii;
-            if (printDlg.ShowDialog() == DialogResult.OK)
-            {
-                printDoc.PrinterSettings = printDlg.PrinterSettings;
-
-            }
-            else return;
-            Start = printDlg.PrinterSettings.FromPage - 1;
-            Stop = printDlg.PrinterSettings.ToPage - 1;
-            printDoc.PrintPage += PrintDoc_PrintPage1; ;
-            printDoc.Print();
-        }
-
-
-        private static void PrintDoc_PrintPage1(object sender, PrintPageEventArgs e)
-        {
-            if (AnaliticService.GetSettingOnAnalitic)
-                AnaliticService.Save_Persont(print_Item2_(Start, 1), getParametrAnalitic_(Start), pathLocal);
-
-            e.Graphics.DrawImage(print_Item2_(Start, 0), new Rectangle()
-            {
-                Height = e.PageSettings.PaperSize.Width,
-                Width = e.PageSettings.PaperSize.Height,
-                X = CalibrationData.X,
-                Y = CalibrationData.Y,
-            });
-
-            if (Start == Stop)
-            {
-                e.HasMorePages = false;
-                Start = Stop = 0;
-            }
-            else e.HasMorePages = true;
-            Start++;
-        }
     }
-
 }
