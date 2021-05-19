@@ -31,52 +31,57 @@ namespace Tool.Services.Excel
             }
             return dateSet.Tables[0].DefaultView; //внизу экселя есть странички
         }
-        
+
         public static DataView LoadrExcel()
         {
             DataSet dateSet;
-            OpenFileDialog openFD = new OpenFileDialog() { ValidateNames = true };
-            openFD.Filter = "xls files (*.xls)|*.xls|Xlsx files (*.xlsx)|*.xlsx";
 
-            if (openFD.ShowDialog() == true)
+            const string filter = "xls files (*.xls)|*.xls|Xlsx files (*.xlsx)|*.xlsx";
+            OpenFileDialog openFileDialog = new OpenFileDialog() { ValidateNames = true, Filter = filter };
+
+            if (openFileDialog.ShowDialog() != true)
+                return null;
+
+            using (FileStream fileStream = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read))
             {
-                using (FileStream fs = new FileStream(openFD.FileName, FileMode.Open, FileAccess.Read))
+                IExcelDataReader excelDataReader = null;
+                if (openFileDialog.FilterIndex == 1) { excelDataReader = ExcelReaderFactory.CreateBinaryReader(fileStream); }
+                else
+                if (openFileDialog.FilterIndex == 2) { excelDataReader = ExcelReaderFactory.CreateOpenXmlReader(fileStream); }
+                else throw new InvalidOperationException();
+
+                using (excelDataReader)
                 {
-                    IExcelDataReader edr = null;
-                    if (openFD.FilterIndex == 1) { edr = ExcelReaderFactory.CreateBinaryReader(fs); }
-                    if (openFD.FilterIndex == 2) { edr = ExcelReaderFactory.CreateOpenXmlReader(fs); }
-
-                    using (edr)
-                    {
-                        edr.IsFirstRowAsColumnNames = false;
-                        dateSet = edr.AsDataSet();
-                    }
-                    return dateSet.Tables[0].DefaultView; //внизу экселя есть странички
-
-                    //string json = JsonConvert.SerializeObject(dd, Formatting.Indented);
-                    //using (FileStream gg = new FileStream("DDD12.txt", FileMode.OpenOrCreate))
-                    //{
-                    //    byte[] array = System.Text.Encoding.Default.GetBytes(json);
-                    //    gg.Write(array,0,array.Length);
-                    //}
+                    excelDataReader.IsFirstRowAsColumnNames = false;
+                    dateSet = excelDataReader.AsDataSet();
                 }
+
+                return dateSet.Tables[0].DefaultView; //внизу экселя есть странички
+
+                //string json = JsonConvert.SerializeObject(dd, Formatting.Indented);
+                //using (FileStream gg = new FileStream("DDD12.txt", FileMode.OpenOrCreate))
+                //{
+                //    byte[] array = System.Text.Encoding.Default.GetBytes(json);
+                //    gg.Write(array,0,array.Length);
+                //}
             }
-            return null;
         }
 
         public static void ExportToExcel(string pathLocal)
         {
-            System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(Path.Combine(pathLocal, "Analitic"));
+            List<Settings> settings = new List<Settings>();
 
-            List<Settings> fff = new List<Settings>();
-            var files = info.GetFiles("*.jpeg").ToList();
+            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(pathLocal, "Analitic"));
+
+            var files = directoryInfo.GetFiles("*.jpeg").ToList();
+
             foreach (var item in files)
             {
                 var mas = item.ToString().Split('_');
 
                 if (item.ToString().Split('_').Count() == 5)
                 {
-                    fff.Add(new Settings()
+                    settings.Add(new Settings()
                     {
                         Nomer = (mas[1]),
                         FIO = (mas[2]),
@@ -87,7 +92,7 @@ namespace Tool.Services.Excel
                 }
                 else
                 {
-                    fff.Add(new Settings()
+                    settings.Add(new Settings()
                     {
                         Nomer = (mas[0]),
                         FIO = (mas[1]),
@@ -96,18 +101,20 @@ namespace Tool.Services.Excel
                     });
                 }
             }
-            using (StreamWriter sw = new StreamWriter(new FileStream(info.FullName + @"\Analitic.csv", FileMode.Create), Encoding.UTF8))
+
+            using (StreamWriter sw = new StreamWriter(new FileStream(directoryInfo.FullName + @"\Analitic.csv", FileMode.Create), Encoding.UTF8))
             {
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("ФИО; НОМЕР;ПОВТОР;ДАТА");
-                foreach (Settings items in fff)
-                {
+
+                foreach (Settings items in settings)                
                     sb.AppendLine(String.Format("{0};{1};{2};{3}", items.FIO, items.Nomer, items.repeat, items.Date));
-                }
+                
                 sw.Write(sb.ToString());
             }
 
-            #region 33
+            #region OtherCode Microsoft.Office
+
             //// Creating a Excel object. 
             //Microsoft.Office.Interop.Excel._Application excel = new Microsoft.Office.Interop.Excel.Application();
             //Microsoft.Office.Interop.Excel._Workbook workbook = excel.Workbooks.Add(Type.Missing);
