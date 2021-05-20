@@ -84,9 +84,8 @@
         <DataGrid Grid.Row="3" Name="DataGridMain" PreviewKeyDown="DataGridMain_PreviewKeyDown"  ColumnWidth="80" LoadingRow="DataGridMain_LoadingRow">
             <DataGrid.ContextMenu>
                 <ContextMenu Opened="DataGridMain_ContextMenu_Opened">
-                    <MenuItem Header="Добавить" Click="MenuItem_DGM_AddConvasOnButton"></MenuItem>
-                    <MenuItem Header="Удалить" Click="MenuItem_DGM_ButtonRemoveOnConvas"></MenuItem>
-                    <MenuItem Header="Предпросмотр" Click="MenuItem_DGM_PreView"></MenuItem>
+                    <MenuItem Header="Добавить 'Выводящий элемент на сцену'" Click="MenuItem_DGM_AddConvasOnButton"></MenuItem>
+                    <MenuItem Header="Удалить  'Выводящий элемент со сцены'" Click="MenuItem_DGM_ButtonRemoveOnConvas"></MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
@@ -94,7 +93,16 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Button Content="Печать" Click="DataGridMain_Button_PrintItem_Click" Margin="1"/>
+                                <Button Name="DataGridMainButtonCM" Content="Действие..." Click="DataGridMainButtonCM_Click"  MouseRightButtonUp="DataGridMainButtonCM_MouseRightButtonUp" Margin="1">
+                                    <Button.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Предпросмотр" Click="MenuItem_DGM_PreView"></MenuItem>
+                                            
+                                            <Separator />
+                                            <MenuItem Header="Печать" Click="DataGridMain_Button_PrintItem_Click"/>
+                                        </ContextMenu>
+                                    </Button.ContextMenu>                                    
+                                </Button>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -117,23 +125,20 @@
         </Grid.RowDefinitions>
         <Image Name="image" MouseDown="imag_click"></Image>
         -->
-
-        <!--<Grid Name="grid_imag" MouseDown="imag_click" Height="{Binding ElementName=image,Path=ActualHeight }" 
+        
+        <!--
+        <Grid Name="grid_imag" MouseDown="imag_click" Height="{Binding ElementName=image,Path=ActualHeight }" 
               Width="{Binding ElementName=image,Path=ActualWidth }"></Grid>
         -->
 
         <!--
-        <Canvas Name="grid_imag" Grid.Row="0" Height="{Binding ElementName=image,Path=ActualHeight }" 
-              Width="{Binding ElementName=image,Path=ActualWidth }">
-             </Canvas>
+        <Canvas Name="grid_imag" Grid.Row="0" Height="{Binding ElementName=image,Path=ActualHeight }" Width="{Binding ElementName=image,Path=ActualWidth }"/>
         
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-
             <Button  Width="80" Content="save" Click="Save_img"></Button>
             <Label Width="200" Name="point"></Label>
             <Button Click="Button_Click"   Content="open"   />
-        </StackPanel>
-        
+        </StackPanel>        
         -->
 
     </Grid>

@@ -335,6 +335,14 @@ namespace WKR2.Views
         #region DataGridMain
 
         private void DataGridMain_LoadingRow(object sender, DataGridRowEventArgs e) => e.Row.Header = $"{(e.Row.GetIndex() + 1)}    ";
+        private void DataGridMainButtonCM_MouseRightButtonUp(object sender, MouseButtonEventArgs e) => e.Handled = true;
+
+        private void DataGridMainButtonCM_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button != null)
+                button.ContextMenu.IsOpen = true;
+        }
 
         private void DataGridMain_ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
