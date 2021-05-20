@@ -274,17 +274,15 @@ namespace WKR2.Views
             }
         }
 
-        private void ButtonAddOnCanvas(string nameButton)
+        private void ButtonAddOnCanvas(string nameButton, Thickness? thickness = null)
         {
-            DataView dataView = (DataView)DataGridMain.ItemsSource;
-
             Button button = new Button()
             {
                 Name = nameButton,
                 Height = 20,
                 Width = 100,
                 Content = "**" + nameButton + "**",
-                Margin = new Thickness(0, 0, 0, 0)
+                Margin = thickness ?? new Thickness(0, 0, 0, 0)
             };
 
             button.PreviewMouseDown += new MouseButtonEventHandler(MouseDown);
@@ -338,7 +336,6 @@ namespace WKR2.Views
 
         private void DataGridMain_LoadingRow(object sender, DataGridRowEventArgs e) => e.Row.Header = $"{(e.Row.GetIndex() + 1)}    ";
 
-        // TODO !
         private void DataGridMain_ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
             //var contextMenu = (ContextMenu)sender;
@@ -398,7 +395,12 @@ namespace WKR2.Views
                 if (DataGridMain.CurrentCell.Column == null)
                     return;
 
-                string nameButton = (string)DataGridMain.CurrentCell.Column.Header;
+                var coll = DataGridMain.CurrentCell.Column;
+
+                if (coll.DisplayIndex <= 0)
+                    return;
+
+                string nameButton = (string)coll.Header;
                 DataGridMain.SelectedIndex = -1;
                 ButtonAddOnCanvas(nameButton);
             }
@@ -462,6 +464,9 @@ namespace WKR2.Views
 
                 canvasOnButtons.Clear();
                 CanvasForImage.Children.Clear();
+
+                this.ButtonAddOnCanvas("Column1", new Thickness(200, 120, 0, 0));
+                this.ButtonAddOnCanvas("Column2", new Thickness(200, 140, 0, 0));
 
                 // для поиска
                 foreach (var item in DataGridMain.Columns)
