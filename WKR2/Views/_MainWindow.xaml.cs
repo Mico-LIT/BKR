@@ -37,7 +37,12 @@ namespace WKR2.Views
 
         public _MainWindow()
         {
-            InitializeComponent(); IssEnabledAllElementsControl();
+            InitializeComponent();
+            IssEnabledAllElementsControl();
+
+            Directory.CreateDirectory(AppSettings.PathPattern);
+            Directory.CreateDirectory(AppSettings.PathAnalytic);
+
             //List<Date> fd = new List<Date>() { new Date() { jsdkf = "423", NAme = "dsf4", NAme1 = "fs43" } };
 
             //image.Source = ImageWork.Load();                                   //генирится ошибка вот тут 
@@ -577,7 +582,9 @@ namespace WKR2.Views
             try
             {
                 const string filter = "Dat files (*.dat)|*.dat";
-                OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = filter, InitialDirectory = Core.AppSettings.PathLocal };
+                string path = AppSettings.PathPattern;
+
+                OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = filter, InitialDirectory = path };
 
                 if (openFileDialog.ShowDialog() == true)
                 {
@@ -618,7 +625,7 @@ namespace WKR2.Views
 
         private void MenuItem_ExportExcel_Click(object sender, RoutedEventArgs e)
         {
-            ExcelService.ExportToExcel(Core.AppSettings.PathLocal);
+            ExcelService.ExportToExcel(Core.AppSettings.PathAnalytic);
             MessageBox.Show("Выгрузка прошла успешно!");
         }
 
@@ -627,9 +634,9 @@ namespace WKR2.Views
             try
             {
                 const string filter = "Dat files (*.dat)|*.dat";
-                DirectoryInfo directoryInfo = Directory.CreateDirectory(Core.AppSettings.PathLocal + @"\Patern");
+                string path = AppSettings.PathPattern;
 
-                SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = filter, DefaultExt = directoryInfo.FullName };
+                SaveFileDialog saveFileDialog = new SaveFileDialog() { InitialDirectory = path, Filter = filter };
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
@@ -657,7 +664,7 @@ namespace WKR2.Views
                     DataPattern dataPattern = new DataPattern()
                     {
                         Font = PrintService.FontCurrent,
-                        Image = bitmapImageOriginal,
+                        Image = new Drawing.Bitmap(bitmapImageOriginal),
                         Params = AnaliticService.PARAMS,
                         SettingButtons = SettingButtons,
                         CalibrationData = PrintService.CalibrationData,
@@ -668,7 +675,7 @@ namespace WKR2.Views
                     MessageBox.Show("Сохранение прошло успешно");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 MessageBox.Show("Ошибка при сохранении", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             }

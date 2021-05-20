@@ -67,11 +67,13 @@ namespace Tool.Services.Excel
             }
         }
 
-        public static void ExportToExcel(string pathLocal)
+        public static void ExportToExcel(string path, string fileName = "Analitic.csv")
         {
             List<Settings> settings = new List<Settings>();
+            DirectoryInfo directoryInfo = new DirectoryInfo(path);
 
-            DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(pathLocal, "Analitic"));
+            if (!directoryInfo.Exists)
+                Directory.CreateDirectory(path);
 
             var files = directoryInfo.GetFiles("*.jpeg").ToList();
 
@@ -102,14 +104,14 @@ namespace Tool.Services.Excel
                 }
             }
 
-            using (StreamWriter sw = new StreamWriter(new FileStream(directoryInfo.FullName + @"\Analitic.csv", FileMode.Create), Encoding.UTF8))
+            using (StreamWriter sw = new StreamWriter(new FileStream(Path.Combine(path, fileName), FileMode.Create), Encoding.UTF8))
             {
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("ФИО; НОМЕР;ПОВТОР;ДАТА");
 
-                foreach (Settings items in settings)                
+                foreach (Settings items in settings)
                     sb.AppendLine(String.Format("{0};{1};{2};{3}", items.FIO, items.Nomer, items.repeat, items.Date));
-                
+
                 sw.Write(sb.ToString());
             }
 
