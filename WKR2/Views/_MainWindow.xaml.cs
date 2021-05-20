@@ -42,23 +42,6 @@ namespace WKR2.Views
 
             Directory.CreateDirectory(AppSettings.PathPattern);
             Directory.CreateDirectory(AppSettings.PathAnalytic);
-
-            //List<Date> fd = new List<Date>() { new Date() { jsdkf = "423", NAme = "dsf4", NAme1 = "fs43" } };
-
-            //image.Source = ImageWork.Load();                                   //генирится ошибка вот тут 
-            //imageORig = image;
-            //bitmapORig = new Dr.Bitmap(ImageWork.Load().UriSource.LocalPath); //генирится ошибка вот тут 
-
-            // сколько кнопок надо на разментку 
-            //for (int i = 1; i < 3; i++)
-            //{
-            //    var but = new Button() { Name = "T_" + i, Content = "**"+i+"**", Margin = new Thickness(0, 0, 0, 0) };
-            //    but.MouseDown += new MouseButtonEventHandler(MouseDown);
-            //    but.MouseUp += new MouseButtonEventHandler(MouseUp);
-            //    but.MouseMove += new MouseEventHandler(MouseMove);
-            //    grid_imag.Children.Add(but);
-            //}
-            //d12.ItemsSource = fd;
         }
 
         private void Previwe(int row = 0)
@@ -73,28 +56,16 @@ namespace WKR2.Views
                     return;
                 }
 
-                //int tt = 0;
-                //Dr.Bitmap bitmapORig = this.bitmapORig;
-                //using (Drawing.Graphics g = Drawing.Graphics.FromImage(b)) { g.DrawImage(bitmapImageOriginal, 0, 0); }
-
                 Drawing.Image drawingImage;
 
                 using (Drawing.Bitmap bitmap = new Drawing.Bitmap(bitmapImageOriginal))
                 {
                     using (Drawing.Graphics graphics = Drawing.Graphics.FromImage(bitmap))
                     {
-                        //g.Clear(System.Drawing.Color.White); 
-                        //g.FillRectangle(Dr.Brushes.White, -50, -50, b.Width, b.Height); //белый листок
-
-                        //using (var font = new Dr.Font("Arial", 15))
-                        //{
-
                         Point pointImage = new Point();
 
                         foreach (var itemUI in CanvasForImage.Children.OfType<Button>())
                         {
-                            //if (itemUI is Button)
-                            //{
                             int i = 0;
                             Button buttonOnCanvas = itemUI;
 
@@ -125,13 +96,7 @@ namespace WKR2.Views
                                     (float)(buttonOnCanvas.Width * magicNumber),
                                     (float)(buttonOnCanvas.Height * magicNumber))
                                 );
-
-                            //     g.DrawString(TEXT+"</br> 3efdvgt4", font, Dr.Brushes.Black,
-                            //(float)PointImag.X, (float)PointImag.Y);
-                            //}
                         }
-
-                        //}
                     }
 
                     string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -225,7 +190,6 @@ namespace WKR2.Views
                                 (float)(f.Height * 3.3)));
                     }
                 }
-
             }
 
             using (MemoryStream tmpStrm = new MemoryStream())
@@ -262,8 +226,6 @@ namespace WKR2.Views
                     e.Handled = true;
                 };
 
-                //var df = But_canvas.Find(x => ((Button)x).Name == str);
-                //if (df != null) throw new Exception() { Source = " Елемент такой уже добавлен!" };
                 if (item.Font != null)
                     PrintService.ButtonFontDictionary.Add(button, item.Font);
 
@@ -316,10 +278,6 @@ namespace WKR2.Views
         {
             DataView dataView = (DataView)DataGridMain.ItemsSource;
 
-            //foreach (DataColumn item in colbot.Table.Columns)
-            //{
-            //var but = new Button() { Name = item.ColumnName, Height = 20, Width = 100, Content = "**" + item.ColumnName + "**", Margin = new Thickness(0, 0, 0, 0) };
-
             Button button = new Button()
             {
                 Name = nameButton,
@@ -340,13 +298,8 @@ namespace WKR2.Views
                 e.Handled = true;
             };
 
-            //var df=But_canvas.Find(x => ((Button)x).Name == str);
-            //if (df != null) but.Content = "Копия " + but.Name;//throw new Exception() { Source = " Елемент такой уже добавлен!" };
-
-
             CanvasForImage.Children.Add(button);
             canvasOnButtons.Add(button);
-            //}
         }
 
         #region Mouse Event
@@ -405,7 +358,7 @@ namespace WKR2.Views
                 }
 
                 var selectedIndex = DataGridMain.SelectedIndex + 1;
-                //Print_Item(ddd);
+
                 ShowMessageBoxAnalitic();
                 PrintService.Print(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal, selectedIndex);
             }
@@ -423,7 +376,6 @@ namespace WKR2.Views
                 gg.Table.Rows.RemoveAt(DataGridMain.SelectedIndex);
                 DataGridMain.ItemsSource = null;
                 DataGridMain.ItemsSource = gg;
-                //d12.Items.Remove(d12.SelectedItem);// напрямую с ним работать нельзя надо посредника DataTable
             }
         }
 
@@ -534,7 +486,7 @@ namespace WKR2.Views
             if (openFileDialog.ShowDialog() == true)
             {
                 Uri uri = new Uri(openFileDialog.FileName);
-                //Clear_button();
+
                 ImageMainControl.Source = new BitmapImage(uri);
                 bitmapImageOriginal = new Drawing.Bitmap(uri.LocalPath);
                 canvasOnButtons.Clear();
@@ -544,11 +496,10 @@ namespace WKR2.Views
 
         private void MenuItem_OpenExcel_Click(object sender, RoutedEventArgs e)
         {
-            //Clear_button();
             try
             {
                 DataView dataView = ExcelService.LoadrExcel();
-                //if (dd != null) d12.ItemsSource = dd;
+
                 if (dataView == null)
                     return;
 
@@ -567,9 +518,6 @@ namespace WKR2.Views
                 }
 
                 IssEnabledAllElementsControl();
-
-                //Сохранить в Json Парметр Excel измененого
-                //Tool.ExcelWork.Json(((DataView)d12.ItemsSource).ToTable());
             }
             catch (Exception)
             {
@@ -593,7 +541,6 @@ namespace WKR2.Views
 
                     DataPattern dataPatternModel = Helper.DeSerializationDataPattern(openFileDialog.FileName);
 
-                    //Tool.Print.But_font = ds.BF;
                     PrintService.FontCurrent = dataPatternModel.Font;
                     PrintService.CalibrationData = dataPatternModel.CalibrationData;
                     AnaliticService.PARAMS = dataPatternModel.Params;
@@ -685,7 +632,6 @@ namespace WKR2.Views
 
         #region Код для 2-ой версии проекта
 
-        //забросил метод
         private void Print_Item(int Item_Row)
         {
             Drawing.Bitmap b = new Drawing.Bitmap(bitmapImageOriginal.Width, bitmapImageOriginal.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
@@ -736,7 +682,6 @@ namespace WKR2.Views
             }
             b.Dispose();
             PrintService.ImageCurrent = vie;
-            //Tool.Print.dd();
         }
 
         private void JJson(object sender, RoutedEventArgs e)
@@ -759,21 +704,6 @@ namespace WKR2.Views
         {
             MessageBox.Show("Пока нет реализации, извините");
             return;
-
-            // белый листок
-            //Dr.Bitmap b = new Dr.Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            ////Dr.Bitmap bmp = new Dr.Bitmap(@"c: \users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\ggh.jpg");
-
-            ////Dr.Bitmap b = new Dr.Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            ////using (Dr.Graphics g = Dr.Graphics.FromImage(b))
-            ////{
-            ////    g.FillRectangle(Dr.Brushes.White, 0, 0, b.Width, b.Height);
-            ////}
-
-            //b.Save(@"c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\111.jpg", System.Drawing.Imaging.ImageFormat.Png);
-
-            //Dr.Bitmap bmp = new Dr.Bitmap(@"c: \users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\ggh.png");
-            ////bmp = b;
 
             Point pointImage = new Point();
 
@@ -815,6 +745,22 @@ namespace WKR2.Views
         #endregion
 
         #region Other Code
+
+        // белый листок
+        //Dr.Bitmap b = new Dr.Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+        ////Dr.Bitmap bmp = new Dr.Bitmap(@"c: \users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\ggh.jpg");
+
+        ////Dr.Bitmap b = new Dr.Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+        ////using (Dr.Graphics g = Dr.Graphics.FromImage(b))
+        ////{
+        ////    g.FillRectangle(Dr.Brushes.White, 0, 0, b.Width, b.Height);
+        ////}
+
+        //b.Save(@"c:\users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\111.jpg", System.Drawing.Imaging.ImageFormat.Png);
+
+        //Dr.Bitmap bmp = new Dr.Bitmap(@"c: \users\redga\documents\visual studio 2015\Projects\WKR2\WKR2\ggh.png");
+        ////bmp = b;
+
 
         //bool m_IsPressed;
         //private void Button_MouseMove(object sender, MouseEventArgs e)
