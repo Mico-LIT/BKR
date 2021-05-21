@@ -49,42 +49,42 @@ namespace Tool.Services.Print
             }
         }
 
-        public static void Print(Func<int, int, Image> print_Item2, Func<int, string> getParametrAnalitic, string pathLocal, int ii = 1)
+        public static void Print(Func<int, int, Image> print_Item2, Func<int, string> getParametrAnalitic, string pathLocal, int index = 1)
         {
             PrintService.pathLocal = pathLocal;
 
             print_Item2_ = print_Item2;
             getParametrAnalitic_ = getParametrAnalitic;
-            var setupDlg = new PageSetupDialog();
-            var printDlg = new PrintDialog();
-            var printDoc = new PrintDocument();
-            printDoc.DocumentName = "Print Document";
 
-            setupDlg.PageSettings = new System.Drawing.Printing.PageSettings();
-            setupDlg.PrinterSettings = new System.Drawing.Printing.PrinterSettings();
-
+            var setupDlg = new PageSetupDialog()
+            {
+                PageSettings = new System.Drawing.Printing.PageSettings(),
+                PrinterSettings = new System.Drawing.Printing.PrinterSettings(),
+            };
             setupDlg.PageSettings.Landscape = true;
             setupDlg.PageSettings.Margins = new Margins(0, 0, 0, 0);
 
-            if (setupDlg.ShowDialog() == DialogResult.OK)
-            {
-                printDoc.DefaultPageSettings = setupDlg.PageSettings;
-                printDoc.PrinterSettings = setupDlg.PrinterSettings;
-            }
-            else return;
-            printDlg.AllowSomePages = true;
-            printDlg.UseEXDialog = true;
+            var printDoc = new PrintDocument() { DocumentName = "Print Document" };
 
-            printDlg.PrinterSettings.FromPage = printDlg.PrinterSettings.ToPage = ii;
-            if (printDlg.ShowDialog() == DialogResult.OK)
-            {
-                printDoc.PrinterSettings = printDlg.PrinterSettings;
+            if (setupDlg.ShowDialog() != DialogResult.OK)
+                return;
 
-            }
-            else return;
+            printDoc.DefaultPageSettings = setupDlg.PageSettings;
+            printDoc.PrinterSettings = setupDlg.PrinterSettings;
+
+            var printDlg = new PrintDialog() { AllowSomePages = true, UseEXDialog = true, };
+
+            printDlg.PrinterSettings.FromPage = printDlg.PrinterSettings.ToPage = index;
+
+            if (printDlg.ShowDialog() != DialogResult.OK)
+                return;
+
+            printDoc.PrinterSettings = printDlg.PrinterSettings;
+
             Start = printDlg.PrinterSettings.FromPage - 1;
             Stop = printDlg.PrinterSettings.ToPage - 1;
-            printDoc.PrintPage += PrintDoc_PrintPage1; ;
+
+            printDoc.PrintPage += PrintDoc_PrintPage1;
             printDoc.Print();
         }
 
