@@ -41,7 +41,6 @@
                 <MenuItem Header="Калибровка" Click="MenuItem_Calibration_Click"></MenuItem>
 
                 <!-- Доп Функционал
-                <MenuItem Header="Печать" Click="Pehat" Visibility="Visible"></MenuItem>
                 <MenuItem Header="Save" Click="Save_img" Visibility="Visible"></MenuItem>
                 <MenuItem Header="Json" Click="JJson" Visibility="Visible"></MenuItem>
                 <Separator/>

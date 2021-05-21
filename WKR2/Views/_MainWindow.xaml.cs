@@ -709,12 +709,6 @@ namespace WKR2.Views
             Helper.JsonSerializeObject(((DataView)DataGridMain.ItemsSource).ToTable());
         }
 
-        private void Pehat(object sender, RoutedEventArgs e)
-        {
-            ShowMessageBoxAnalitic();
-            PrintService.Print(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathAnalytic);
-        }
-
         private void Poisk(object sender, RoutedEventArgs e) => new Views.Poisk(this).Show();
 
         private void Save_img(object sender, RoutedEventArgs e)
