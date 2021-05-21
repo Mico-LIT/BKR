@@ -33,7 +33,7 @@ namespace WKR2.Views
     public partial class _MainWindow : Window
     {
         Drawing.Bitmap bitmapImageOriginal;//оригинал загружен
-        List<UIElement> canvasOnButtons = new List<UIElement>();
+        Dictionary<int, Drawing.Font> hashCodeButtonsOncanvas = new Dictionary<int, Drawing.Font>();
 
         public _MainWindow()
         {
@@ -68,8 +68,8 @@ namespace WKR2.Views
                         {
                             Button buttonOnCanvas = itemUI;
 
-                            double pixelWidth = ((BitmapImage)ImageMainControl.Source).PixelWidth;
-                            double pixelHeight = ((BitmapImage)ImageMainControl.Source).PixelHeight;
+                            double pixelWidth = ((BitmapSource)ImageMainControl.Source).PixelWidth;
+                            double pixelHeight = ((BitmapSource)ImageMainControl.Source).PixelHeight;
                             pointImage.X = (pixelWidth * buttonOnCanvas.Margin.Left) / ImageMainControl.ActualWidth;
                             pointImage.Y = (pixelHeight * buttonOnCanvas.Margin.Top) / ImageMainControl.ActualHeight;
 
@@ -78,7 +78,7 @@ namespace WKR2.Views
 
                             string text = sourceDGM.Table.Rows[rowIndex].ItemArray[columnIndex].ToString();
 
-                            Drawing.Font font = PrintService.ButtonFontDictionary.FirstOrDefault(x => buttonOnCanvas == x.Key).Value;
+                            Drawing.Font font = hashCodeButtonsOncanvas.FirstOrDefault(x => x.Key == itemUI.GetHashCode()).Value;
 
                             if (font == null)
                                 font = PrintService.FontCurrent;
@@ -183,7 +183,7 @@ namespace WKR2.Views
                         }
                         string TEXT = (yy.Table.Rows[rowIndex].ItemArray[i]).ToString();
 
-                        var trt = PrintService.ButtonFontDictionary.FirstOrDefault(x => f == x.Key).Value;
+                        var trt = hashCodeButtonsOncanvas.FirstOrDefault(x => f.GetHashCode() == x.Key).Value;
                         if (trt == null) { trt = PrintService.FontCurrent; }
 
                         g.DrawString(TEXT, trt, Drawing.Brushes.Black,
@@ -225,17 +225,13 @@ namespace WKR2.Views
                 button.MouseRightButtonDown += (sender, e) =>
                 {
                     Button buttonCurrent = sender as Button;
-                    Views.Button_Calibration windowButtonCalibration = new Views.Button_Calibration(ref buttonCurrent);
+                    var windowButtonCalibration = new Views.Button_Calibration(buttonCurrent, hashCodeButtonsOncanvas);
                     windowButtonCalibration.ShowDialog();
                     e.Handled = true;
                 };
 
-                if (item.Font != null)
-                    PrintService.ButtonFontDictionary.Add(button, item.Font);
-
                 CanvasForImage.Children.Add(button);
-                //TODO !
-                canvasOnButtons.Add(button);
+                hashCodeButtonsOncanvas.Add(button.GetHashCode(), item.Font ?? PrintService.FontCurrent);
             }
         }
 
@@ -295,13 +291,13 @@ namespace WKR2.Views
             button.MouseRightButtonDown += (sender, e) =>
             {
                 Button buttonCurrent = sender as Button;
-                Views.Button_Calibration windowButtonCalibration = new Views.Button_Calibration(ref buttonCurrent);
+                var windowButtonCalibration = new Views.Button_Calibration(buttonCurrent, hashCodeButtonsOncanvas);
                 windowButtonCalibration.ShowDialog();
                 e.Handled = true;
             };
 
             CanvasForImage.Children.Add(button);
-            canvasOnButtons.Add(button);
+            hashCodeButtonsOncanvas.Add(button.GetHashCode(), PrintService.FontCurrent);
         }
 
         #region Mouse Event
@@ -428,14 +424,17 @@ namespace WKR2.Views
             try
             {
                 string nameButton = (string)DataGridMain.CurrentCell.Column.Header;
-                var buttonFind = canvasOnButtons.FindLast(x => ((Button)x).Name == nameButton);
+                var buttons = CanvasForImage.Children.OfType<Button>();
+
+                var buttonOnCanvas = buttons.FirstOrDefault(x => x.Name == nameButton);
+                if (buttonOnCanvas == null) return;
+
+                var hashCodeButton = hashCodeButtonsOncanvas.Keys.ToList().FindLast(x => x == buttonOnCanvas.GetHashCode());
+
+                CanvasForImage.Children.Remove(buttonOnCanvas);
+                hashCodeButtonsOncanvas.Remove(hashCodeButton);
+
                 DataGridMain.SelectedIndex = -1;
-
-                if (buttonFind == null) return;
-
-                PrintService.ButtonFontDictionary.Remove((Button)buttonFind);
-                CanvasForImage.Children.Remove(buttonFind);
-                canvasOnButtons.Remove(buttonFind);
             }
             catch (Exception ex)
             {
@@ -474,7 +473,7 @@ namespace WKR2.Views
                     bitmapImageOriginal = new Drawing.Bitmap(stream);
                 }
 
-                canvasOnButtons.Clear();
+                hashCodeButtonsOncanvas.Clear();
                 CanvasForImage.Children.Clear();
 
                 this.ButtonAddOnCanvas("Column1", new Thickness(200, 140, 0, 0));
@@ -506,7 +505,7 @@ namespace WKR2.Views
 
                 ImageMainControl.Source = new BitmapImage(uri);
                 bitmapImageOriginal = new Drawing.Bitmap(uri.LocalPath);
-                canvasOnButtons.Clear();
+                hashCodeButtonsOncanvas.Clear();
                 CanvasForImage.Children.Clear();
             }
         }
@@ -553,7 +552,7 @@ namespace WKR2.Views
 
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    canvasOnButtons.Clear();
+                    hashCodeButtonsOncanvas.Clear();
                     CanvasForImage.Children.Clear();
 
                     DataPattern dataPatternModel = Helper.DeSerializationDataPattern(openFileDialog.FileName);
@@ -574,7 +573,7 @@ namespace WKR2.Views
 
                     Button_SERi_Canvas(dataPatternModel.SettingButtons);
 
-                    bitmapImageOriginal = dataPatternModel.Image;
+                    bitmapImageOriginal = new Drawing.Bitmap(dataPatternModel.Image);
                     MessageBox.Show("Загрузка прошла успешно");
                 }
             }
@@ -612,7 +611,7 @@ namespace WKR2.Views
 
                         SettingButtons.Add(new SettingButton()
                         {
-                            Font = PrintService.ButtonFontDictionary.FirstOrDefault(x => x.Key == (Button)item).Value,
+                            Font = hashCodeButtonsOncanvas.FirstOrDefault(x => x.Key == button.GetHashCode()).Value,
                             Name = button.Name,
 
                             Width = button.Width,
@@ -678,7 +677,7 @@ namespace WKR2.Views
                         }
                         string TEXT = (yy.Table.Rows[Item_Row].ItemArray[i]).ToString();
 
-                        var trt = PrintService.ButtonFontDictionary.FirstOrDefault(x => f == x.Key).Value;
+                        var trt = hashCodeButtonsOncanvas.FirstOrDefault(x => f.GetHashCode() == x.Key).Value;
                         if (trt == null) { trt = PrintService.FontCurrent; }
 
                         g.DrawString(TEXT, trt, Drawing.Brushes.Black,

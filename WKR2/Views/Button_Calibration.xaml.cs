@@ -22,10 +22,13 @@ namespace WKR2.Views
     public partial class Button_Calibration : Window
     {
         private Button buttonRef;
+        private Dictionary<int, Font> hashCodeButtonsOncanvas;
 
-        public Button_Calibration(ref Button button)
+        public Button_Calibration(Button button, Dictionary<int, Font> hashCodeButtonsOncanvas)
         {
             this.buttonRef = button;
+            this.hashCodeButtonsOncanvas = hashCodeButtonsOncanvas;
+
             InitializeComponent();
             gridCallibration.DataContext = button;
         }
@@ -53,19 +56,19 @@ namespace WKR2.Views
 
         private void But_font_Click(object sender, RoutedEventArgs e)
         {
-            var button = PrintService.ButtonFontDictionary.FirstOrDefault(x => buttonRef == x.Key);
+            int buttonGetHashCode = buttonRef.GetHashCode();
+            var fontButton = hashCodeButtonsOncanvas[buttonGetHashCode];
 
-            if (button.Key != null)
-            {
-                Font font = PrintService.Font(PrintService.ButtonFontDictionary[buttonRef]);
-                if (font != null) PrintService.ButtonFontDictionary[buttonRef] = font;
+            Font font = PrintService.Font(fontButton);
+            if (font != null)
+                hashCodeButtonsOncanvas[buttonGetHashCode] = font;
+        }
 
-            }
-            else
-            {
-                Font font = PrintService.Font();
-                if (font != null) PrintService.ButtonFontDictionary.Add(buttonRef, font);
-            }
+        protected override void OnClosed(EventArgs e)
+        {
+            this.buttonRef = null;
+            this.hashCodeButtonsOncanvas = null;
+            base.OnClosed(e);
         }
     }
 }

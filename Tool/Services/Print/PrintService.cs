@@ -17,9 +17,6 @@ namespace Tool.Services.Print
     {
         private static Font fontCurrent = new Font("Arial", 15);
 
-        private static Dictionary<System.Windows.Controls.Button, Font>
-            buttonFontDictionary = new Dictionary<System.Windows.Controls.Button, Font>();
-
         private static string pathLocal;
         private static int Start = 0;
         private static int Stop = 0;
@@ -29,23 +26,20 @@ namespace Tool.Services.Print
         public static Calibration_Data CalibrationData { get; set; } = new Calibration_Data() { X = 0, Y = 0 };
         public static Image ImageCurrent { get; set; } //Картинка на печать
         public static Font FontCurrent => fontCurrent; //Шрифт
-
-        public static Dictionary<System.Windows.Controls.Button, Font> ButtonFontDictionary => buttonFontDictionary;
-
         public static Font Font(Font font = null, bool isDialog = true, bool updateFontCurrent = false)
         {
             Font returnFont = null;
 
             if (isDialog)
-                using (FontDialog fontDialog = new FontDialog() { Font = font ?? fontCurrent })
+                using (FontDialog fontDialog = new FontDialog() { Font = font ?? FontCurrent })
                 {
                     if (fontDialog.ShowDialog() == DialogResult.OK)
                         returnFont = fontDialog.Font;
                     else
-                        returnFont = fontCurrent;
+                        returnFont = FontCurrent;
                 }
 
-            if (updateFontCurrent)
+            if (returnFont != null && updateFontCurrent)
                 fontCurrent = returnFont;
 
             return returnFont;
