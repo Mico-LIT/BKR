@@ -44,11 +44,11 @@ namespace WKR2.Views
             Directory.CreateDirectory(AppSettings.PathAnalytic);
         }
 
-        private void Previwe(int row = 0)
+        private void Previwe(int rowIndex = 0)
         {
             try
             {
-                if (row == -1) return;
+                if (rowIndex == -1) return;
 
                 if (bitmapImageOriginal == null)
                 {
@@ -66,7 +66,6 @@ namespace WKR2.Views
 
                         foreach (var itemUI in CanvasForImage.Children.OfType<Button>())
                         {
-                            int i = 0;
                             Button buttonOnCanvas = itemUI;
 
                             double pixelWidth = ((BitmapImage)ImageMainControl.Source).PixelWidth;
@@ -75,12 +74,9 @@ namespace WKR2.Views
                             pointImage.Y = (pixelHeight * buttonOnCanvas.Margin.Top) / ImageMainControl.ActualHeight;
 
                             DataView sourceDGM = (DataView)DataGridMain.ItemsSource;
-                            foreach (DataColumn dataColumn in sourceDGM.Table.Columns)
-                            {
-                                if (dataColumn.ColumnName == buttonOnCanvas.Name) break;
-                                i++;
-                            }
-                            string text = (sourceDGM.Table.Rows[row].ItemArray[i]).ToString();
+                            int columnIndex = sourceDGM.Table.Columns.IndexOf(buttonOnCanvas.Name);
+
+                            string text = sourceDGM.Table.Rows[rowIndex].ItemArray[columnIndex].ToString();
 
                             Drawing.Font font = PrintService.ButtonFontDictionary.FirstOrDefault(x => buttonOnCanvas == x.Key).Value;
 
@@ -99,8 +95,7 @@ namespace WKR2.Views
                         }
                     }
 
-                    string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-                    bitmap.Save(path + "\\PreView.jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                    bitmap.Save(System.IO.Path.Combine(AppSettings.PathLocal,"PreView.jpeg"), System.Drawing.Imaging.ImageFormat.Jpeg);
 
                     using (MemoryStream tmpStrm = new MemoryStream())
                     {
@@ -124,30 +119,39 @@ namespace WKR2.Views
 
         private void ShowMessageBoxAnalitic()
         {
-            MessageBoxResult result = MessageBox.Show("Включить аналитик?!", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Information);
-            switch (result)
+            if (AnaliticService.GetSettingOnAnalitic == null || AnaliticService.GetSettingOnAnalitic == false)
             {
-                case MessageBoxResult.No:
-                    AnaliticService.GetSettingOnAnalitic = false;
-                    break;
-                case MessageBoxResult.Yes:
-                    AnaliticService.GetSettingOnAnalitic = true;
-                    break;
-                default:
-                    break;
+                MessageBoxResult result = MessageBox.Show("Включить аналитик?!", "Внимание!", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
+                switch (result)
+                {
+                    case MessageBoxResult.No:
+                        AnaliticService.GetSettingOnAnalitic = false;
+                        break;
+                    case MessageBoxResult.Yes:
+                        AnaliticService.GetSettingOnAnalitic = true;
+                        break;
+                    default:
+                        AnaliticService.GetSettingOnAnalitic = null;
+                        break;
+                }
             }
         }
 
         private string GetParametrAnalitic(int Row)
         {
-            var dataRowCollencion = ((DataView)DataGridMain.ItemsSource).Table.Rows[Row];
+            if (DataGridMain.ItemsSource == null)
+                throw new InvalidOperationException();
 
-            return string.Format("{0}_{1}_{2}_",
-                dataRowCollencion.ItemArray[AnaliticService.PARAMS.Params_1].ToString(),
-                dataRowCollencion.ItemArray[AnaliticService.PARAMS.Params_2].ToString(),
-                DateTime.Now.ToShortDateString()
-                );
+            var dataRowCollencion = ((DataView)DataGridMain.ItemsSource).Table.Rows[Row];
+            int columnIndex1 = AnaliticService.PARAMS.Params_1;
+            int columnIndex2 = AnaliticService.PARAMS.Params_1;
+
+            string value1 = dataRowCollencion.ItemArray[columnIndex1].ToString();
+            string value2 = dataRowCollencion.ItemArray[columnIndex2].ToString();
+
+            return string.Format("{0}_{1}_{2}_", value1, value2, DateTime.Now.ToShortDateString());
         }
+
         //TODO !
         private Drawing.Image Print_Item2(int Item_Row, int rez = 0)
         {
@@ -365,7 +369,7 @@ namespace WKR2.Views
                 var selectedIndex = DataGridMain.SelectedIndex + 1;
 
                 ShowMessageBoxAnalitic();
-                PrintService.Print(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal, selectedIndex);
+                PrintService.Print(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathAnalytic, selectedIndex);
             }
             catch (Exception ex)
             {
@@ -377,10 +381,10 @@ namespace WKR2.Views
         {
             if (e.Key == Key.Delete)
             {
-                DataView gg = (DataView)DataGridMain.ItemsSource;
-                gg.Table.Rows.RemoveAt(DataGridMain.SelectedIndex);
+                DataView dataView = (DataView)DataGridMain.ItemsSource;
+                dataView.Table.Rows.RemoveAt(DataGridMain.SelectedIndex);
                 DataGridMain.ItemsSource = null;
-                DataGridMain.ItemsSource = gg;
+                DataGridMain.ItemsSource = dataView;
             }
         }
 
@@ -473,8 +477,8 @@ namespace WKR2.Views
                 canvasOnButtons.Clear();
                 CanvasForImage.Children.Clear();
 
-                this.ButtonAddOnCanvas("Column1", new Thickness(200, 120, 0, 0));
-                this.ButtonAddOnCanvas("Column2", new Thickness(200, 140, 0, 0));
+                this.ButtonAddOnCanvas("Column1", new Thickness(200, 140, 0, 0));
+                this.ButtonAddOnCanvas("Column2", new Thickness(200, 160, 0, 0));
 
                 // для поиска
                 foreach (var item in DataGridMain.Columns)
@@ -708,7 +712,7 @@ namespace WKR2.Views
         private void Pehat(object sender, RoutedEventArgs e)
         {
             ShowMessageBoxAnalitic();
-            PrintService.Print(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathLocal);
+            PrintService.Print(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathAnalytic);
         }
 
         private void Poisk(object sender, RoutedEventArgs e) => new Views.Poisk(this).Show();

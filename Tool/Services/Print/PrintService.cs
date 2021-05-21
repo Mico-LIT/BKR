@@ -90,7 +90,7 @@ namespace Tool.Services.Print
 
         static void PrintDoc_PrintPage1(object sender, PrintPageEventArgs e)
         {
-            if (AnaliticService.GetSettingOnAnalitic)
+            if (AnaliticService.GetSettingOnAnalitic == true)
                 AnaliticService.Save_Persont(print_Item2_(Start, 1), getParametrAnalitic_(Start), pathLocal);
 
             e.Graphics.DrawImage(print_Item2_(Start, 0), new Rectangle()

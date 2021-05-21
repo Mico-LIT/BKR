@@ -10,23 +10,22 @@ namespace Tool.Services.Analitic
 {
     public class AnaliticService
     {
-        public static bool GetSettingOnAnalitic { get; set; }
+        public static bool? GetSettingOnAnalitic { get; set; }
 
         static public Params PARAMS = new Params();
 
-        internal static void Save_Persont(Image image, string str, string pathLocal)
+        internal static void Save_Persont(Image image, string nameFile, string pathLocal)
         {
-            DirectoryInfo di = Directory.CreateDirectory(Path.Combine(pathLocal, @"\Analitic"));
-            string path = string.Format(di.FullName + @"\{0}.jpeg", str);
+            DirectoryInfo directoryInfo = Directory.CreateDirectory(pathLocal);
+            string path = string.Format(@"{0}\{1}.jpeg", directoryInfo.FullName, nameFile);
 
             if (File.Exists(path))
             {
-                str = "Repeat" + DateTime.Now.TimeOfDay.Milliseconds.ToString() + "_" + str;
-                path = string.Format(di.FullName + @"\{0}.jpeg", str);
-                image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                nameFile = "Repeat" + DateTime.Now.TimeOfDay.Milliseconds.ToString() + "_" + nameFile;
+                path = string.Format(@"{0}\{1}.jpeg", directoryInfo.FullName, nameFile);
             }
-            else
-                image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
         }
     }
 }
