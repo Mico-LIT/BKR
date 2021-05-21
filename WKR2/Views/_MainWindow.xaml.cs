@@ -95,7 +95,7 @@ namespace WKR2.Views
                         }
                     }
 
-                    bitmap.Save(System.IO.Path.Combine(AppSettings.PathLocal,"PreView.jpeg"), System.Drawing.Imaging.ImageFormat.Jpeg);
+                    bitmap.Save(System.IO.Path.Combine(AppSettings.PathLocal, "PreView.jpeg"), System.Drawing.Imaging.ImageFormat.Jpeg);
 
                     using (MemoryStream tmpStrm = new MemoryStream())
                     {
@@ -394,7 +394,7 @@ namespace WKR2.Views
 
         private void MenuItem_Calibration_Click(object sender, RoutedEventArgs e)
             => new Views.Calibration(PrintService.CalibrationData).ShowDialog();
-        private void MenuItem_Font_click(object sender, RoutedEventArgs e) => PrintService.FontCurrent = PrintService.Font();
+        private void MenuItem_Font_click(object sender, RoutedEventArgs e) => PrintService.Font(updateFontCurrent: true);
         private void MenuItem_PreView_Click(object sender, RoutedEventArgs e) => Previwe();
         private void MenuItem_Exit_Click(object sender, RoutedEventArgs e) => this.Close();
         private void MenuItem_GroupFile_MouseMove(object sender, MouseEventArgs e) => IssEnabledAllElementsControl();
@@ -558,7 +558,7 @@ namespace WKR2.Views
 
                     DataPattern dataPatternModel = Helper.DeSerializationDataPattern(openFileDialog.FileName);
 
-                    PrintService.FontCurrent = dataPatternModel.Font;
+                    PrintService.Font(dataPatternModel.Font, isDialog: false, updateFontCurrent: true);
                     PrintService.CalibrationData = dataPatternModel.CalibrationData;
                     AnaliticService.PARAMS = dataPatternModel.Params;
 

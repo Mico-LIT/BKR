@@ -15,8 +15,7 @@ namespace Tool.Services.Print
 {
     public class PrintService
     {
-        private static Font fontDefault = new Font("Arial", 15);
-        private static Font fontCurrent;
+        private static Font fontCurrent = new Font("Arial", 15);
 
         private static Dictionary<System.Windows.Controls.Button, Font>
             buttonFontDictionary = new Dictionary<System.Windows.Controls.Button, Font>();
@@ -29,26 +28,30 @@ namespace Tool.Services.Print
 
         public static Calibration_Data CalibrationData { get; set; } = new Calibration_Data() { X = 0, Y = 0 };
         public static Image ImageCurrent { get; set; } //Картинка на печать
-        public static Font FontCurrent  //Шрифт
-        {
-            get { return fontCurrent ?? fontDefault; }
-            set { fontCurrent = value; }
-        }
+        public static Font FontCurrent => fontCurrent; //Шрифт
+
         public static Dictionary<System.Windows.Controls.Button, Font> ButtonFontDictionary => buttonFontDictionary;
 
-        public static Font Font(Font font = null)
+        public static Font Font(Font font = null, bool isDialog = true, bool updateFontCurrent = false)
         {
-            using (FontDialog Fontdialog = new FontDialog())
-            {
-                Fontdialog.Font = font ?? fontDefault;
+            Font returnFont = null;
 
-                if (Fontdialog.ShowDialog() == DialogResult.OK)
-                    return Fontdialog.Font;
+            if (isDialog)
+                using (FontDialog fontDialog = new FontDialog() { Font = font ?? fontCurrent })
+                {
+                    if (fontDialog.ShowDialog() == DialogResult.OK)
+                        returnFont = fontDialog.Font;
+                    else
+                        returnFont = fontCurrent;
+                }
 
-                return fontDefault;
-            }
+            if (updateFontCurrent)
+                fontCurrent = returnFont;
+
+            return returnFont;
         }
 
+        // TODO Print
         public static void Print(Func<int, int, Image> print_Item2, Func<int, string> getParametrAnalitic, string pathLocal, int index = 1)
         {
             PrintService.pathLocal = pathLocal;
@@ -81,6 +84,7 @@ namespace Tool.Services.Print
 
             printDoc.PrinterSettings = printDlg.PrinterSettings;
 
+            //Задумка печетать несколько элементов
             Start = printDlg.PrinterSettings.FromPage - 1;
             Stop = printDlg.PrinterSettings.ToPage - 1;
 
