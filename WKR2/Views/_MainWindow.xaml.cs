@@ -137,12 +137,12 @@ namespace WKR2.Views
             }
         }
 
-        private string GetParametrAnalitic(int Row)
+        private string GetParametrAnalitic(int rowIndex)
         {
             if (DataGridMain.ItemsSource == null)
                 throw new InvalidOperationException();
 
-            var dataRowCollencion = ((DataView)DataGridMain.ItemsSource).Table.Rows[Row];
+            var dataRowCollencion = ((DataView)DataGridMain.ItemsSource).Table.Rows[rowIndex];
             int columnIndex1 = AnaliticService.PARAMS.Params_1;
             int columnIndex2 = AnaliticService.PARAMS.Params_1;
 
@@ -153,7 +153,7 @@ namespace WKR2.Views
         }
 
         //TODO !
-        private Drawing.Image Print_Item2(int Item_Row, int rez = 0)
+        private Drawing.Image Print_Item2(int rowIndex, int rez = 0)
         {
             Drawing.Bitmap b = new Drawing.Bitmap(bitmapImageOriginal.Width, bitmapImageOriginal.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             Drawing.Image vie;
@@ -181,7 +181,7 @@ namespace WKR2.Views
                             if (ii.ColumnName == f.Name) break;
                             i++;
                         }
-                        string TEXT = (yy.Table.Rows[Item_Row].ItemArray[i]).ToString();
+                        string TEXT = (yy.Table.Rows[rowIndex].ItemArray[i]).ToString();
 
                         var trt = PrintService.ButtonFontDictionary.FirstOrDefault(x => f == x.Key).Value;
                         if (trt == null) { trt = PrintService.FontCurrent; }
