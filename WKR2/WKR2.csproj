@@ -141,9 +141,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExampleData\TestData.xls" />
     <None Include="Others\Analitic\Analitic.csv" />
-    <None Include="Others\Patern\rrrr.dat" />
+    <None Include="Others\Patern\test.dat" />
     <None Include="Others\TestData.xls" />
-    <None Include="Others\Исправления и доработки.docx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -164,44 +163,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Others\32132.jpeg" />
-    <Resource Include="Others\Analitic\16-292_Власова Анастасия Евгеньевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-293_Вострикова Валентина Павловна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-294_Давлетгареева Анжелика Сергеевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-295_Демидова Анна Евгеньевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-296_Дмитроница Екатерина Евгеньевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-297_Драницина Анастасия Александровна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-298_Жабина Анжелика Петровна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-299_Зайцева Лидия Георгиевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-300_Какишева Екатерина Муратовна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-301_Касанова Дарья Искандаровна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-302_Крещенецкая Кристина Андреевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-303_Меркулова Дарья Константиновна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-304_Мингалева Виктория Викторовна_29.05.2017_.jpeg" />
     <Resource Include="Others\Analitic\16-305_Никокошева Кира Николаевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-306_Новикова Марина Сергеевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-307_Петухова Анна Евгеньевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-308_Полтавцева Екатерина Сергеевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-309_Сембинова Екатерина Валентиновна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-310_Синицкая Елизавета Андреевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\Analitic\16-311_Щепетнева Дарья Александровна_29.05.2017_.jpeg" />
     <Resource Include="Others\Analitic\54АА 0000151_Белых Полина Сергеевна_29.05.2017_.jpeg" />
     <Resource Include="Others\Analitic\54АА 0000152_Нагина %28Богомолова%29 Анна Владимировна_29.05.2017_.jpeg" />
     <Resource Include="Others\Analitic\Repeat127_16-296_Дмитроница Екатерина Евгеньевна_29.05.2017_.jpeg" />
     <Resource Include="Others\Analitic\Repeat292_16-292_Власова Анастасия Евгеньевна_29.05.2017_.jpeg" />
-    <Resource Include="Others\DDD12.txt" />
-    <Resource Include="Others\PreView.jpeg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Core\Contents\strelki.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Others\new12.jpg" />
+    <Resource Include="Others\PatternImage.jpg" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="ExampleData\ImageTemplate.jpg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
