@@ -639,7 +639,7 @@ namespace WKR2.Views
 
         #endregion
 
-        #region Код для 2-ой версии проекта
+        #region Other Code
 
         private void Print_Item(int Item_Row)
         {
@@ -781,11 +781,6 @@ namespace WKR2.Views
         //private void MouseDown(object sender, MouseButtonEventArgs e)
         //{
         //    m_IsPressed = true;
-        //}
-
-        //private void Button_MouseUp(object sender, MouseButtonEventArgs e)
-        //{
-
         //}
 
         //
