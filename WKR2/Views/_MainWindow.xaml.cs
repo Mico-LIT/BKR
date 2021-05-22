@@ -144,7 +144,7 @@ namespace WKR2.Views
 
             var dataRowCollencion = ((DataView)DataGridMain.ItemsSource).Table.Rows[rowIndex];
             int columnIndex1 = AnaliticService.PARAMS.Params_1;
-            int columnIndex2 = AnaliticService.PARAMS.Params_1;
+            int columnIndex2 = AnaliticService.PARAMS.Params_2;
 
             string value1 = dataRowCollencion.ItemArray[columnIndex1].ToString();
             string value2 = dataRowCollencion.ItemArray[columnIndex2].ToString();
