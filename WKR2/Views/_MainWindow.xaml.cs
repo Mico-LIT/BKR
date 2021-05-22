@@ -35,6 +35,10 @@ namespace WKR2.Views
         Drawing.Bitmap bitmapImageOriginal;//оригинал загружен
         Dictionary<int, Drawing.Font> hashCodeButtonsOncanvas = new Dictionary<int, Drawing.Font>();
 
+        readonly AnaliticService analiticService;
+        readonly ExcelService excelService;
+        readonly PrintService printService;
+
         public _MainWindow()
         {
             InitializeComponent();
@@ -42,18 +46,46 @@ namespace WKR2.Views
 
             Directory.CreateDirectory(AppSettings.PathPattern);
             Directory.CreateDirectory(AppSettings.PathAnalytic);
+
+            analiticService = new AnaliticService(AppSettings.PathAnalytic);
+            excelService = new ExcelService();
+            printService = new PrintService();
+
+            printService.NotificationPrint += PrintService_NotificationPrint;
+            printService.GetImage += (index, useBackgroundImage) => Preview(index, useBackgroundImage);
         }
 
-        private void Previwe(int rowIndex = 0)
+        private void PrintService_NotificationPrint(int index)
+        {
+            if (analiticService.GetSettingOnAnalitic == true)
+            {
+                if (DataGridMain.ItemsSource == null) throw new InvalidOperationException();
+
+                var dataRowCollencion = ((DataView)DataGridMain.ItemsSource).Table.Rows[index];
+                int columnIndex1 = analiticService.PARAMS.Params_1;
+                int columnIndex2 = analiticService.PARAMS.Params_2;
+
+                string value1 = dataRowCollencion.ItemArray[columnIndex1].ToString();
+                string value2 = dataRowCollencion.ItemArray[columnIndex2].ToString();
+
+                string fileName = string.Format("{0}_{1}_{2}_", value1, value2, DateTime.Now.ToShortDateString());
+
+                Drawing.Image image = Preview(index);
+
+                analiticService.Save_Persont(image, fileName);
+            }
+        }
+
+        private Drawing.Image Preview(int rowIndex = 0, bool useBackgroundImage = true)
         {
             try
             {
-                if (rowIndex == -1) return;
+                if (rowIndex == -1) return null;
 
                 if (bitmapImageOriginal == null)
                 {
                     MessageBox.Show("Нужно загрузить шаблон\\картинку для работы", "Информация");
-                    return;
+                    return null;
                 }
 
                 Drawing.Image drawingImage;
@@ -62,6 +94,8 @@ namespace WKR2.Views
                 {
                     using (Drawing.Graphics graphics = Drawing.Graphics.FromImage(bitmap))
                     {
+                        if (!useBackgroundImage) graphics.Clear(Drawing.Color.White);
+
                         Point pointImage = new Point();
 
                         foreach (var itemUI in CanvasForImage.Children.OfType<Button>())
@@ -81,7 +115,7 @@ namespace WKR2.Views
                             Drawing.Font font = hashCodeButtonsOncanvas.FirstOrDefault(x => x.Key == itemUI.GetHashCode()).Value;
 
                             if (font == null)
-                                font = PrintService.FontCurrent;
+                                font = printService.FontCurrent;
 
                             const float magicNumber = 3.3f;
 
@@ -104,134 +138,32 @@ namespace WKR2.Views
                     }
                 }
 
-                PrintService.ImageCurrent = drawingImage;
-                Views.PreView pre = new Views.PreView(drawingImage);
-                pre.WindowState = WindowState.Maximized;
-                pre.ShowDialog();
-
+                return drawingImage;
             }
             catch (Exception ex)
             {
-                var tmp = ex;
-                MessageBox.Show("Error");
+                MessageBox.Show(ex.Message, "Error");
+                throw;
             }
         }
 
         private void ShowMessageBoxAnalitic()
         {
-            if (AnaliticService.GetSettingOnAnalitic == null || AnaliticService.GetSettingOnAnalitic == false)
+            if (analiticService.GetSettingOnAnalitic == null || analiticService.GetSettingOnAnalitic == false)
             {
                 MessageBoxResult result = MessageBox.Show("Включить аналитик?!", "Внимание!", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
                 switch (result)
                 {
                     case MessageBoxResult.No:
-                        AnaliticService.GetSettingOnAnalitic = false;
+                        analiticService.GetSettingOnAnalitic = false;
                         break;
                     case MessageBoxResult.Yes:
-                        AnaliticService.GetSettingOnAnalitic = true;
+                        analiticService.GetSettingOnAnalitic = true;
                         break;
                     default:
-                        AnaliticService.GetSettingOnAnalitic = null;
+                        analiticService.GetSettingOnAnalitic = null;
                         break;
                 }
-            }
-        }
-
-        private string GetParametrAnalitic(int rowIndex)
-        {
-            if (DataGridMain.ItemsSource == null)
-                throw new InvalidOperationException();
-
-            var dataRowCollencion = ((DataView)DataGridMain.ItemsSource).Table.Rows[rowIndex];
-            int columnIndex1 = AnaliticService.PARAMS.Params_1;
-            int columnIndex2 = AnaliticService.PARAMS.Params_2;
-
-            string value1 = dataRowCollencion.ItemArray[columnIndex1].ToString();
-            string value2 = dataRowCollencion.ItemArray[columnIndex2].ToString();
-
-            return string.Format("{0}_{1}_{2}_", value1, value2, DateTime.Now.ToShortDateString());
-        }
-
-        //TODO !
-        private Drawing.Image Print_Item2(int rowIndex, int rez = 0)
-        {
-            Drawing.Bitmap b = new Drawing.Bitmap(bitmapImageOriginal.Width, bitmapImageOriginal.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            Drawing.Image vie;
-            if (rez != 0) using (Drawing.Graphics g = Drawing.Graphics.FromImage(b)) { g.DrawImage(bitmapImageOriginal, 0, 0); }
-
-            using (Drawing.Graphics g = Drawing.Graphics.FromImage(b))
-            {
-                if (rez == 0) g.Clear(System.Drawing.Color.White);
-
-                Point pointImage = new Point();
-
-                foreach (var item in CanvasForImage.Children)
-                {
-                    if (item is Button)
-                    {
-                        Button f = item as Button;
-                        int i = 0;
-                        double pixelWidth = ImageMainControl.Source.Width;
-                        double pixelHeight = ImageMainControl.Source.Height;
-                        pointImage.X = (pixelWidth * f.Margin.Left) / ImageMainControl.ActualWidth;
-                        pointImage.Y = (pixelHeight * f.Margin.Top) / ImageMainControl.ActualHeight;
-                        var yy = (DataView)DataGridMain.ItemsSource;
-                        foreach (DataColumn ii in yy.Table.Columns)
-                        {
-                            if (ii.ColumnName == f.Name) break;
-                            i++;
-                        }
-                        string TEXT = (yy.Table.Rows[rowIndex].ItemArray[i]).ToString();
-
-                        var trt = hashCodeButtonsOncanvas.FirstOrDefault(x => f.GetHashCode() == x.Key).Value;
-                        if (trt == null) { trt = PrintService.FontCurrent; }
-
-                        g.DrawString(TEXT, trt, Drawing.Brushes.Black,
-                            new Drawing.RectangleF(
-                                (float)pointImage.X,
-                                (float)pointImage.Y,
-                                (float)(f.Width * 3.3),
-                                (float)(f.Height * 3.3)));
-                    }
-                }
-            }
-
-            using (MemoryStream tmpStrm = new MemoryStream())
-            {
-                b.Save(tmpStrm, System.Drawing.Imaging.ImageFormat.Png);
-                vie = Drawing.Image.FromStream(tmpStrm);
-            }
-            b.Dispose();
-            return vie;
-
-        }
-
-        private void Button_SERi_Canvas(IList<SettingButton> settingButtons)
-        {
-            foreach (SettingButton item in settingButtons)
-            {
-                Button button = new Button()
-                {
-                    Name = item.Name,
-                    Height = item.Height,
-                    Width = item.Width,
-                    Content = "**" + item.Name + "**",
-                    Margin = new Thickness(item.MarginL, item.MarginT, item.MarginR, item.MarginB)
-                };
-
-                button.PreviewMouseDown += new MouseButtonEventHandler(MouseDown);
-                button.PreviewMouseUp += new MouseButtonEventHandler(MouseUp);
-                button.PreviewMouseMove += new MouseEventHandler(MouseMove);
-                button.MouseRightButtonDown += (sender, e) =>
-                {
-                    Button buttonCurrent = sender as Button;
-                    var windowButtonCalibration = new Views.Button_Calibration(buttonCurrent, hashCodeButtonsOncanvas);
-                    windowButtonCalibration.ShowDialog();
-                    e.Handled = true;
-                };
-
-                CanvasForImage.Children.Add(button);
-                hashCodeButtonsOncanvas.Add(button.GetHashCode(), item.Font ?? PrintService.FontCurrent);
             }
         }
 
@@ -256,8 +188,7 @@ namespace WKR2.Views
         {
             if (DataGridMain.Items.Count > 0)
             {
-                MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled =
-                MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = true;
+                MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled = MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = true;
 
                 MISavePattent.IsEnabled = (ImageMainControl.Source != null);
 
@@ -291,20 +222,20 @@ namespace WKR2.Views
             button.MouseRightButtonDown += (sender, e) =>
             {
                 Button buttonCurrent = sender as Button;
-                var windowButtonCalibration = new Views.Button_Calibration(buttonCurrent, hashCodeButtonsOncanvas);
+                var windowButtonCalibration = new Views.Button_Calibration(buttonCurrent, hashCodeButtonsOncanvas, printService);
                 windowButtonCalibration.ShowDialog();
                 e.Handled = true;
             };
 
             CanvasForImage.Children.Add(button);
-            hashCodeButtonsOncanvas.Add(button.GetHashCode(), PrintService.FontCurrent);
+            hashCodeButtonsOncanvas.Add(button.GetHashCode(), printService.FontCurrent);
         }
 
         #region Mouse Event
 
         bool isMoved = false;
 
-        private void MouseDown(object sender, MouseButtonEventArgs e)
+        private new void MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -312,14 +243,14 @@ namespace WKR2.Views
                 Point startMovePosition = e.GetPosition(this);
             }
         }
-        private void MouseUp(object sender, MouseButtonEventArgs e)
+        private new void MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Released)
             {
                 isMoved = false;
             }
         }
-        private void MouseMove(object sender, MouseEventArgs e)
+        private new void MouseMove(object sender, MouseEventArgs e)
         {
             if (isMoved)
             {
@@ -365,7 +296,8 @@ namespace WKR2.Views
                 var selectedIndex = DataGridMain.SelectedIndex + 1;
 
                 ShowMessageBoxAnalitic();
-                PrintService.Print(Print_Item2, GetParametrAnalitic, Core.AppSettings.PathAnalytic, selectedIndex);
+
+                printService.Print(selectedIndex);
             }
             catch (Exception ex)
             {
@@ -389,13 +321,23 @@ namespace WKR2.Views
         #region MenuItem
 
         private void MenuItem_Calibration_Click(object sender, RoutedEventArgs e)
-            => new Views.Calibration(PrintService.CalibrationData).ShowDialog();
-        private void MenuItem_Font_click(object sender, RoutedEventArgs e) => PrintService.Font(updateFontCurrent: true);
-        private void MenuItem_PreView_Click(object sender, RoutedEventArgs e) => Previwe();
+            => new Views.Calibration(printService.CalibrationData).ShowDialog();
+        private void MenuItem_Font_click(object sender, RoutedEventArgs e) => printService.Font(updateFontCurrent: true);
+        private void MenuItem_PreView_Click(object sender, RoutedEventArgs e)
+        {
+            var image = Preview();
+            Views.PreView pre = new Views.PreView(image) { WindowState = WindowState.Maximized };
+            pre.ShowDialog();
+        }
         private void MenuItem_Exit_Click(object sender, RoutedEventArgs e) => this.Close();
         private void MenuItem_GroupFile_MouseMove(object sender, MouseEventArgs e) => IssEnabledAllElementsControl();
 
-        private void MenuItem_DGM_PreView(object sender, RoutedEventArgs e) => Previwe(DataGridMain.SelectedIndex);
+        private void MenuItem_DGM_PreView(object sender, RoutedEventArgs e)
+        {
+            var image = Preview(DataGridMain.SelectedIndex);
+            Views.PreView pre = new Views.PreView(image) { WindowState = WindowState.Maximized };
+            pre.ShowDialog();
+        }
         private void MenuItem_DGM_AddConvasOnButton(object sender, RoutedEventArgs e)
         {
             try
@@ -484,13 +426,14 @@ namespace WKR2.Views
             catch (Exception ex)
             {
                 MessageBox.Show("Ошибка при загрузке!");
+                throw ex;
             }
         }
 
         private void MenuItem_OpenImage_Click(object sender, RoutedEventArgs e)
         {
-            var windowAnaliticSettings = new Views.AnalliticSetings(DataGridMain.Columns.OfType<DataGridTextColumn>()
-                                       .Select(x => x.Header.ToString()).ToList());
+            var windowAnaliticSettings = new Views.AnalliticSetings(analiticService,
+                DataGridMain.Columns.OfType<DataGridTextColumn>().Select(x => x.Header.ToString()).ToList());
 
             windowAnaliticSettings.ShowDialog();
 
@@ -512,7 +455,7 @@ namespace WKR2.Views
         {
             try
             {
-                DataView dataView = ExcelService.LoadrExcel();
+                DataView dataView = excelService.LoadrExcel();
 
                 if (dataView == null)
                     return;
@@ -549,9 +492,9 @@ namespace WKR2.Views
 
                     DataPattern dataPatternModel = Helper.DeSerializationDataPattern(openFileDialog.FileName);
 
-                    PrintService.Font(dataPatternModel.Font, isDialog: false, updateFontCurrent: true);
-                    PrintService.CalibrationData = dataPatternModel.CalibrationData;
-                    AnaliticService.PARAMS = dataPatternModel.Params;
+                    printService.Font(dataPatternModel.Font, isDialog: false, updateFontCurrent: true);
+                    printService.CalibrationData = dataPatternModel.CalibrationData;
+                    analiticService.PARAMS = dataPatternModel.Params;
 
                     BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap
                     (
@@ -563,7 +506,32 @@ namespace WKR2.Views
 
                     ImageMainControl.Source = bitmapSource;
 
-                    Button_SERi_Canvas(dataPatternModel.SettingButtons);
+                    foreach (SettingButton item in dataPatternModel.SettingButtons)
+                    {
+                        Button button = new Button()
+                        {
+                            Name = item.Name,
+                            Height = item.Height,
+                            Width = item.Width,
+                            Content = "**" + item.Name + "**",
+                            Margin = new Thickness(item.MarginL, item.MarginT, item.MarginR, item.MarginB)
+                        };
+
+                        button.PreviewMouseDown += new MouseButtonEventHandler(MouseDown);
+                        button.PreviewMouseUp += new MouseButtonEventHandler(MouseUp);
+                        button.PreviewMouseMove += new MouseEventHandler(MouseMove);
+                        button.MouseRightButtonDown += (_sender, _e) =>
+                        {
+                            Button buttonCurrent = _sender as Button;
+                            new Views.Button_Calibration(buttonCurrent, hashCodeButtonsOncanvas, printService).ShowDialog();
+                            e.Handled = true;
+                        };
+
+                        Drawing.Font font = item.Font ?? printService.FontCurrent;
+
+                        CanvasForImage.Children.Add(button);
+                        hashCodeButtonsOncanvas.Add(button.GetHashCode(), font);
+                    }
 
                     bitmapImageOriginal = new Drawing.Bitmap(dataPatternModel.Image);
                     MessageBox.Show("Загрузка прошла успешно");
@@ -576,12 +544,12 @@ namespace WKR2.Views
         }
 
         private void MenuItem_SettingAnalitic_Click(object sender, RoutedEventArgs e)
-            => new Views.AnalliticSetings(DataGridMain.Columns.OfType<DataGridTextColumn>()
-                .Select(x => x.Header.ToString()).ToList()).ShowDialog();
+            => new Views.AnalliticSetings(analiticService,
+                DataGridMain.Columns.OfType<DataGridTextColumn>().Select(x => x.Header.ToString()).ToList()).ShowDialog();
 
         private void MenuItem_ExportExcel_Click(object sender, RoutedEventArgs e)
         {
-            ExcelService.ExportToExcel(Core.AppSettings.PathAnalytic);
+            excelService.ExportToExcel(Core.AppSettings.PathAnalytic);
             MessageBox.Show("Выгрузка прошла успешно!");
         }
 
@@ -619,11 +587,11 @@ namespace WKR2.Views
 
                     DataPattern dataPattern = new DataPattern()
                     {
-                        Font = PrintService.FontCurrent,
+                        Font = printService.FontCurrent,
                         Image = new Drawing.Bitmap(bitmapImageOriginal),
-                        Params = AnaliticService.PARAMS,
+                        Params = analiticService.PARAMS,
                         SettingButtons = SettingButtons,
-                        CalibrationData = PrintService.CalibrationData,
+                        CalibrationData = printService.CalibrationData,
                     };
 
                     Helper.SerializationDataPattern(dataPattern, saveFileDialog.FileName);
@@ -634,6 +602,7 @@ namespace WKR2.Views
             catch (Exception ex)
             {
                 MessageBox.Show("Ошибка при сохранении", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw ex;
             }
         }
 
@@ -671,7 +640,7 @@ namespace WKR2.Views
                         string TEXT = (yy.Table.Rows[Item_Row].ItemArray[i]).ToString();
 
                         var trt = hashCodeButtonsOncanvas.FirstOrDefault(x => f.GetHashCode() == x.Key).Value;
-                        if (trt == null) { trt = PrintService.FontCurrent; }
+                        if (trt == null) { trt = printService.FontCurrent; }
 
                         g.DrawString(TEXT, trt, Drawing.Brushes.Black,
                             new Drawing.RectangleF(
@@ -690,7 +659,6 @@ namespace WKR2.Views
                 vie = Drawing.Image.FromStream(tmpStrm);
             }
             b.Dispose();
-            PrintService.ImageCurrent = vie;
         }
 
         private void JJson(object sender, RoutedEventArgs e)
@@ -698,7 +666,7 @@ namespace WKR2.Views
             MessageBox.Show("Пока нет реализации, извините");
             return;
 
-            Helper.JsonSerializeObject(((DataView)DataGridMain.ItemsSource).ToTable());
+            //Helper.JsonSerializeObject(((DataView)DataGridMain.ItemsSource).ToTable());
         }
 
         private void Poisk(object sender, RoutedEventArgs e) => new Views.Poisk(this).Show();
@@ -708,41 +676,93 @@ namespace WKR2.Views
             MessageBox.Show("Пока нет реализации, извините");
             return;
 
-            Point pointImage = new Point();
+            //Point pointImage = new Point();
 
-            Drawing.Bitmap bmp = new Drawing.Bitmap(@"C:\BKR\WKR2\ggh.jpg");
-            Drawing.Bitmap b = new Drawing.Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            //Drawing.Bitmap bmp = new Drawing.Bitmap(@"C:\BKR\WKR2\ggh.jpg");
+            //Drawing.Bitmap b = new Drawing.Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+
+            //using (Drawing.Graphics g = Drawing.Graphics.FromImage(b))
+            //{
+            //    g.DrawImage(bmp, 0, 0);
+            //}
+
+            //using (Drawing.Graphics g = Drawing.Graphics.FromImage(b))
+            //{
+            //    using (var font = new Drawing.Font("Arial", 10))  // настроить шрифт
+            //    {
+            //        foreach (var item in CanvasForImage.Children)
+            //        {
+            //            if (item is Button)
+            //            {
+            //                Button f = item as Button;
+
+            //                double pixelWidth = ImageMainControl.Source.Width;
+            //                double pixelHeight = ImageMainControl.Source.Height;
+            //                pointImage.X = (pixelWidth * f.Margin.Left) / ImageMainControl.ActualWidth;
+            //                pointImage.Y = (pixelHeight * f.Margin.Top) / ImageMainControl.ActualHeight;
+
+            //                g.DrawString("Информационная конференция IT Corparation", font, Drawing.Brushes.Black,
+            //           (float)pointImage.X, (float)pointImage.Y);
+            //            }
+            //        }
+
+            //    }
+            //}
+            //b.Save(@"C:\BKR\WKR2\gomer1.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            //bmp.Dispose();
+            //b.Dispose();
+        }
+
+        private Drawing.Image Print_Item(int rowIndex, int rez = 0)
+        {
+            Drawing.Bitmap b = new Drawing.Bitmap(bitmapImageOriginal.Width, bitmapImageOriginal.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            Drawing.Image vie;
+            if (rez != 0) using (Drawing.Graphics g = Drawing.Graphics.FromImage(b)) { g.DrawImage(bitmapImageOriginal, 0, 0); }
 
             using (Drawing.Graphics g = Drawing.Graphics.FromImage(b))
             {
-                g.DrawImage(bmp, 0, 0);
-            }
+                if (rez == 0) g.Clear(System.Drawing.Color.White);
 
-            using (Drawing.Graphics g = Drawing.Graphics.FromImage(b))
-            {
-                using (var font = new Drawing.Font("Arial", 10))  // настроить шрифт
+                Point pointImage = new Point();
+
+                foreach (var item in CanvasForImage.Children)
                 {
-                    foreach (var item in CanvasForImage.Children)
+                    if (item is Button)
                     {
-                        if (item is Button)
+                        Button f = item as Button;
+                        int i = 0;
+                        double pixelWidth = ImageMainControl.Source.Width;
+                        double pixelHeight = ImageMainControl.Source.Height;
+                        pointImage.X = (pixelWidth * f.Margin.Left) / ImageMainControl.ActualWidth;
+                        pointImage.Y = (pixelHeight * f.Margin.Top) / ImageMainControl.ActualHeight;
+                        var yy = (DataView)DataGridMain.ItemsSource;
+                        foreach (DataColumn ii in yy.Table.Columns)
                         {
-                            Button f = item as Button;
-
-                            double pixelWidth = ImageMainControl.Source.Width;
-                            double pixelHeight = ImageMainControl.Source.Height;
-                            pointImage.X = (pixelWidth * f.Margin.Left) / ImageMainControl.ActualWidth;
-                            pointImage.Y = (pixelHeight * f.Margin.Top) / ImageMainControl.ActualHeight;
-
-                            g.DrawString("Информационная конференция IT Corparation", font, Drawing.Brushes.Black,
-                       (float)pointImage.X, (float)pointImage.Y);
+                            if (ii.ColumnName == f.Name) break;
+                            i++;
                         }
-                    }
+                        string TEXT = (yy.Table.Rows[rowIndex].ItemArray[i]).ToString();
 
+                        var trt = hashCodeButtonsOncanvas.FirstOrDefault(x => f.GetHashCode() == x.Key).Value;
+                        if (trt == null) { trt = printService.FontCurrent; }
+
+                        g.DrawString(TEXT, trt, Drawing.Brushes.Black,
+                            new Drawing.RectangleF(
+                                (float)pointImage.X,
+                                (float)pointImage.Y,
+                                (float)(f.Width * 3.3),
+                                (float)(f.Height * 3.3)));
+                    }
                 }
             }
-            b.Save(@"C:\BKR\WKR2\gomer1.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-            bmp.Dispose();
+
+            using (MemoryStream tmpStrm = new MemoryStream())
+            {
+                b.Save(tmpStrm, System.Drawing.Imaging.ImageFormat.Png);
+                vie = Drawing.Image.FromStream(tmpStrm);
+            }
             b.Dispose();
+            return vie;
         }
 
         #endregion

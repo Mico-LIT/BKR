@@ -14,7 +14,7 @@ using Tool.Services.Excel.Models;
 
 namespace Tool.Services.Excel
 {
-    public static class ExcelService
+    public class ExcelService
     {
         public static DataView LoadrExcel(Stream stream)
         {
@@ -32,7 +32,7 @@ namespace Tool.Services.Excel
             return dateSet.Tables[0].DefaultView; //внизу экселя есть странички
         }
 
-        public static DataView LoadrExcel()
+        public DataView LoadrExcel()
         {
             DataSet dateSet;
 
@@ -67,7 +67,7 @@ namespace Tool.Services.Excel
             }
         }
 
-        public static void ExportToExcel(string path, string fileName = "Analitic.csv")
+        public void ExportToExcel(string path, string fileName = "Analitic.csv")
         {
             List<Settings> settings = new List<Settings>();
             DirectoryInfo directoryInfo = new DirectoryInfo(path);

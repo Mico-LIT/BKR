@@ -10,13 +10,19 @@ namespace Tool.Services.Analitic
 {
     public class AnaliticService
     {
-        public static bool? GetSettingOnAnalitic { get; set; }
+        public bool? GetSettingOnAnalitic { get; set; }
 
-        static public Params PARAMS = new Params();
+        public Params PARAMS = new Params();
+        readonly string pathLocal;
 
-        internal static void Save_Persont(Image image, string nameFile, string pathLocal)
+        public AnaliticService(string pathLocal)
         {
-            DirectoryInfo directoryInfo = Directory.CreateDirectory(pathLocal);
+            this.pathLocal = pathLocal;
+        }
+
+        public void Save_Persont(Image image, string nameFile)
+        {
+            DirectoryInfo directoryInfo = Directory.CreateDirectory(this.pathLocal);
             string path = string.Format(@"{0}\{1}.jpeg", directoryInfo.FullName, nameFile);
 
             if (File.Exists(path))

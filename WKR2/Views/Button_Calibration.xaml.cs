@@ -23,11 +23,13 @@ namespace WKR2.Views
     {
         private Button buttonRef;
         private Dictionary<int, Font> hashCodeButtonsOncanvas;
+        private PrintService printService;
 
-        public Button_Calibration(Button button, Dictionary<int, Font> hashCodeButtonsOncanvas)
+        public Button_Calibration(Button button, Dictionary<int, Font> hashCodeButtonsOncanvas, PrintService printService)
         {
             this.buttonRef = button;
             this.hashCodeButtonsOncanvas = hashCodeButtonsOncanvas;
+            this.printService = printService;
 
             InitializeComponent();
             gridCallibration.DataContext = button;
@@ -59,7 +61,7 @@ namespace WKR2.Views
             int buttonGetHashCode = buttonRef.GetHashCode();
             var fontButton = hashCodeButtonsOncanvas[buttonGetHashCode];
 
-            Font font = PrintService.Font(fontButton);
+            Font font = printService.Font(fontButton);
             if (font != null)
                 hashCodeButtonsOncanvas[buttonGetHashCode] = font;
         }

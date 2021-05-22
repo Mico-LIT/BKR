@@ -23,11 +23,11 @@ namespace WKR2.Views
             InitializeComponent();
         }
 
-        public AnalliticSetings(IList<string> items) : this()
+        public AnalliticSetings(Tool.Services.Analitic.AnaliticService analliticSetings, IList<string> items) : this()
         {
             comboBoxId.ItemsSource = items; //d1.SelectedIndex = 0;
             comboBoxFIO.ItemsSource = items; //d2.SelectedIndex = 0;
-            stackPanel.DataContext = Tool.Services.Analitic.AnaliticService.PARAMS;
+            stackPanel.DataContext = analliticSetings.PARAMS;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

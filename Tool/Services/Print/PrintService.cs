@@ -15,18 +15,20 @@ namespace Tool.Services.Print
 {
     public class PrintService
     {
-        private static Font fontCurrent = new Font("Arial", 15);
+        public delegate void PrintHandler(int index);
+        public event PrintHandler NotificationPrint;
 
-        private static string pathLocal;
-        private static int Start = 0;
-        private static int Stop = 0;
-        private static Func<int, int, Image> print_Item2_;
-        private static Func<int, string> getParametrAnalitic_;
+        public delegate Image GetImageHandler(int index, bool useBackgroundImage = false);
+        public event GetImageHandler GetImage;
 
-        public static Calibration_Data CalibrationData { get; set; } = new Calibration_Data() { X = 0, Y = 0 };
-        public static Image ImageCurrent { get; set; } //Картинка на печать
-        public static Font FontCurrent => fontCurrent; //Шрифт
-        public static Font Font(Font font = null, bool isDialog = true, bool updateFontCurrent = false)
+        Font fontCurrent = new Font("Arial", 15);
+        int indexStart = 0;
+        int indexStop = 0;
+
+        public Calibration_Data CalibrationData { get; set; } = new Calibration_Data() { X = 0, Y = 0 };
+        public Font FontCurrent => fontCurrent; //Шрифт
+
+        public Font Font(Font font = null, bool isDialog = true, bool updateFontCurrent = false)
         {
             Font returnFont = null;
 
@@ -45,13 +47,9 @@ namespace Tool.Services.Print
             return returnFont;
         }
 
-        // TODO Print
-        public static void Print(Func<int, int, Image> print_Item2, Func<int, string> getParametrAnalitic, string pathLocal, int index = 1)
+        public void Print(int index = 1)
         {
-            PrintService.pathLocal = pathLocal;
-
-            print_Item2_ = print_Item2;
-            getParametrAnalitic_ = getParametrAnalitic;
+            if (GetImage == null) throw new InvalidOperationException($"Событие должно быть добавленно! {nameof(GetImage)}");
 
             var setupDlg = new PageSetupDialog()
             {
@@ -79,19 +77,18 @@ namespace Tool.Services.Print
             printDoc.PrinterSettings = printDlg.PrinterSettings;
 
             //Задумка печетать несколько элементов
-            Start = printDlg.PrinterSettings.FromPage - 1;
-            Stop = printDlg.PrinterSettings.ToPage - 1;
+            indexStart = printDlg.PrinterSettings.FromPage - 1;
+            indexStop = printDlg.PrinterSettings.ToPage - 1;
 
             printDoc.PrintPage += PrintDoc_PrintPage1;
             printDoc.Print();
         }
 
-        static void PrintDoc_PrintPage1(object sender, PrintPageEventArgs e)
+        void PrintDoc_PrintPage1(object sender, PrintPageEventArgs e)
         {
-            if (AnaliticService.GetSettingOnAnalitic == true)
-                AnaliticService.Save_Persont(print_Item2_(Start, 1), getParametrAnalitic_(Start), pathLocal);
+            Image image = GetImage(indexStart);
 
-            e.Graphics.DrawImage(print_Item2_(Start, 0), new Rectangle()
+            e.Graphics.DrawImage(image, new Rectangle()
             {
                 Height = e.PageSettings.PaperSize.Width,
                 Width = e.PageSettings.PaperSize.Height,
@@ -99,20 +96,22 @@ namespace Tool.Services.Print
                 Y = CalibrationData.Y,
             });
 
-            if (Start == Stop)
+            NotificationPrint?.Invoke(indexStart);
+
+            if (indexStart == indexStop)
             {
                 e.HasMorePages = false;
-                Start = Stop = 0;
+                indexStart = indexStop = 0;
             }
             else e.HasMorePages = true;
-            Start++;
+            indexStart++;
         }
 
         #region OtherCode
 
-        static void dd(int ii)
+        void dd(int ii)
         {
-            Start = Stop = ii;
+            indexStart = indexStop = ii;
             var setupDlg = new PageSetupDialog();
             var printDlg = new PrintDialog();
             var printDoc = new PrintDocument();
@@ -164,8 +163,10 @@ namespace Tool.Services.Print
 
         }
 
-        static void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
+        void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
         {
+            Image ImageCurrent = null; //Картинка на печать
+
             if (ImageCurrent == null)
                 throw new ArgumentNullException(nameof(ImageCurrent));
 
@@ -195,7 +196,7 @@ namespace Tool.Services.Print
 
         }
 
-        static Bitmap ResizeImage(Image image, int width, int height)
+        Bitmap ResizeImage(Image image, int width, int height)
         {
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
@@ -220,7 +221,7 @@ namespace Tool.Services.Print
             return destImage;
         }
 
-        static Image ResizeOrigImg(Image image, int nWidth, int nHeight)
+        Image ResizeOrigImg(Image image, int nWidth, int nHeight)
         {
             int newWidth, newHeight;
             var coefH = (double)nHeight / (double)image.Height;
