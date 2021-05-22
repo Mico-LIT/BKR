@@ -73,11 +73,11 @@
         <Label Grid.Row="1" Height="35" Width="250" Name="point" HorizontalAlignment="Center" VerticalAlignment="Top"></Label>
 
         <!-- Поиск Доп Функционал-->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Name="poisk" Visibility="Collapsed">
+        <!--<StackPanel Grid.Row="2" Orientation="Horizontal" Name="poisk" Visibility="Collapsed">
             <ComboBox Width="200" Name="Com"></ComboBox>
             <TextBox Width="150"></TextBox>
             <Button Width="50">Поиск</Button>
-        </StackPanel>
+        </StackPanel>-->
         <!---->
 
         <DataGrid Grid.Row="3" Name="DataGridMain" PreviewKeyDown="DataGridMain_PreviewKeyDown"  ColumnWidth="80" LoadingRow="DataGridMain_LoadingRow">

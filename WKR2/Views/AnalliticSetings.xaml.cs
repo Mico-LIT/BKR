@@ -23,7 +23,7 @@ namespace WKR2.Views
             InitializeComponent();
         }
 
-        public AnalliticSetings(ItemCollection items) : this()
+        public AnalliticSetings(IList<string> items) : this()
         {
             comboBoxId.ItemsSource = items; //d1.SelectedIndex = 0;
             comboBoxFIO.ItemsSource = items; //d2.SelectedIndex = 0;

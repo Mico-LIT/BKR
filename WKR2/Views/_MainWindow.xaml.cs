@@ -257,7 +257,7 @@ namespace WKR2.Views
             if (DataGridMain.Items.Count > 0)
             {
                 MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled =
-                MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = poisk.IsEnabled = true;
+                MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = true;
 
                 MISavePattent.IsEnabled = (ImageMainControl.Source != null);
 
@@ -267,7 +267,7 @@ namespace WKR2.Views
             else
             {
                 MIOpenImage.IsEnabled = MIDownloadPattern.IsEnabled = MISavePattent.IsEnabled =
-                  MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = poisk.IsEnabled = false;
+                  MIGroupAnalitic.IsEnabled = MIPreView.IsEnabled = false;
 
                 foreach (MenuItem item in DataGridMain.ContextMenu.Items)
                     item.IsEnabled = false;
@@ -479,10 +479,6 @@ namespace WKR2.Views
                 this.ButtonAddOnCanvas("Column1", new Thickness(200, 140, 0, 0));
                 this.ButtonAddOnCanvas("Column2", new Thickness(200, 160, 0, 0));
 
-                // для поиска
-                foreach (var item in DataGridMain.Columns)
-                    if (item is DataGridTextColumn) Com.Items.Add((string)item.Header);
-
                 IssEnabledAllElementsControl();
             }
             catch (Exception ex)
@@ -493,7 +489,9 @@ namespace WKR2.Views
 
         private void MenuItem_OpenImage_Click(object sender, RoutedEventArgs e)
         {
-            Views.AnalliticSetings windowAnaliticSettings = new Views.AnalliticSetings(Com.Items);
+            var windowAnaliticSettings = new Views.AnalliticSetings(DataGridMain.Columns.OfType<DataGridTextColumn>()
+                                       .Select(x => x.Header.ToString()).ToList());
+
             windowAnaliticSettings.ShowDialog();
 
             const string filter = "Jpeg files (*.jpeg)|*.jpeg;*.jpg| PNG files (*.PNG)|*.png|Все файлы (*.*)|*.*";
@@ -525,12 +523,6 @@ namespace WKR2.Views
                     CanvasForImage.Children.Clear();
                     DataGridMain.ItemsSource = null;
                     DataGridMain.ItemsSource = dataView;
-
-                    //TODO для поиска 
-                    var columns = DataGridMain.Columns.OfType<DataGridTextColumn>();
-                    foreach (var item in columns)
-                        Com.Items.Add((string)item.Header);
-                    //
                 }
 
                 IssEnabledAllElementsControl();
@@ -584,7 +576,8 @@ namespace WKR2.Views
         }
 
         private void MenuItem_SettingAnalitic_Click(object sender, RoutedEventArgs e)
-            => new Views.AnalliticSetings(Com.Items).ShowDialog();
+            => new Views.AnalliticSetings(DataGridMain.Columns.OfType<DataGridTextColumn>()
+                .Select(x => x.Header.ToString()).ToList()).ShowDialog();
 
         private void MenuItem_ExportExcel_Click(object sender, RoutedEventArgs e)
         {
